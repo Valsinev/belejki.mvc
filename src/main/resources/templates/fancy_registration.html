@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{registration}">Registration</title>
+
+
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Sofia' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" th:href="@{/css/fancy_form.css}">
+</head>
+<body>
+
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:text="#{home}" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:text="#{login}" href="/login">Login</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<form class="container" id="registrationForm" action="/registration" method="post" th:object="${userInfoDto}" onsubmit="return validateForm()">
+    <div class="header row mt-5">
+        <h2 class="col" th:text="#{registration}">Register</h2>
+    </div>
+    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+    <div class="row mt-3 justify-content-md-center">
+        <input class="col-xl-8 text-center" name="username" th:field="*{username}" id="email" th:placeholder='#{email}' type='email' maxlength="44">
+        <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-danger col-8"></span>
+    </div>
+    <div class="row mt-3 justify-content-md-center">
+        <input class="col-xl-8 text-center" name='firstName' th:field="*{firstName}" th:placeholder=#{first.name} type='text'>
+        <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="text-danger col-8"></span>
+    </div>
+    <div class="row mt-3 justify-content-md-center">
+        <input class="col-xl-8 text-center" name='lastName' th:field="*{lastName}" th:placeholder="#{last.name}" type='text'>
+        <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="text-danger col-8"></span>
+    </div>
+    <div class="row mt-3 justify-content-md-center">
+        <input class="col-xl-8 text-center" id='password' name='password' th:field="*{password}" th:placeholder='#{password}' type='password'>
+        <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger col-8"></span>
+    </div>
+    <div class="row mt-3 justify-content-md-center">
+        <input class="col-xl-8 text-center" id='confirm_password' name='confirm_password' th:placeholder='#{confirm.password}' type='password'>
+    </div>
+    <div class="row mt-3 justify-content-md-center">
+        <input class="col-xl-8 text-center animated" type='submit' th:value='#{registration}'>
+    </div>
+    <div class="row mt-3 justify-content-md-center">
+        <a class='forgot col-xl-8 text-center' href='/login' th:text="#{already.have.an.account}">Already have an account?</a>
+    </div>
+</form>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    function validateForm() {
+        var password = document.getElementById("password").value;
+        var confirmPassword = document.getElementById("confirm_password").value;
+        if (password !== confirmPassword) {
+            alert("Passwords do not match");
+            return false;
+        }
+        return true;
+    }
+</script>
+</body>
+</html>

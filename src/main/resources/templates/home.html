@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{home}">Home</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles -->
+    <style>
+        /* Add custom styles here */
+        .body {
+            background: #ffffd3;
+        }
+    </style>
+</head>
+
+<body class="body">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:text="#{login}" href="/login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:text="#{registration}" href="/registration">Registration</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-secondary" role="button" aria-pressed="true" href="?lang=bg">BG</a>
+                        <a class="btn btn-secondary" role="button" aria-pressed="true" href="?lang=en">EN</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="main-content container-fluid">
+
+        <div class="row mt-3">
+            <div class="col-xl-6 col-md-12">
+                <div class="card text-white bg-warning mb-3">
+                    <img src="/home.jpg" class="card-img-top  p-2" alt="...">
+                    <div class="card-body text-dark text-center mt-5 mb-5">
+                        <h1 class="card-title" th:text="#{home.card1.title}">Never Miss an Event Again!</h1>
+                        <p class="card-text">
+                        <h3 th:text="#{home.card1.text}">Stay organized and on top of your schedule with our event reminder service.</h3>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6 col-md-12 mb-2">
+                <div class="card text-white bg-warning mb-3">
+                    <div class="card-body text-dark text-center">
+                        <h1 class="card-title" th:text="#{home.card2.title}">Be prepared with the ideal gift.</h1>
+                        <p class="card-text">
+                        <h3 th:text="#{home.card2.text.paragraph1}">Create and exchange</h3>
+                        </p>
+                        <p class="card-text">
+                        <h3 th:text="#{home.card2.text.paragraph2}">wishlists with your</h3>
+                        </p>
+                        <p class="card-text">
+                        <h3 th:text="#{home.card2.text.paragraph3}">family and friends.</h3>
+                        </p>
+                    </div>
+                    <img src="/present.avif" class="card-img-bottom p-2" alt="...">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer bg-dark text-white text-center pt-3" style="position: fixed; bottom: 0; width: 100%;">
+        <div class="container">
+            <p th:text="'&copy; ' + ${theYear} + ' Event Reminder'"></p>
+        </div>
+    </footer>
+
+    <style>
+        .card-body {
+            font-family: Snell Roundhand, cursive;
+            /* Change the font family as desired */
+            font-style: oblique;
+            font-weight: 600;
+        }
+    </style>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>
