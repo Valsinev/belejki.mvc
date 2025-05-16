@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{recipes}">Recipes</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Custom styles -->
+    <link rel="stylesheet" th:href="@{/css/default_layout_styles.css}">
+</head>
+<body>
+
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg  navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/" th:text="#{home}">Home</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/login?logout" th:text="#{logout}">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<section class="main-content container-fluid">
+
+    <div class="row">
+
+        <aside class="left-side col-lg-2 col-md-12 border-right border-left border-dark mt-2">
+            <div class="container">
+                <div class="row h-100">
+                    <div class="container">
+                        <div class="row mt-2">
+                            <a class="btn btn-success" href="/user/dashboard" th:text="#{dashboard}">Dashboard</a>
+                        </div>
+                        <div class="row mt-2">
+                            <a class="btn btn-success" href="/user/reminders" th:text="#{reminders}">Reminders</a>
+                        </div>
+                        <div class="row mt-2">
+                            <a class="btn btn-success" href="/user/wishlist" th:text="#{wishlist}">Wishlist</a>
+                        </div>
+                        <div class="row mt-2 mb-2">
+                            <a class="btn btn-success" href="/user/friends" th:text="#{friends}">Friends</a>
+                        </div>
+                        <div class="row mt-2 mb-2">
+                            <a class="btn btn-warning" href="/user/shoplist" th:text="#{shoplist}">Shopping List</a>
+                        </div>
+                        <div class="row mb-2" sec:authorize="hasRole('ROLE_ADMIN')">
+                            <a class="btn btn-success" href="/admin" th:text="#{admin.dashboard}">Admin Dashboard</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+
+
+
+
+
+        <aside class="right-side col-xl-10 col-md-12">
+            <div class="container mt-4">
+                <div class="row">
+                    <a class="btn btn-success" href="/user/createRecipe" th:text="#{add.new.recipe}">Add New Recipe</a>
+                </div>
+                <div class="row mt-4 border-top">
+
+                    <h2 class="mb-4" th:text="#{your.recipes} + ':'">Your Recipes:</h2>
+                    <div class="container-fluid mt-4">
+                        <form th:action="@{/user/recipes/search}" th:method="get">
+                            <div class="input-group mb-3">
+                                <input id="searchInput" th:name="searchValue" type="text" class="form-control col-6"
+                                       th:placeholder="#{search.by.description}" aria-label="Search"
+                                       aria-describedby="basic-addon2">
+                                <button class="btn btn-success" type="submit" th:text="#{search}">Search</button>
+                            </div>
+                        </form>
+                        <form th:action="@{/user/recipes/filter}" th:method="get">
+                            <h4 th:text="#{filter.by.price}">Filter by price:</h4>
+                            <div class="input-group mb-3">
+                                <input id="to" th:name="toValue" type="number" class="form-control col-6"
+                                       th:placeholder="#{max}" aria-label="to" aria-describedby="basic-addon2">
+                                <button class="btn btn-success" type="submit" th:text="#{filter}">Filter</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <section class="text-center mt-5">
+                    <div class="container">
+                        <table class="table table-sm table-striped table-hover table-responsive mb-5">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th th:text="#{description}"> Description </th>
+                                <th th:text="#{approximate.price}"> Approximate Price </th>
+                                <th th:text="#{link}"> Link </th>
+                                <th th:text="#{action}"> Action </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:if="${recipes.empty}">
+                                <td colspan="2" th:text="#{no.recipes.found}"> No recipes found.</td>
+                            </tr>
+                            <tr th:each="recipe : ${recipes}">
+                                <td><span th:text="${recipe.name}"> Description </span></td>
+                                <td><span th:text="${recipe.howToMake}"> Approximate Price </span></td>
+                                <td><span th:href="${recipe.ingredients}">Ingredients</span>
+                                </td>
+                                <td><span>
+                                                <a th:href="@{'/user/editWish/' + ${wish.id}}"
+                                                   class="btn btn-primary" th:text="#{edit}">Edit</a>
+                                                <a th:href="@{'/user/wishlist/delete/' + ${wish.id}}"
+                                                   class="btn btn-danger" th:text="#{delete}">Delete</a>
+                                            </span></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </aside>
+
+    </div>
+</section>
+
+
+
+
+
+</body>
+</html>

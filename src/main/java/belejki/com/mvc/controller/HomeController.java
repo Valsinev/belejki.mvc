@@ -1,5 +1,6 @@
 package belejki.com.mvc.controller;
 
+import belejki.com.mvc.config.AppConfig;
 import belejki.com.mvc.dto.UserInfoDto;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,7 +16,10 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
@@ -30,14 +34,16 @@ import java.util.Map;
 @Controller
 @Slf4j
 public class HomeController {
-    @Value("${backend.api.url}")
-    private String backendApiUrl;
+//    @Value("${backend.api.url}")
+//    private String backendApiUrl;
 
     private final RestTemplate restTemplate;
+    private final AppConfig appConfig;
 
     @Autowired
-    public HomeController(RestTemplate restTemplate) {
+    public HomeController(RestTemplate restTemplate, AppConfig appConfig) {
         this.restTemplate = restTemplate;
+        this.appConfig = appConfig;
     }
 
     @GetMapping("/")
@@ -74,7 +80,7 @@ public class HomeController {
         Locale locale = Locale.forLanguageTag(localeData);
         session.setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
 
-        String loginUrl = backendApiUrl + "/login";
+        String loginUrl = appConfig.getBackendApiUrl() + "/login";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -139,7 +145,7 @@ public class HomeController {
             HttpEntity<UserInfoDto> request = new HttpEntity<>(userInfoDto, headers);
 
             ResponseEntity<UserInfoDto> restResponse = restTemplate.postForEntity(
-                    backendApiUrl + "/user/users", request, UserInfoDto.class);
+                    appConfig.getBackendApiUrl() + "/user/users", request, UserInfoDto.class);
 
             log.info("Saved user from REST API: " + restResponse.getBody());
             return "redirect:/registration/success";

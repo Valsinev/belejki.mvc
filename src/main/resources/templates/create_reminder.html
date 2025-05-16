@@ -39,10 +39,10 @@
                     <h4 class="text-center" th:text="#{create.reminder}">Create Reminder</h4>
                 </div>
                 <div class="card-body">
-                    <form th:action="@{/user/createReminder}" method="post" th:object="${reminder}">
-                        <input type="hidden" th:field="*{id}">
-                        <input type="hidden" th:field="*{expired}">
-                        <div class="form-group">
+                    <form th:action="${editing} ? @{'/user/reminders/update/' + ${reminder.id}} : @{/user/reminders/create}"
+                                             method="post" th:object="${reminder}">
+
+                <div class="form-group">
                             <label for="name" class="form-label" th:text="#{name}">Name</label>
                             <input type="text" class="form-control" id="name" th:field="*{name}" name="name" required minlength="1" maxlength="50">
                         </div>
@@ -58,7 +58,7 @@
                             <label for="expiration" class="form-label" th:text="#{expiration.date}">Expiration Date</label>
                             <input type="date" class="form-control" th:field="*{expiration}" id="expiration" name="expiration" onchange="formatAndDisplayDate()" required>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-block" th:text="#{create}">Create</button>
+                        <button type="submit" class="btn btn-primary btn-block" th:text="${editing} ? #{update} : #{create}">Create</button>
                     </form>
                 </div>
             </div>

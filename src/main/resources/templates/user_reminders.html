@@ -44,7 +44,7 @@
                     <div class="row h-100">
                         <div class="container">
                             <div class="row mt-2">
-                                <a class="btn btn-success" href="/user" th:text="#{dashboard}">Dashboard</a>
+                                <a class="btn btn-success" href="/user/dashboard" th:text="#{dashboard}">Dashboard</a>
                             </div>
                             <div class="row mt-2">
                                 <a class="btn btn-warning" href="/user/reminders" th:text="#{reminders}">Reminders</a>
@@ -58,8 +58,8 @@
                             <div class="row mt-2 mb-2">
                                 <a class="btn btn-success" href="/user/shoplist" th:text="#{shoplist}">Shopping List</a>
                             </div>
-                            <div class="row mb-2" sec:authorize="hasRole('ROLE_ADMIN')">
-                                <a class="btn btn-success" href="/admin" th:text="#{admin.dashboard}">Admin Dashboard</a>
+                            <div class="row mt-2 mb-2">
+                                <a class="btn btn-success" href="/user/recipes" th:text="#{recipes}">Cooking Recipes</a>
                             </div>
                         </div>
                     </div>
@@ -70,7 +70,7 @@
             <aside class="right-side col-xl-10 col-md-12">
                 <div class="container mt-4">
                     <div class="row">
-                        <a class="btn btn-success" href="/user/createReminder" th:text="#{add.new.event}">Add New Event</a>
+                        <a class="btn btn-success" href="/user/reminders/create" th:text="#{add.new.event}">Add New Event</a>
                     </div>
                     <!-- Example event card -->
                     <div class="row mt-4 border-top">
@@ -102,13 +102,13 @@
                             <tr th:if="${reminders.empty}">
                                 <td colspan="2" th:text="#{no.reminders.available}"> No Reminders Available </td>
                             </tr>
-                            <tr th:each="reminder : ${reminders}" th:class="${reminder.expired} ? 'table-danger' : (${reminder.expiresInNumberOfDays} ? 'table-warning' : 'table-success')">
+                            <tr th:each="reminder : ${reminders}" th:class="${reminder.expired} ? 'table-danger' : (${reminder.expiresSoon} ? 'table-warning' : 'table-success')">
                                 <td><span th:text="${reminder.name}"> Name </span></td>
                                 <td><span th:text="${reminder.importanceLevel}"> Importance Level </span></td>
                                 <td><span th:text="${reminder.description}"> Description</span></td>
                                 <td><span th:text="${#temporals.format(reminder.expiration, 'dd-MMMM-yyyy')}"> Expiration </span></td>
                                 <td><span>
-                                        <a th:href="@{'/user/editReminder/' + ${reminder.id}}"
+                                        <a th:href="@{'/user/reminders/edit/' + ${reminder.id}}"
                                             class="btn btn-primary" th:text="#{edit}">Edit</a>
                                         <a th:href="@{'/user/reminders/delete/' + ${reminder.id}}"
                                             class="btn btn-danger" th:text="#{delete}">Delete</a>
