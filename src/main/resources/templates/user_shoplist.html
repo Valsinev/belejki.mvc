@@ -50,7 +50,7 @@
                             <a class="btn btn-success" href="/user/reminders" th:text="#{reminders}">Reminders</a>
                         </div>
                         <div class="row mt-2">
-                            <a class="btn btn-success" href="/user/wishlist" th:text="#{wishlist}">Wishlist</a>
+                            <a class="btn btn-success" href="/user/wishes" th:text="#{wishlist}">Wishlist</a>
                         </div>
                         <div class="row mt-2 mb-2">
                             <a class="btn btn-success" href="/user/friends" th:text="#{friends}">Friends</a>
@@ -58,8 +58,8 @@
                         <div class="row mt-2 mb-2">
                             <a class="btn btn-warning" href="/user/shoplist" th:text="#{shoplist}">Shopping List</a>
                         </div>
-                        <div class="row mb-2" sec:authorize="hasRole('ROLE_ADMIN')">
-                            <a class="btn btn-success" href="/admin" th:text="#{admin.dashboard}">Admin Dashboard</a>
+                        <div class="row mt-2 mb-2">
+                            <a class="btn btn-success" href="/user/recipes" th:text="#{recipes}">Cooking Recipes</a>
                         </div>
                     </div>
                 </div>
@@ -78,10 +78,23 @@
                 <div class="row">
                     <div>
 
-                        <form th:action="@{/user/shoplist/addItem}" th:method="get">
+
+                        <div class="mt-2">
+                            <form th:action="@{/user/shoplist/clear}" method="post" onsubmit="return confirmClear();">
+                                <button
+                                        class="btn btn-danger"
+                                        type="submit"
+                                >Clear Shopping List
+                                </button>
+                            </form>
+                        </div>
+
+                        <form th:action="@{/user/shoplist}" th:object="${item}" th:method="post">
+                            <label for="exampleColorInput" class="mt-2 form-label">Color picker</label>
+                            <input type="color" th:name="color" class="form-control form-control-color" id="exampleColorInput" value="#563d7c" title="Choose your color">
 
                             <div class="input-group col col-md-6 col-sm-12 col-xs-12 mt-4 mb-3">
-                                <input type="text" th:name="itemName" class="form-control" th:placeholder="#{add.product}" aria-label="Recipient's username" aria-describedby="basic-addon2" maxlength="20">
+                                <input type="text" th:name="name" class="form-control" th:placeholder="#{add.product}" aria-label="Recipient's username" aria-describedby="basic-addon2" maxlength="20">
                                 <div class="input-group-append">
                                     <button class="btn btn-success" type="submit" th:text="#{add}">Add</button>
                                 </div>
@@ -90,18 +103,30 @@
                     </div>
                 </div>
 
-                <form th:action="@{/user/shoplist/remove}" method="post">
-                    <div class="row mt-5">
-                        <div class="col mt-3" th:each="item : ${shopItems}">
-                            <button class="btn btn-danger" th:value="${item.id}" th:text="${item.name} " name="itemId" type="submit">Shop Item</button>
-                        </div>
+                <div class="row mt-5">
+                    <div class="col mt-3" th:each="item : ${shoplist}">
+                        <form th:action="@{'/user/shoplist/' + ${item.id}}" method="post">
+                            <button
+                                    class="btn"
+                                    type="submit"
+                                    th:text="${item.name}"
+                                    th:style="'background-color:' + ${item.color} + '; color: white; border: none;'">
+                            </button>
+                        </form>
                     </div>
-                </form>
+                </div>
+
             </div>
         </aside>
     </div>
 </section>
 
+
+<script>
+    function confirmClear() {
+        return confirm("Are you sure you want to clear your entire shopping list?");
+    }
+</script>
 
 <!-- Bootstrap JS and dependencies -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
