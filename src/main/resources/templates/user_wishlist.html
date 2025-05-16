@@ -45,7 +45,7 @@
                     <div class="row h-100">
                         <div class="container">
                             <div class="row mt-2">
-                                <a class="btn btn-success" href="/user" th:text="#{dashboard}">Dashboard</a>
+                                <a class="btn btn-success" href="/user/dashboard" th:text="#{dashboard}">Dashboard</a>
                             </div>
                             <div class="row mt-2">
                                 <a class="btn btn-success" href="/user/reminders" th:text="#{reminders}">Reminders</a>
@@ -59,8 +59,8 @@
                             <div class="row mt-2 mb-2">
                                 <a class="btn btn-success" href="/user/shoplist" th:text="#{shoplist}">Shopping List</a>
                             </div>
-                            <div class="row mb-2" sec:authorize="hasRole('ROLE_ADMIN')">
-                                <a class="btn btn-success" href="/admin" th:text="#{admin.dashboard}">Admin Dashboard</a>
+                            <div class="row mt-2 mb-2">
+                                <a class="btn btn-success" href="/user/recipes" th:text="#{recipes}">Cooking Recipes</a>
                             </div>
                         </div>
                     </div>
@@ -70,13 +70,13 @@
             <aside class="right-side col-xl-10 col-md-12">
                 <div class="container mt-4">
                     <div class="row">
-                        <a class="btn btn-success" href="/user/createWish" th:text="#{add.new.wish}">Add New Wish</a>
+                        <a class="btn btn-success" href="/user/wishes/create" th:text="#{add.new.wish}">Add New Wish</a>
                     </div>
                     <div class="row mt-4 border-top">
 
                         <h2 class="mb-4" th:text="#{your.wishlist} + ':'">Your Wishlist:</h2>
                         <div class="container-fluid mt-4">
-                            <form th:action="@{/user/wishlist/search}" th:method="get">
+                            <form th:action="@{/user/wishes/search}" th:method="get">
                                 <div class="input-group mb-3">
                                     <input id="searchInput" th:name="searchValue" type="text" class="form-control col-6"
                                         th:placeholder="#{search.by.description}" aria-label="Search"
@@ -84,10 +84,10 @@
                                     <button class="btn btn-success" type="submit" th:text="#{search}">Search</button>
                                 </div>
                             </form>
-                            <form th:action="@{/user/wishlist/filter}" th:method="get">
+                            <form th:action="@{/user/wishes/filter}" th:method="get">
                                 <h4 th:text="#{filter.by.price}">Filter by price:</h4>
                                 <div class="input-group mb-3">
-                                    <input id="to" th:name="toValue" type="number" class="form-control col-6"
+                                    <input id="to" th:name="maxPrice" type="number" class="form-control col-6"
                                         th:placeholder="#{max}" aria-label="to" aria-describedby="basic-addon2">
                                     <button class="btn btn-success" type="submit" th:text="#{filter}">Filter</button>
                                 </div>
@@ -116,9 +116,9 @@
                                         <td><a th:href="${wish.link}" th:text="${wish.link}" target="_blank">Link</a>
                                         </td>
                                         <td><span>
-                                                <a th:href="@{'/user/editWish/' + ${wish.id}}"
+                                                <a th:href="@{'/user/wishes/edit/' + ${wish.id}}"
                                                     class="btn btn-primary" th:text="#{edit}">Edit</a>
-                                                <a th:href="@{'/user/wishlist/delete/' + ${wish.id}}"
+                                                <a th:href="@{'/user/wishes/delete/' + ${wish.id}}"
                                                     class="btn btn-danger" th:text="#{delete}">Delete</a>
                                             </span></td>
                                     </tr>
