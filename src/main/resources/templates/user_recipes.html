@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -67,77 +67,124 @@
 
 
 
-
-
-
-        <aside class="right-side col-xl-10 col-md-12">
+        <div class="col-xl-10 col-md-12">
             <div class="container mt-4">
                 <div class="row">
-                    <a class="btn btn-success" href="/user/createRecipe" th:text="#{add.new.recipe}">Add New Recipe</a>
+                    <a class="btn btn-success" href="/user/recipes/create" th:text="#{add.new.recipe}">Add New Recipe</a>
                 </div>
-                <div class="row mt-4 border-top">
+                <div class="row mt-2 border-top">
 
-                    <h2 class="mb-4" th:text="#{your.recipes} + ':'">Your Recipes:</h2>
+                    <h2 class="mb-2" th:text="#{find.recipes}">Find Recipes</h2>
                     <div class="container-fluid mt-4">
-                        <form th:action="@{/user/recipes/search}" th:method="get">
+                        <h4 class="mb-2" th:text="#{search.by.title}">Search by title</h4>
+                        <form th:action="@{/user/recipes/search/title}" th:method="get">
                             <div class="input-group mb-3">
                                 <input id="searchInput" th:name="searchValue" type="text" class="form-control col-6"
-                                       th:placeholder="#{search.by.description}" aria-label="Search"
+                                       th:placeholder="#{title}" aria-label="Search"
                                        aria-describedby="basic-addon2">
                                 <button class="btn btn-success" type="submit" th:text="#{search}">Search</button>
                             </div>
                         </form>
-                        <form th:action="@{/user/recipes/filter}" th:method="get">
-                            <h4 th:text="#{filter.by.price}">Filter by price:</h4>
-                            <div class="input-group mb-3">
-                                <input id="to" th:name="toValue" type="number" class="form-control col-6"
-                                       th:placeholder="#{max}" aria-label="to" aria-describedby="basic-addon2">
-                                <button class="btn btn-success" type="submit" th:text="#{filter}">Filter</button>
+                        <h4 class="mb-2" th:text="#{search.by.ingredients}">Search by ingredients</h4>
+                        <form th:action="@{/user/recipes/search/ingredients}" method="get">
+                            <div id="ingredient-inputs" class="mb-3">
+                                <div class="input-group mb-2">
+                                    <input name="ingredients" type="text" class="form-control" th:placeholder="#{ingredient.placeholder}">
+                                    <button type="button" class="btn btn-outline-danger remove-btn" onclick="removeIngredient(this)">✕</button>
+                                </div>
                             </div>
+
+                            <button type="button"   class="btn btn-outline-primary mb-3" th:text="#{add.ingredient}" onclick="addIngredient()">+ Add Ingredient</button>
+
+                            <button class="btn btn-success" type="submit" th:text="#{search}">Search</button>
                         </form>
                     </div>
                 </div>
 
-                <section class="text-center mt-5">
-                    <div class="container">
-                        <table class="table table-sm table-striped table-hover table-responsive mb-5">
-                            <thead class="thead-dark">
-                            <tr>
-                                <th th:text="#{description}"> Description </th>
-                                <th th:text="#{approximate.price}"> Approximate Price </th>
-                                <th th:text="#{link}"> Link </th>
-                                <th th:text="#{action}"> Action </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:if="${recipes.empty}">
-                                <td colspan="2" th:text="#{no.recipes.found}"> No recipes found.</td>
-                            </tr>
-                            <tr th:each="recipe : ${recipes}">
-                                <td><span th:text="${recipe.name}"> Description </span></td>
-                                <td><span th:text="${recipe.howToMake}"> Approximate Price </span></td>
-                                <td><span th:href="${recipe.ingredients}">Ingredients</span>
-                                </td>
-                                <td><span>
-                                                <a th:href="@{'/user/editWish/' + ${wish.id}}"
-                                                   class="btn btn-primary" th:text="#{edit}">Edit</a>
-                                                <a th:href="@{'/user/wishlist/delete/' + ${wish.id}}"
-                                                   class="btn btn-danger" th:text="#{delete}">Delete</a>
-                                            </span></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </section>
             </div>
-        </aside>
+        </div>
+
+
+        <section class="text-center mt-5">
+            <div class="container">
+                <div th:each="recipe : ${recipes}">
+                    <div class="col mt-2">
+                        <div class="card h-100">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="card-title mb-0" th:text="${recipe.name}">Recipe Title</h5>
+                            </div>
+                            <div class="card-body">
+                                <h6 class="card-subtitle mb-2 text-muted">Ingredients:</h6>
+                                <ul class="text-start">
+                                    <li th:each="ingredient : ${recipe.ingredients}"
+                                        th:text="|${ingredient.ingredient} - ${ingredient.quantity}|">
+                                        Ingredient - Quantity
+                                    </li>
+                                </ul>
+
+                                <h6 class="mt-3">Instructions:</h6>
+                                <p th:text="${recipe.howToMake}">How to make the recipe...</p>
+                            </div>
+                            <div class="card-footer">
+                                <a class="btn btn-sm btn-danger"
+                                   th:href="@{'/user/recipes/delete/' + ${recipe.id}}"
+                                   th:text="#{delete}"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
 
     </div>
 </section>
 
 
 
+<script th:inline="javascript">
+    let ingredientBase = /*[[#{ingredient.placeholder}]]*/ 'Ingredient';
+</script>
+<script>
+    let ingredientCount = 1;
+
+    function addIngredient() {
+        ingredientCount++;
+        const container = document.getElementById('ingredient-inputs');
+
+        const inputGroup = document.createElement('div');
+        inputGroup.className = 'input-group mb-2';
+
+        const input = document.createElement('input');
+        input.name = 'ingredients';
+        input.type = 'text';
+        input.className = 'form-control';
+        input.placeholder = ingredientBase + ' ' + ingredientCount;
+
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'btn btn-outline-danger remove-btn';
+        removeBtn.innerText = '✕';
+        removeBtn.onclick = function () {
+            removeIngredient(removeBtn);
+        };
+
+        inputGroup.appendChild(input);
+        inputGroup.appendChild(removeBtn);
+
+        container.appendChild(inputGroup);
+    }
+
+    function removeIngredient(button) {
+        const group = button.parentElement;
+        group.remove();
+    }
+</script>
+
 
 
 </body>
+
 </html>
+
+

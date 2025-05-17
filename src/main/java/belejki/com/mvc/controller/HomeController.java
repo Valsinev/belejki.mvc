@@ -106,7 +106,7 @@ public class HomeController {
             List<String> roles = (List<String>) claims.get("roles");
 
             if (roles.contains("ROLE_ADMIN")) {
-                return "redirect:/admin/dashboard";
+                return "redirect:/admin";
             } else {
                 return "redirect:/user/dashboard";
             }

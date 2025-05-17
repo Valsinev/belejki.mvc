@@ -44,7 +44,7 @@
                 <div class="row h-100">
                     <div class="container">
                         <div class="row mt-2">
-                            <a class="btn btn-success" href="/user" th:text="#{dashboard}">Dashboard</a>
+                            <a class="btn btn-success" href="/admin" th:text="#{dashboard}">Dashboard</a>
                         </div>
                         <div class="row mt-2">
                             <a class="btn btn-success" href="/user/reminders" th:text="#{reminders}">Reminders</a>
@@ -58,7 +58,10 @@
                         <div class="row mt-2 mb-2">
                             <a class="btn btn-success" href="/user/shoplist" th:text="#{shoplist}">Shopping List</a>
                         </div>
-                        <div class="row mb-2" sec:authorize="hasRole('ROLE_ADMIN')">
+                        <div class="row mt-2 mb-2">
+                            <a class="btn btn-success" href="/user/recipes" th:text="#{recipes}">Cooking Recipes</a>
+                        </div>
+                        <div class="row mb-2">
                             <a class="btn btn-warning" href="/admin" th:text="#{admin.dashboard}">Admin Dashboard</a>
                         </div>
                     </div>
