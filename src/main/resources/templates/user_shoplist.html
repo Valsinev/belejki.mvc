@@ -90,8 +90,10 @@
                         </div>
 
                         <form th:action="@{/user/shoplist}" th:object="${item}" th:method="post">
-                            <label for="exampleColorInput" class="mt-2 form-label">Color picker</label>
-                            <input type="color" th:name="color" class="form-control form-control-color" id="exampleColorInput" value="#563d7c" title="Choose your color">
+                            <div class="col-2">
+                                <label for="exampleColorInput" th:text="#{color}" class="mt-2 form-label">Color</label>
+                                <input type="color" th:name="color" class="form-control form-control-color" id="exampleColorInput" value="#563d7c" title="Choose your color">
+                            </div>
 
                             <div class="input-group col col-md-6 col-sm-12 col-xs-12 mt-4 mb-3">
                                 <input type="text" th:name="name" class="form-control" th:placeholder="#{add.product}" aria-label="Recipient's username" aria-describedby="basic-addon2" maxlength="20">

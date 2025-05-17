@@ -34,7 +34,7 @@ public class ShoppingItemsController {
     @GetMapping
     public String getUserShoppingList(Model model, HttpSession session) {
         String token = (String) session.getAttribute("jwt");
-        if (token == null) return "redirect:/user/dashboard";
+        if (token == null) return "redirect:/login";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);

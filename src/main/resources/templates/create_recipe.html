@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{create.reminder}">Create Recipe</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <link rel="stylesheet" th:href="@{/css/default_layout_styles.css}">
+</head>
+<body class="">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/" th:text="#{home}">Home</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/login?logout" th:text="#{logout}">Logout</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/reminders" th:text="#{return}">Return</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+
+                <form th:action="@{/user/recipes}" th:object="${recipe}" method="post" class="container mt-4">
+                    <!-- Recipe Title -->
+                    <div class="form-group">
+                        <div>
+                            <label for="title">Title</label>
+                        </div>
+                        <div>
+                            <input th:field="*{title}" type="text" class="form-control" id="title" required>
+                        </div>
+                    </div>
+
+
+                    <!-- Ingredients -->
+                    <div class="form-group">
+                        <label>Ingredients</label>
+                        <div id="ingredients-list">
+                            <!-- First ingredient row (template for cloning) -->
+                            <div class="form-row align-items-end ingredient-row mb-2">
+                                <div class="col">
+                                    <input type="text" name="ingredients[0].ingredient" class="form-control" placeholder="Ingredient Name" required>
+                                </div>
+                                <div class="col">
+                                    <input type="text" name="ingredients[0].quantity" class="form-control" placeholder="Quantity" required>
+                                </div>
+                                <div class="col-auto">
+                                    <button type="button" class="btn btn-success add-ingredient">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- How to Make -->
+                    <div class="form-group">
+                        <div>
+                            <label for="howToMake">How to Make</label>
+                        </div>
+                        <div>
+                            <textarea th:field="*{howToMake}" class="form-control" id="howToMake" rows="4" required></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Submit -->
+                    <button type="submit" class="btn btn-primary">Save Recipe</button>
+
+                </form>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
+
+<script>
+    let ingredientIndex = 1;
+
+    document.addEventListener('click', function (e) {
+        if (e.target && e.target.classList.contains('add-ingredient')) {
+            e.preventDefault();
+
+            const ingredientsList = document.getElementById('ingredients-list');
+            const newRow = document.createElement('div');
+            newRow.className = 'form-row align-items-end ingredient-row mb-2';
+
+            newRow.innerHTML = `
+                <div class="col">
+                    <input type="text" name="ingredients[${ingredientIndex}].ingredientName" class="form-control" placeholder="Ingredient Name" required>
+                </div>
+                <div class="col">
+                    <input type="text" name="ingredients[${ingredientIndex}].quantity" class="form-control" placeholder="Quantity" required>
+                </div>
+                <div class="col-auto">
+                    <button type="button" class="btn btn-danger remove-ingredient">-</button>
+                </div>
+            `;
+
+            ingredientsList.appendChild(newRow);
+            ingredientIndex++;
+        }
+
+        // Remove ingredient row
+        if (e.target && e.target.classList.contains('remove-ingredient')) {
+            e.preventDefault();
+            e.target.closest('.ingredient-row').remove();
+        }
+    });
+</script>

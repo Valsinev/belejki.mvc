@@ -50,7 +50,7 @@
                                 <a class="btn btn-success" href="/user/reminders" th:text="#{reminders}">Reminders</a>
                             </div>
                             <div class="row mt-2">
-                                <a class="btn btn-success" href="/user/wishlist" th:text="#{wishlist}">Wishlist</a>
+                                <a class="btn btn-success" href="/user/wishes" th:text="#{wishlist}">Wishlist</a>
                             </div>
                             <div class="row mt-2 mb-2">
                                 <a class="btn btn-warning" href="/user/friends" th:text="#{friends}">Friends</a>
@@ -58,8 +58,8 @@
                             <div class="row mt-2 mb-2">
                                 <a class="btn btn-success" href="/user/shoplist" th:text="#{shoplist}">Shopping List</a>
                             </div>
-                            <div class="row mb-2" sec:authorize="hasRole('ROLE_ADMIN')">
-                                <a class="btn btn-success" href="/admin" th:text="#{admin.dashboard}">Admin Dashboard</a>
+                            <div class="row mt-2 mb-2">
+                                <a class="btn btn-success" href="/user/recipes" th:text="#{recipes}">Shopping List</a>
                             </div>
                         </div>
                     </div>
@@ -71,7 +71,9 @@
                 <div class="container mt-4">
                     <div class="row">
                         <form th:action="@{/user/friends/addFriend}" th:method="get">
-                            <div class="input-group mb-3">
+
+                            <h4 class="mt-2" th:text="#{friend.page.description}">Add a friend and access his wishlist and cooking recipes.</h4>
+                            <div class="input-group mb-3 col-lg-4 col-md-8 col-sm-12">
                                 <input id="addFriend" th:name="friendEmail" type="email" class="form-control col-10"
                                     th:placeholder="#{enter.friend.email}" aria-label="addFriend"
                                     aria-describedby="basic-addon2">
@@ -128,14 +130,26 @@
                                             Name</h5>
                                     </div>
                                     <div class="card-footer">
-                                        <form th:action="@{/user/friends/friend/wishlist}" method="post">
-                                            <input type="hidden" name="friendId" th:value="${friend.username}" />
-                                            <button type="submit" class="btn btn-primary" th:text="#{view.wishlist}">View WishList</button>
-                                        </form>
-                                        <form th:action="@{/user/friends/remove}" method="post">
-                                            <input type="hidden" name="friendId" th:value="${friend.username}" />
-                                            <button type="submit" class="btn btn-danger" th:text="#{remove}">Remove</button>
-                                        </form>
+                                        <div>
+                                            <form th:action="@{/user/friends/friend/wishlist}" method="post">
+                                                <input type="hidden" name="friendId" th:value="${friend.username}" />
+                                                <button type="submit" class="btn btn-primary" th:text="#{view.wishlist}">View WishList</button>
+                                            </form>
+                                        </div>
+
+                                        <div class="mt-1">
+                                            <form th:action="@{/user/friends/friend/recipes}" method="post">
+                                                <input type="hidden" name="friendId" th:value="${friend.username}" />
+                                                <button type="submit" class="btn btn-primary" th:text="#{view.recipes}">View Cooking Recipes</button>
+                                            </form>
+                                        </div>
+
+                                        <div class="mt-1">
+                                            <form th:action="@{/user/friends/remove}" method="post">
+                                                <input type="hidden" name="friendId" th:value="${friend.username}" />
+                                                <button type="submit" class="btn btn-danger" th:text="#{remove}">Remove</button>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

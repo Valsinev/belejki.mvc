@@ -2,8 +2,11 @@
 .navbar {
 }
 
+
 body {
   background: #ffffd3;
+  color: #435160;
+  font-family: "Open Sans", sans-serif;
 }
 
 .left-side {
