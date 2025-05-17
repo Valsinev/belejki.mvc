@@ -43,7 +43,7 @@
                     <!-- Recipe Title -->
                     <div class="form-group">
                         <div>
-                            <label for="title">Title</label>
+                            <label for="title" th:text="#{title}">Title</label>
                         </div>
                         <div>
                             <input th:field="*{name}" type="text" class="form-control" id="title" required minlength="2" maxlength="64">
@@ -53,15 +53,15 @@
 
                     <!-- Ingredients -->
                     <div class="form-group">
-                        <label>Ingredients</label>
+                        <label th:text="#{ingredients}">Ingredients</label>
                         <div id="ingredients-list">
                             <!-- First ingredient row (template for cloning) -->
                             <div class="form-row align-items-end ingredient-row mb-2">
                                 <div class="col">
-                                    <input type="text" name="ingredients[0].ingredient" class="form-control" placeholder="Ingredient Name" required minlength="2" maxlength="64">
+                                    <input type="text" name="ingredients[0].ingredient" class="form-control" th:placeholder="#{ingredient.name}" required minlength="2" maxlength="64">
                                 </div>
                                 <div class="col">
-                                    <input type="text" name="ingredients[0].quantity" class="form-control" placeholder="Quantity" required minlength="2" maxlength="64">
+                                    <input type="text" name="ingredients[0].quantity" class="form-control" th:placeholder="#{quantity}" required minlength="2" maxlength="64">
                                 </div>
                                 <div class="col-auto">
                                     <button type="button" class="btn btn-success add-ingredient">+</button>
@@ -74,7 +74,7 @@
                     <!-- How to Make -->
                     <div class="form-group">
                         <div>
-                            <label for="howToMake">How to Make</label>
+                            <label for="howToMake" th:text="#{how.to.make}">How to Make</label>
                         </div>
                         <div>
                             <textarea th:field="*{howToMake}" class="form-control" id="howToMake" rows="4" required minlength="10" maxlength="4000"></textarea>
@@ -82,7 +82,9 @@
                     </div>
 
                     <!-- Submit -->
-                    <button type="submit" class="btn btn-primary">Save Recipe</button>
+                    <div class="mb-2">
+                        <button type="submit" class="btn btn-primary" th:text="#{save.recipe}">Save Recipe</button>
+                    </div>
 
                 </form>
 
