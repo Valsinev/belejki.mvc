@@ -35,12 +35,7 @@ public class UsersController {
         this.restTemplate = restTemplate;
     }
 
-    @GetMapping("/admin/dashboard")
-    public String getAdminDashboard(HttpSession session, Model model) {
-        return "admin";
-    }
-
-    @GetMapping("/user/dashboard")
+    @GetMapping("/user")
     public String getUserDashboard(HttpSession session, Model model) {
         String token = (String) session.getAttribute("jwt");
         if (token == null) return "redirect:/login";

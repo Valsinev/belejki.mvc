@@ -44,7 +44,7 @@
                     <div class="row h-100">
                         <div class="container">
                             <div class="row mt-2">
-                                <a class="btn btn-success" href="/user/dashboard" th:text="#{dashboard}">Dashboard</a>
+                                <a class="btn btn-success" href="/user" th:text="#{dashboard}">Dashboard</a>
                             </div>
                             <div class="row mt-2">
                                 <a class="btn btn-success" href="/user/reminders" th:text="#{reminders}">Reminders</a>
@@ -69,12 +69,16 @@
             <!-- Upcoming Events -->
             <aside class="right-side col-10">
                 <div class="container mt-4">
+<!--                    <div th:if="${errorMessage}" class="alert alert-danger" role="alert">-->
+<!--                        <p th:text="${errorMessage}"></p>-->
+<!--                    </div>-->
+
                     <div class="row">
-                        <form th:action="@{/user/friends/addFriend}" th:method="get">
+                        <form th:action="@{/user/friends}" th:method="post">
 
                             <h4 class="mt-2" th:text="#{friend.page.description}">Add a friend and access his wishlist and cooking recipes.</h4>
                             <div class="input-group mb-3 col-lg-4 col-md-8 col-sm-12">
-                                <input id="addFriend" th:name="friendEmail" type="email" class="form-control col-10"
+                                <input id="friend" th:name="friend" type="email" class="form-control col-10"
                                     th:placeholder="#{enter.friend.email}" aria-label="addFriend"
                                     aria-describedby="basic-addon2" required minlength="4" maxlength="64">
                                 <button class="btn btn-success" type="submit" th:text="#{add}">Add</button>
@@ -130,25 +134,20 @@
                                             Name</h5>
                                     </div>
                                     <div class="card-footer">
-                                        <div>
-                                            <form th:action="@{/user/friends/friend/wishlist}" method="post">
-                                                <input type="hidden" name="friendId" th:value="${friend.username}" />
-                                                <button type="submit" class="btn btn-primary" th:text="#{view.wishlist}">View WishList</button>
-                                            </form>
+
+                                        <div class="mt-1">
+                                            <a th:href="@{'/user/friends/wishlist/' + ${friend.friendName}}"
+                                               class="btn btn-primary" th:text="#{view.wishlist}">View Wishlist</a>
                                         </div>
 
                                         <div class="mt-1">
-                                            <form th:action="@{/user/friends/friend/recipes}" method="post">
-                                                <input type="hidden" name="friendId" th:value="${friend.username}" />
-                                                <button type="submit" class="btn btn-primary" th:text="#{view.recipes}">View Cooking Recipes</button>
-                                            </form>
+                                            <a th:href="@{'/user/friends/recipes/' + ${friend.friendName}}"
+                                               class="btn btn-primary" th:text="#{view.recipes}">View Recipes</a>
                                         </div>
 
                                         <div class="mt-1">
-                                            <form th:action="@{/user/friends/remove}" method="post">
-                                                <input type="hidden" name="friendId" th:value="${friend.username}" />
-                                                <button type="submit" class="btn btn-danger" th:text="#{remove}">Remove</button>
-                                            </form>
+                                            <a th:href="@{'/user/friends/remove/' + ${friend.id}}"
+                                               class="btn btn-danger" th:text="#{remove}">Remove</a>
                                         </div>
                                     </div>
                                 </div>

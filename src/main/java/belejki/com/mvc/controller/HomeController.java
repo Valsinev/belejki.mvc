@@ -108,7 +108,7 @@ public class HomeController {
             if (roles.contains("ROLE_ADMIN")) {
                 return "redirect:/admin";
             } else {
-                return "redirect:/user/dashboard";
+                return "redirect:/user";
             }
         } catch (HttpClientErrorException ex) {
             model.addAttribute("error", "Invalid username or password.");
