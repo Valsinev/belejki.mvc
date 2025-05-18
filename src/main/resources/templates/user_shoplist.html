@@ -84,6 +84,7 @@
                                 <button
                                         class="btn btn-danger"
                                         type="submit"
+                                        th:text="#{clear.shopping.list}"
                                 >Clear Shopping List
                                 </button>
                             </form>
@@ -123,11 +124,14 @@
     </div>
 </section>
 
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    let clearConfirmMessage = /*[[#{shopping.clear.confirm}]]*/ 'Are you sure?';
 
-<script>
     function confirmClear() {
-        return confirm("Are you sure you want to clear your entire shopping list?");
+        return confirm(clearConfirmMessage);
     }
+    /*]]>*/
 </script>
 
 <!-- Bootstrap JS and dependencies -->

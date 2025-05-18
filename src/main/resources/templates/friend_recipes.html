@@ -76,7 +76,7 @@
                 <h2 class="mb-2" th:text="#{find.recipes}">Find Recipes</h2>
                 <div class="container-fluid mt-4">
                     <h4 class="mb-2" th:text="#{search.by.title}">Search by title</h4>
-                    <form th:action="@{/user/friends/recipes/search/title}" th:method="get">
+                    <form th:action="@{/user/friends/recipes/search/title}" th:method="get" accept-charset="UTF-8">
                         <input type="hidden" name="username" th:value="${username}" />
                         <div class="input-group mb-3">
                             <input id="searchInput" th:name="searchValue" type="text" class="form-control col-6"
