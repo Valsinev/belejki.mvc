@@ -47,9 +47,13 @@ public class RecipesController {
                                     BindingResult result,
                                     HttpSession session,
                                     Model model) {
+
         String token = (String) session.getAttribute("jwt");
         if (token == null) return "redirect:/login";
 
+        if (result.hasErrors()) {
+            return "create_recipe";
+        }
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);
         headers.setContentType(MediaType.APPLICATION_JSON);
