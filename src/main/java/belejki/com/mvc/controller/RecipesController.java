@@ -7,6 +7,7 @@ import belejki.com.mvc.dto.WishDto;
 import belejki.com.mvc.util.PagedResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.context.MessageSource;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("/user/recipes")
@@ -28,10 +32,12 @@ public class RecipesController {
 
     private final AppConfig appConfig;
     private final RestTemplate restTemplate;
+    private final MessageSource messageSource;
 
-    public RecipesController(AppConfig appConfig, RestTemplate restTemplate) {
+    public RecipesController(AppConfig appConfig, RestTemplate restTemplate, MessageSource messageSource) {
         this.appConfig = appConfig;
         this.restTemplate = restTemplate;
+        this.messageSource = messageSource;
     }
 
 
@@ -70,12 +76,11 @@ public class RecipesController {
 
 
     @GetMapping
-    public String getUserRecipes(Model model, HttpSession session) {String token = (String) session.getAttribute("jwt");
+    public String getUserRecipes(Model model, HttpSession session, Locale locale) {String token = (String) session.getAttribute("jwt");
         if (token == null) return "redirect:/user/dashboard";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);
-
 
         return "user_recipes";
     }
@@ -85,7 +90,8 @@ public class RecipesController {
     @GetMapping("/search/title")
     public String searchByNameContaining(@RequestParam("searchValue") String searchValue,
                                          Model model,
-                                         HttpSession session) {
+                                         HttpSession session,
+                                         Locale locale) {
         String token = (String) session.getAttribute("jwt");
         if (token == null) return "redirect:/user/dashboard";
 
@@ -103,6 +109,8 @@ public class RecipesController {
         );
         List<RecipeDto> recipes = response.getBody().getContent();
 
+        checkForVideoLink(locale, recipes);
+
         model.addAttribute("recipes", recipes);
 
 
@@ -113,7 +121,8 @@ public class RecipesController {
     @GetMapping("/search/ingredients")
     public String searchByIngredients(@RequestParam("ingredients") List<String> ingredients,
                                          Model model,
-                                         HttpSession session) {
+                                         HttpSession session,
+                                      Locale locale) {
         String token = (String) session.getAttribute("jwt");
         if (token == null) return "redirect:/user/dashboard";
 
@@ -137,6 +146,8 @@ public class RecipesController {
                 }
         );
         List<RecipeDto> recipes = response.getBody().getContent();
+
+        checkForVideoLink(locale, recipes);
 
         model.addAttribute("recipes", recipes);
 
@@ -166,6 +177,23 @@ public class RecipesController {
             return "redirect:/user/reminders?error=delete";
         }
         return "redirect:/user/recipes";
+    }
+
+
+    private void checkForVideoLink(Locale locale, List<RecipeDto> recipes) {
+        String videoPrefix = messageSource.getMessage("video.prefix", null, locale);
+        String linkText = messageSource.getMessage("video.watch.here", null, locale);
+
+        String regex = "(?i)[\\r\\n\\s]*" + Pattern.quote(videoPrefix) + ":\\s*(https?://\\S+)";
+        String replacement = "<strong>" + videoPrefix + ":</strong> <a href=\"$1\" target=\"_blank\">" + linkText + "</a>";
+
+        Pattern pattern = Pattern.compile(regex);
+
+        recipes.forEach(recipeDto -> {
+            Matcher matcher = pattern.matcher(recipeDto.getHowToMake());
+            String result = matcher.replaceAll(replacement);
+            recipeDto.setHowToMake(result);
+        });
     }
 }
 
