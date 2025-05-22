@@ -16,6 +16,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -31,7 +32,7 @@ public class WishlistController {
     }
 
     @GetMapping
-    public String getUserReminders(Model model, HttpSession session) {
+    public String getUserWishlist(Model model, HttpSession session) {
         String token = (String) session.getAttribute("jwt");
         if (token == null) return "redirect:/login";
 
@@ -48,6 +49,7 @@ public class WishlistController {
                 }
         );
         List<WishDto> wishlist = response.getBody().getContent();
+        wishlist.sort(Comparator.comparing(WishDto::getApproximatePrice).reversed());
 
         model.addAttribute("wishlist", wishlist);
 
@@ -192,6 +194,7 @@ public class WishlistController {
                 }
         );
         List<WishDto> wishlist = response.getBody().getContent();
+        wishlist.sort(Comparator.comparing(WishDto::getApproximatePrice).reversed());
 
         model.addAttribute("wishlist", wishlist);
 
@@ -219,6 +222,7 @@ public class WishlistController {
                 }
         );
         List<WishDto> wishlist = response.getBody().getContent();
+        wishlist.sort(Comparator.comparing(WishDto::getApproximatePrice).reversed());
 
         model.addAttribute("wishlist", wishlist);
 

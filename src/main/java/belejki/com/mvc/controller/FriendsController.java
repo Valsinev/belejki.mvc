@@ -21,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -205,6 +206,7 @@ public class FriendsController {
                 }
         );
         List<WishDto> wishlist = response.getBody().getContent();
+        wishlist.sort(Comparator.comparing(WishDto::getApproximatePrice).reversed());
 
         model.addAttribute("wishlist", wishlist);
         model.addAttribute("username", username);
@@ -241,6 +243,7 @@ public class FriendsController {
                 }
         );
         List<WishDto> wishlist = response.getBody().getContent();
+        wishlist.sort(Comparator.comparing(WishDto::getApproximatePrice).reversed());
 
         model.addAttribute("wishlist", wishlist);
         model.addAttribute("username", username);

@@ -16,6 +16,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -50,6 +51,7 @@ public class RemindersController {
                 }
         );
         List<ReminderDto> reminders = response.getBody().getContent();
+        reminders.sort(Comparator.comparing(ReminderDto::getExpiration));
 
         model.addAttribute("reminders", reminders);
 
@@ -187,6 +189,7 @@ public class RemindersController {
                 }
         );
         List<ReminderDto> reminders = response.getBody().getContent();
+        reminders.sort(Comparator.comparing(ReminderDto::getExpiration));
 
         model.addAttribute("reminders", reminders);
 
