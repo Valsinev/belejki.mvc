@@ -12,6 +12,7 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
     <link rel="stylesheet" th:href="@{/css/fancy_form.css}">
+    <link rel="icon" type="images/x-icon" href="/images/user.icon.png" >
 
 </head>
 <body>
@@ -37,6 +38,7 @@
 </nav>
 
 <form class="container" id="registrationForm" th:action="@{/login}" method="post">
+    <input type="hidden" name="lang" th:value="${#locale.language}" />
     <div class="header row mt-5">
         <h2 class="col" th:text="#{login}">Login</h2>
     </div>
