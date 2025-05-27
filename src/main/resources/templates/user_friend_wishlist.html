@@ -11,6 +11,7 @@
     <link rel="stylesheet" th:href="@{/css/default_layout_styles.css}">
     <link rel="icon" type="images/x-icon" href="/images/wishlist.icon.ico" >
     <link rel="stylesheet" href="/css/default.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
 
 
 
@@ -91,7 +92,7 @@
                             <h4 th:text="#{filter.by.price}">Filter by price:</h4>
                             <div class="input-group mb-3">
                                 <input type="hidden" name="friendId" th:value="${friendId}" />
-                                <input id="to" th:name="toValue"  type="number" class="form-control col-6" th:placeholder="#{max}" aria-label="to" aria-describedby="basic-addon2">
+                                <input id="to" th:name="toValue"  type="number" class="form-control col-6" th:placeholder="#{max}" aria-label="to" aria-describedby="basic-addon2" required>
                                 <button class="btn btn-success" type="submit" th:text="#{filter}">Filter</button>
                             </div>
                         </form>

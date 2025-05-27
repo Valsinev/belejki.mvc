@@ -2,8 +2,6 @@ package belejki.com.mvc.controller;
 
 import belejki.com.mvc.config.AppConfig;
 import belejki.com.mvc.dto.RecipeDto;
-import belejki.com.mvc.dto.ReminderDto;
-import belejki.com.mvc.dto.WishDto;
 import belejki.com.mvc.util.PagedResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;

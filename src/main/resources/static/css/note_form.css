@@ -4,6 +4,14 @@ body {
   background-image: url("/images/background.png");
 }
 
+.card-title {
+    font-size: 2.5rem;
+}
+
+.card-subtitle {
+    font-size: 1.8rem;
+}
+
 .card {
     background: #fdfdc4; /* pale yellow note paper */
     border: 1px solid #ccc;

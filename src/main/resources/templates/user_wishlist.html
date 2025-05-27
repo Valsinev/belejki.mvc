@@ -13,6 +13,7 @@
     <link rel="stylesheet" th:href="@{/css/default_layout_styles.css}">
     <link rel="icon" type="images/x-icon" href="/images/wishlist.icon.png" >
     <link rel="stylesheet" href="/css/default.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
 
 
 </head>
@@ -54,7 +55,7 @@
                                 <a class="btn btn-success" href="/user/reminders" th:text="#{reminders}">Reminders</a>
                             </div>
                             <div class="row mt-2">
-                                <a class="btn btn-warning" href="/user/wishlist" th:text="#{wishlist}">Wishlist</a>
+                                <a class="btn btn-warning" href="/user/wishes" th:text="#{wishlist}">Wishlist</a>
                             </div>
                             <div class="row mt-2 mb-2">
                                 <a class="btn btn-success" href="/user/friends" th:text="#{friends}">Friends</a>
@@ -84,7 +85,7 @@
                                 <div class="input-group mb-3">
                                     <input id="searchInput" th:name="searchValue" type="text" class="form-control col-6"
                                         th:placeholder="#{search.by.description}" aria-label="Search"
-                                        aria-describedby="basic-addon2">
+                                        aria-describedby="basic-addon2" required>
                                     <button class="btn btn-success" type="submit" th:text="#{search}">Search</button>
                                 </div>
                             </form>
@@ -92,7 +93,7 @@
                                 <h4 th:text="#{filter.by.price}">Filter by price:</h4>
                                 <div class="input-group mb-3">
                                     <input id="to" th:name="maxPrice" type="number" class="form-control col-6"
-                                        th:placeholder="#{max}" aria-label="to" aria-describedby="basic-addon2">
+                                        th:placeholder="#{max}" aria-label="to" aria-describedby="basic-addon2" required>
                                     <button class="btn btn-success" type="submit" th:text="#{filter}">Filter</button>
                                 </div>
                             </form>

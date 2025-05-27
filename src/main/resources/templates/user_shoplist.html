@@ -13,6 +13,7 @@
     <link rel="stylesheet" th:href="@{/css/default_layout_styles.css}">
     <link rel="icon" type="images/x-icon" href="/images/shoplist.icon.png" >
     <link rel="stylesheet" href="/css/default.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
 
 
 </head>
@@ -100,7 +101,7 @@
                             </div>
 
                             <div class="input-group col col-md-6 col-sm-12 col-xs-12 mt-4 mb-3">
-                                <input type="text" th:name="name" class="form-control" th:placeholder="#{add.product}" aria-label="Recipient's username" aria-describedby="basic-addon2" maxlength="20">
+                                <input type="text" th:name="name" class="form-control" th:placeholder="#{add.product}" aria-label="Recipient's username" aria-describedby="basic-addon2" maxlength="20" required>
                                 <div class="input-group-append">
                                     <button class="btn btn-success" type="submit" th:text="#{add}">Add</button>
                                 </div>

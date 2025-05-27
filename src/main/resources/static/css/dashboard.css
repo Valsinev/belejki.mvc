@@ -1,0 +1,18 @@
+
+.navbar {
+}
+
+
+body {
+  background: #ffffd3;
+  background-image: url("/images/background.png");
+  color: #435160;
+  font-family: "Sofia", cursive;
+  font-size: 2rem;
+}
+
+.btn {
+  font-family: "Open Sans", sans-serif;
+}
+
+

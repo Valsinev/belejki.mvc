@@ -12,7 +12,8 @@
     <!-- Custom styles -->
     <link rel="stylesheet" th:href="@{/css/default_layout_styles.css}">
     <link rel="icon" type="images/x-icon" href="/images/recipes.icon.png" >
-    <link rel="stylesheet" href="/css/default.css">
+    <link rel="stylesheet" href="/css/note_form.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
 
 </head>
 
@@ -84,7 +85,7 @@
                         <div class="input-group mb-3">
                             <input id="searchInput" th:name="searchValue" type="text" class="form-control col-6"
                                    th:placeholder="#{title}" aria-label="Search"
-                                   aria-describedby="basic-addon2">
+                                   aria-describedby="basic-addon2" required>
                             <button class="btn btn-success" type="submit" th:text="#{search}">Search</button>
                         </div>
                     </form>

@@ -11,7 +11,8 @@
     <!-- Custom styles -->
     <link rel="stylesheet" th:href="@{/css/default_layout_styles.css}">
     <link rel="icon" type="images/x-icon" href="/images/recipes.icon.png" >
-    <link rel="stylesheet" href="/css/default.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/note_form.css">
 
 
 </head>
@@ -85,7 +86,7 @@
                             <div class="input-group mb-3">
                                 <input id="searchInput" th:name="searchValue" type="text" class="form-control col-6"
                                        th:placeholder="#{title}" aria-label="Search"
-                                       aria-describedby="basic-addon2">
+                                       aria-describedby="basic-addon2" required>
                                 <button class="btn btn-success" type="submit" th:text="#{search}">Search</button>
                             </div>
                         </form>
@@ -114,7 +115,7 @@
                 <div th:each="recipe : ${recipes}">
                     <div class="col mt-2">
                         <div class="card h-100">
-                            <div class="card-header bg-primary text-white">
+                            <div class="card-header">
                                 <h5 class="card-title mb-0" th:text="${recipe.name}">Recipe Title</h5>
                             </div>
                             <div class="card-body">
@@ -126,7 +127,7 @@
                                     </li>
                                 </ul>
 
-                                <h6 class="mt-3" th:text="#{how.to.make}">Instructions:</h6>
+                                <h6 class="card-subtitle mt-3" th:text="#{how.to.make}">Instructions:</h6>
                                 <p th:utext="${recipe.howToMake}">How to make the recipe...</p>
                             </div>
                             <div class="card-footer">
