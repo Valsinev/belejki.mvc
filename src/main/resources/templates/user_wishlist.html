@@ -10,9 +10,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
-    <link rel="stylesheet" th:href="@{/css/default_layout_styles.css}">
     <link rel="icon" type="images/x-icon" href="/images/wishlist.icon.png" >
-    <link rel="stylesheet" href="/css/default.css">
     <link rel="stylesheet" href="/css/dashboard.css">
 
 
@@ -74,7 +72,7 @@
             <aside class="right-side col-xl-10 col-md-12">
                 <div class="container mt-4">
                     <div class="row">
-                        <h4 class="mt-2" th:text="#{wish.page.description}">Add a new item to your wishlist and share it with your friends.</h4>
+                        <h2 class="mt-2" th:text="#{wish.page.description}">Add a new item to your wishlist and share it with your friends.</h2>
                         <a class="btn btn-success" href="/user/wishes/create" th:text="#{add.new.wish}">Add New Wish</a>
                     </div>
                     <div class="row mt-4 border-top">

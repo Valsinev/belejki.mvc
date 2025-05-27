@@ -1,7 +1,9 @@
 
 .navbar {
 }
-
+.navbar-brand {
+  font-size: 2rem;
+}
 
 body {
   background: #ffffd3;
