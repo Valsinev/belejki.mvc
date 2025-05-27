@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,8 +33,6 @@ import java.util.Map;
 @Controller
 @Slf4j
 public class HomeController {
-//    @Value("${backend.api.url}")
-//    private String backendApiUrl;
 
     private final RestTemplate restTemplate;
     private final AppConfig appConfig;
@@ -65,8 +62,7 @@ public class HomeController {
     }
 
     @GetMapping("/login")
-    public String getLoginPage(@RequestParam(required = false, defaultValue = "bg") String localeData, HttpSession session) {
-        Locale locale = Locale.forLanguageTag(localeData);
+    public String getLoginPage(Locale locale, HttpSession session) {
         session.setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
         return "fancy_login";
     }
@@ -74,10 +70,9 @@ public class HomeController {
     @PostMapping("/login")
     public String getUserDashboard(@RequestParam String username,
             @RequestParam String password,
-            @RequestParam(required = false, defaultValue = "bg") String localeData,
+            Locale locale,
                                    HttpSession session,
                                    Model model) {
-        Locale locale = Locale.forLanguageTag(localeData);
         session.setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
 
         String loginUrl = appConfig.getBackendApiUrl() + "/login";
@@ -87,6 +82,7 @@ public class HomeController {
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put("username", username);
         requestBody.put("password", password);
+        requestBody.put("locale", locale.toLanguageTag());
 
         HttpEntity<Map<String, String>> request = new HttpEntity<>(requestBody, headers);
 
