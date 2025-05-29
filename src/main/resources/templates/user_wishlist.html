@@ -118,12 +118,14 @@
                                         <td><span th:text="${wish.approximatePrice}"> Approximate Price </span></td>
                                         <td><a th:href="${wish.link}" th:text="${wish.link}" target="_blank">Link</a>
                                         </td>
-                                        <td><span>
+                                        <td>
+                                            <span>
                                                 <a th:href="@{'/user/wishes/edit/' + ${wish.id}}"
                                                     class="btn btn-primary" th:text="#{edit}">Edit</a>
                                                 <a th:href="@{'/user/wishes/delete/' + ${wish.id}}"
                                                     class="btn btn-danger" th:text="#{delete}">Delete</a>
-                                            </span></td>
+                                            </span>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
