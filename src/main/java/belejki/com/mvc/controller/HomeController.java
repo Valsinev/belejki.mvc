@@ -2,6 +2,7 @@ package belejki.com.mvc.controller;
 
 import belejki.com.mvc.config.AppConfig;
 import belejki.com.mvc.dto.UserInfoDto;
+import belejki.com.mvc.service.RecaptchaValidationService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
@@ -36,11 +37,13 @@ public class HomeController {
 
     private final RestTemplate restTemplate;
     private final AppConfig appConfig;
+    private final RecaptchaValidationService recaptchaValidationService;
 
     @Autowired
-    public HomeController(RestTemplate restTemplate, AppConfig appConfig) {
+    public HomeController(RestTemplate restTemplate, AppConfig appConfig, RecaptchaValidationService recaptchaValidationService) {
         this.restTemplate = restTemplate;
         this.appConfig = appConfig;
+        this.recaptchaValidationService = recaptchaValidationService;
     }
 
     @GetMapping("/")
@@ -52,6 +55,7 @@ public class HomeController {
     @GetMapping("/registration")
     public String showRegistrationForm(Model model) {
         model.addAttribute("userInfoDto", new UserInfoDto());
+        model.addAttribute("recaptchaSiteKey", appConfig.getRecaptchaSiteKey());
         return "fancy_registration";
     }
 
@@ -124,7 +128,8 @@ public class HomeController {
             @Valid @ModelAttribute("userInfoDto") UserInfoDto userInfoDto,
             BindingResult bindingResult,
             Model model,
-            HttpServletResponse response) {
+            HttpServletResponse response,
+            @RequestParam("g-recaptcha-response") String captchaToken) {
 
         log.info(userInfoDto.toString());
 
@@ -134,11 +139,19 @@ public class HomeController {
             return "fancy_registration";
         }
 
+        // 🔐 Validate reCAPTCHA
+        if (!recaptchaValidationService.isCaptchaValid(captchaToken)) {
+            model.addAttribute("errorMessage", "Captcha validation failed. Please try again.");
+            response.setStatus(HttpStatus.BAD_REQUEST.value());
+            return "fancy_registration";
+        }
+
         try {
             // Send to REST API
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<UserInfoDto> request = new HttpEntity<>(userInfoDto, headers);
+
 
             ResponseEntity<UserInfoDto> restResponse = restTemplate.postForEntity(
                     appConfig.getBackendApiUrl() + "/user/users", request, UserInfoDto.class);

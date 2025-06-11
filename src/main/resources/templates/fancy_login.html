@@ -32,6 +32,17 @@
                 <li class="nav-item">
                     <a class="nav-link" th:text="#{registration}" href="/registration">Registration</a>
                 </li>
+
+                <li class="nav-item dropdown ms-3">
+                    <button class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        🌐
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="?lang=bg">🇧🇬 Български</a></li>
+                        <li><a class="dropdown-item" href="?lang=ru">🇷🇺 Русский</a></li>
+                        <li><a class="dropdown-item" href="?lang=en">🇬🇧 English</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
     </div>
@@ -63,15 +74,8 @@
     </div>
 </form>
 
-<!-- Bootstrap JS and dependencies (optional) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 </body>
 </html>
-
-<script>
-    $(document).ready(function() {
-        // your code here
-    });
-</script>

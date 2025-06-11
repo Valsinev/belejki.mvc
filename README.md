@@ -37,6 +37,8 @@ Before running the application, set the following environment variables:
 | `SERVER_PORT`              | (Optional) Port to run the app on                               | `8080`             |
 | `BACKEND_API_URL`          | Backend rest URL used in email confirmation links               | `http://localhost:8080` |
 | `APP_JWT_SECRET`           | JWT secret key for the authentication of the users              | —                  |
+| `RECAPTCHA_SITE`           | Site key for the google reCAPTCHA service             | —                  |
+| `RECAPTCHA_SECRET`         | Secret key for the google reCAPTCHA service               | —                  |
 
 💡 In IntelliJ, go to Run > Edit Configurations > Environment Variables to set these.
 
