@@ -13,26 +13,7 @@
 </head>
 <body class="">
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="/" th:text="#{home}">Home</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/login?logout" th:text="#{logout}">Logout</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/user/recipes" th:text="#{return}">Return</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-
+<div th:replace="fragments/navbar::navbar"></div>
 
 <div class="container mt-5 mb-5">
     <div class="row justify-content-center">
@@ -88,6 +69,10 @@
         </div>
     </div>
 </div>
+
+
+<!-- Footer -->
+<div th:replace="fragments/footer::footer"></div>
 
 
 </body>

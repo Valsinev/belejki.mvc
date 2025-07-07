@@ -1,12 +1,11 @@
 package belejki.com.mvc.controller;
 
+import belejki.com.mvc.config.AppConfig;
 import belejki.com.mvc.dto.ReminderDto;
+import belejki.com.mvc.service.JwtService;
 import belejki.com.mvc.util.PagedResponse;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -21,17 +20,16 @@ import java.util.List;
 
 @Controller
 public class UsersController {
-    @Value("${app.jwt.secret}")
-    private String secretKey;
 
-    @Value("${backend.api.url}")
-    private String backendApiUrl;
-
+    private final AppConfig appConfig;
     private final RestTemplate restTemplate;
+    private final JwtService jwtService;
 
     @Autowired
-    public UsersController(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
+    public UsersController(AppConfig appConfig, RestTemplate restTemplate, JwtService jwtService) {
+	    this.appConfig = appConfig;
+	    this.restTemplate = restTemplate;
+	    this.jwtService = jwtService;
     }
 
     @GetMapping("/user")
@@ -45,7 +43,7 @@ public class UsersController {
         HttpEntity<Void> request = new HttpEntity<>(headers);
 
         ResponseEntity<PagedResponse<ReminderDto>> response = restTemplate.exchange(
-                backendApiUrl + "/user/reminders",
+                appConfig.getBackendApiUrl() + "/user/reminders",
                 HttpMethod.GET,
                 request,
                 new ParameterizedTypeReference<PagedResponse<ReminderDto>>() {
@@ -56,22 +54,15 @@ public class UsersController {
         List<ReminderDto> expiresSoon = reminders.stream().filter(ReminderDto::isExpiresSoon).toList();
 
 
-        model.addAttribute("user", extractUsername(token));
+        model.addAttribute("user", jwtService.extractUsername(token));
         model.addAttribute("remindersCount", reminders.size());
         model.addAttribute("expiredCount", expired.size());
-        model.addAttribute("expiredReminders", expired);
         model.addAttribute("almost", expiresSoon.size());
+        model.addAttribute("expiredReminders", expired);
         model.addAttribute("almostExpiredReminders", expiresSoon);
         return "user";
     }
 
 
-    private String extractUsername(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(secretKey.getBytes())
-                .parseClaimsJws(token)
-                .getBody();
-        return claims.getSubject();
-    }
 
 }

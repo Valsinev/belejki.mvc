@@ -15,6 +15,7 @@ import java.util.Locale;
 @org.springframework.context.annotation.Configuration
 public class Configuration implements WebMvcConfigurer {
 
+    //configures the message source
     @Bean
     public ResourceBundleMessageSource messageSource() {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
@@ -24,18 +25,11 @@ public class Configuration implements WebMvcConfigurer {
         return messageSource;
     }
 
-//    @Bean
-//    public LocaleResolver localeResolver() {
-//        SessionLocaleResolver slr = new SessionLocaleResolver();
-//        slr.setDefaultLocale(Locale.ENGLISH);
-////        slr.setDefaultLocale(Locale.forLanguageTag("bg"));
-//        return slr;
-//    }
 
     @Bean
     public LocaleResolver localeResolver() {
         CookieLocaleResolver clr = new CookieLocaleResolver();
-        clr.setDefaultLocale(Locale.ENGLISH);
+        clr.setDefaultLocale(Locale.forLanguageTag("BG"));
         clr.setCookieName("lang");
         clr.setCookieMaxAge(3600); // 1 hour
         return clr;

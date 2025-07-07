@@ -3,9 +3,11 @@ package belejki.com.mvc.controller;
 import belejki.com.mvc.config.AppConfig;
 import belejki.com.mvc.dto.ReminderDto;
 import belejki.com.mvc.dto.WishDto;
+import belejki.com.mvc.service.UserWishlistService;
 import belejki.com.mvc.util.PagedResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
@@ -23,37 +25,17 @@ import java.util.List;
 @RequestMapping("/user/wishes")
 public class WishlistController {
 
-    private final AppConfig appConfig;
-    private final RestTemplate restTemplate;
+    private final UserWishlistService userWishlistService;
 
-    public WishlistController(AppConfig appConfig, RestTemplate restTemplate) {
-        this.appConfig = appConfig;
-        this.restTemplate = restTemplate;
-    }
+    @Autowired
+	public WishlistController(UserWishlistService userWishlistService) {
+		this.userWishlistService = userWishlistService;
+	}
 
-    @GetMapping
+	@GetMapping
     public String getUserWishlist(Model model, HttpSession session) {
-        String token = (String) session.getAttribute("jwt");
-        if (token == null) return "redirect:/login";
+        return userWishlistService.getWishlist(model, session);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(token);
-
-        HttpEntity<Void> request = new HttpEntity<>(headers);
-
-        ResponseEntity<PagedResponse<WishDto>> response = restTemplate.exchange(
-                appConfig.getBackendApiUrl() + "/user/wishlist",
-                HttpMethod.GET,
-                request,
-                new ParameterizedTypeReference<PagedResponse<WishDto>>() {
-                }
-        );
-        List<WishDto> wishlist = response.getBody().getContent();
-        wishlist.sort(Comparator.comparing(WishDto::getApproximatePrice).reversed());
-
-        model.addAttribute("wishlist", wishlist);
-
-        return "user_wishlist";
     }
 
     @GetMapping("/create")
@@ -67,168 +49,50 @@ public class WishlistController {
                              BindingResult result,
                              HttpSession session,
                              Model model) {
-        if (result.hasErrors()) {
-            model.addAttribute("editing", false);
-            return "create_wish";
-        }
+        return userWishlistService.createWish(wish, result, session, model);
 
-        String token = (String) session.getAttribute("jwt");
-        if (token == null) return "redirect:/login";
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(token);
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        HttpEntity<WishDto> request = new HttpEntity<>(wish, headers);
-
-        restTemplate.postForEntity(
-                appConfig.getBackendApiUrl() + "/user/wishlist",
-                request,
-                Void.class);
-
-        return "redirect:/user/wishes";
     }
 
     @GetMapping("/edit/{id}")
-    public String editReminder(@PathVariable Long id,
+    public String editWish(@PathVariable Long id,
                                HttpSession session,
                                Model model) {
 
-        String token = (String) session.getAttribute("jwt");
-        if (token == null) return "redirect:/login";
+        return userWishlistService.editWish(id, session, model);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(token);
-
-        HttpEntity<Void> request = new HttpEntity<>(headers);
-
-        ResponseEntity<WishDto> response = restTemplate.exchange(
-                appConfig.getBackendApiUrl() + "/user/wishlist/" + id,
-                HttpMethod.GET,
-                request,
-                WishDto.class
-        );
-
-        WishDto wish = response.getBody();
-
-        model.addAttribute("wish", wish);
-        model.addAttribute("editing", true);
-
-        return "create_wish";
     }
 
     @PostMapping("/update/{id}")
-    public String editWish(@PathVariable Long id,
+    public String updateWish(@PathVariable Long id,
                            @Valid @ModelAttribute("wish") WishDto wish,
                            BindingResult result,
                            HttpSession session,
                            Model model) {
-        if (result.hasErrors()) {
-            model.addAttribute("editing", true);
-            return "create_wish";
-        }
+        return userWishlistService.updateWish(id, wish, result, session, model);
 
-        String token = (String) session.getAttribute("jwt");
-        if (token == null) return "redirect:/login";
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(token);
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        HttpEntity<WishDto> request = new HttpEntity<>(wish, headers);
-
-        restTemplate.exchange(
-                appConfig.getBackendApiUrl() + "/user/wishlist/update/" + id,
-                HttpMethod.PUT,
-                request,
-                Void.class
-        );
-
-
-        return "redirect:/user/wishes";
     }
 
 
 
     @GetMapping("/delete/{id}")
     public String deleteWish(@PathVariable Long id, HttpSession session) {
-        String token = (String) session.getAttribute("jwt");
-        if (token == null) return "redirect:/login";
+        return userWishlistService.deleteWish(id, session);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(token);
-
-        HttpEntity<Void> request = new HttpEntity<>(headers);
-
-        try {
-
-            restTemplate.exchange(
-                    appConfig.getBackendApiUrl() + "/user/wishlist/" + id,
-                    HttpMethod.DELETE,
-                    request,
-                    Void.class
-            );
-        } catch (HttpClientErrorException | HttpServerErrorException e) {
-            return "redirect:/user/wishes?error=delete";
-        }
-        return "redirect:/user/wishes";
     }
 
     @GetMapping("/search")
     public String searchByNameContaining(@RequestParam("searchValue") String searchValue,
                                          Model model,
                                          HttpSession session) {
+        return userWishlistService.searchByNameContaining(searchValue, model, session);
 
-        String token = (String) session.getAttribute("jwt");
-        if (token == null) return "redirect:/login";
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(token);
-
-        HttpEntity<Void> request = new HttpEntity<>(headers);
-
-        ResponseEntity<PagedResponse<WishDto>> response = restTemplate.exchange(
-                appConfig.getBackendApiUrl() + "/user/wishlist/description/" + searchValue,
-                HttpMethod.GET,
-                request,
-                new ParameterizedTypeReference<PagedResponse<WishDto>>() {
-                }
-        );
-        List<WishDto> wishlist = response.getBody().getContent();
-        wishlist.sort(Comparator.comparing(WishDto::getApproximatePrice).reversed());
-
-        model.addAttribute("wishlist", wishlist);
-
-
-        return "user_wishlist";
     }
 
     @GetMapping("/filter")
     public String filterByPriceLessThan(@RequestParam("maxPrice") Long maxPrice,
                                          Model model,
                                          HttpSession session) {
-        String token = (String) session.getAttribute("jwt");
+        return userWishlistService.filterByPriceLessThan(maxPrice, model, session);
 
-        if (token == null) return "redirect:/login";
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(token);
-
-        HttpEntity<Void> request = new HttpEntity<>(headers);
-
-        ResponseEntity<PagedResponse<WishDto>> response = restTemplate.exchange(
-                appConfig.getBackendApiUrl() + "/user/wishlist/price/" + maxPrice,
-                HttpMethod.GET,
-                request,
-                new ParameterizedTypeReference<PagedResponse<WishDto>>() {
-                }
-        );
-        List<WishDto> wishlist = response.getBody().getContent();
-        wishlist.sort(Comparator.comparing(WishDto::getApproximatePrice).reversed());
-
-        model.addAttribute("wishlist", wishlist);
-
-
-        return "user_wishlist";
     }
 }

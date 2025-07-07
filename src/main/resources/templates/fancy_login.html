@@ -48,17 +48,19 @@
     </div>
 </nav>
 
-<form class="container" id="registrationForm" th:action="@{/login}" method="post">
+<form class="container" id="registrationForm" th:object="${userLogingBindingModel}" th:action="@{/login}" method="post">
     <input type="hidden" name="lang" th:value="${#locale.language}" />
     <div class="header row mt-5">
         <h2 class="col" th:text="#{login}">Login</h2>
     </div>
     <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
     <div class="row mt-3 justify-content-md-center">
-        <input class="col-xl-8 text-center" name="username" id="email" th:placeholder='#{email}' type='email'>
+        <input class="col-xl-8 text-center" name="username" th:field="*{username}" id="email" th:placeholder='#{email}' type='email'>
+        <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-danger col-8"></span>
     </div>
     <div class="row mt-3 justify-content-md-center">
-        <input class="col-xl-8 text-center" id='password' name='password' th:placeholder='#{password}' type='password'>
+        <input class="col-xl-8 text-center" id='password' th:field="*{password}" name='password' th:placeholder='#{password}' type='password'>
+        <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger col-8"></span>
     </div>
     <div class="row mt-3 justify-content-md-center">
         <input class="col-xl-8 text-center animated" type='submit' th:value="#{sign}">
@@ -73,6 +75,10 @@
         <a class='forgot col-xl-8 text-center' th:text="#{dont.have.account}" href='/registration'>Don't have an account?</a>
     </div>
 </form>
+
+
+<!-- Footer -->
+<div th:replace="fragments/footer::footer"></div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>

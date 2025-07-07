@@ -1,4 +1,4 @@
-package belejki.com.mvc.service;
+package belejki.com.mvc.service.impl;
 
 import belejki.com.mvc.config.AppConfig;
 import lombok.Data;

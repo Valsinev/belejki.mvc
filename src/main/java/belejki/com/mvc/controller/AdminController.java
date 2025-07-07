@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AdminController {
 
 
-    @GetMapping
+    @GetMapping("/users")
     public String getAdminDashboard(Model model) {
-        return "admin";
+        return "admin_users";
     }
 }
