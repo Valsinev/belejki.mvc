@@ -1,23 +1,26 @@
 package belejki.com.mvc.service;
 
 import belejki.com.mvc.dto.WishDto;
+import belejki.com.mvc.model.binding.UserWishBindingModel;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
+import java.util.List;
+
 public interface UserWishlistService {
-	String getWishlist(Model model, HttpSession session);
+	List<WishDto> getWishlist(String jwtToken);
 
-	String createWish(@Valid WishDto wish, BindingResult result, HttpSession session, Model model);
+	WishDto createWish(UserWishBindingModel userWishBindingModel, String jwtToken);
 
-	String editWish(Long id, HttpSession session, Model model);
+	WishDto editWish(Long id, String jwtToken);
 
-	String updateWish(Long id, @Valid WishDto wish, BindingResult result, HttpSession session, Model model);
+	WishDto updateWish(Long id, UserWishBindingModel userWishBindingModel, String jwtToken);
 
-	String deleteWish(Long id, HttpSession session);
+	WishDto deleteWish(Long id, String jwtToken);
 
-	String searchByNameContaining(String searchValue, Model model, HttpSession session);
+	List<WishDto> searchByNameContaining(String searchValue, String jwtToken);
 
-	String filterByPriceLessThan(Long maxPrice, Model model, HttpSession session);
+	List<WishDto> filterByPriceLessThan(Long maxPrice, String jwtToken);
 }

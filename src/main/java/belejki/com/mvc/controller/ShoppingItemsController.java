@@ -1,57 +1,86 @@
 package belejki.com.mvc.controller;
 
-import belejki.com.mvc.config.AppConfig;
-import belejki.com.mvc.dto.ShoppingItemDto;
+import belejki.com.mvc.dto.UserShoppingItemDto;
+import belejki.com.mvc.model.binding.UserShoppingItemBindingModel;
 import belejki.com.mvc.service.UserShoppingItemsService;
-import belejki.com.mvc.util.PagedResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClientException;
 
-import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/user/shoplist")
 public class ShoppingItemsController {
 
-    private final UserShoppingItemsService userShoppingItemsService;
+	private final UserShoppingItemsService userShoppingItemsService;
 
-    @Autowired
+	@Autowired
 	public ShoppingItemsController(UserShoppingItemsService userShoppingItemsService) {
 		this.userShoppingItemsService = userShoppingItemsService;
 	}
 
 	@GetMapping
-    public String getUserShoppingList(Model model, HttpSession session) {
-        return userShoppingItemsService.getShoppingList(model, session);
+	public String getUserShoppingList(Model model, HttpSession session) {
 
-    }
+		String token = (String) session.getAttribute("jwt");
+		if (token == null) return "redirect:/login";
 
-    @PostMapping
-    public String addShoppingItem(@Valid @ModelAttribute("item") ShoppingItemDto item,
-                                  Model model,
-                                  HttpSession session) {
-        return userShoppingItemsService.addShoppingItem(item, session);
+		Set<UserShoppingItemDto> shoplist = userShoppingItemsService.getShoppingList(token);
 
-    }
+		model.addAttribute("item", new UserShoppingItemBindingModel());
+		model.addAttribute("shoplist", shoplist);
 
-    @PostMapping("/{id}")
-    public String deleteItem(@PathVariable Long id, HttpSession session) {
-        return userShoppingItemsService.deleteItem(id, session);
+		return "user_shoplist";
+	}
 
-    }
+	@PostMapping
+	public String addShoppingItem(@Valid @ModelAttribute("item") UserShoppingItemBindingModel item,
+	                              Model model,
+	                              HttpSession session) {
 
-    @PostMapping("/clear")
-    public String clearShoppingList(HttpSession session) {
-        return userShoppingItemsService.clearShoppingList(session);
+		String token = (String) session.getAttribute("jwt");
+		if (token == null) return "redirect:/login";
 
-    }
+		userShoppingItemsService.addShoppingItem(item, token);
+
+		return "redirect:/user/shoplist";
+	}
+
+	@PostMapping("/{id}")
+	public String deleteItem(@PathVariable Long id, HttpSession session) {
+
+		String token = (String) session.getAttribute("jwt");
+		if (token == null) return "redirect:/login";
+
+		try {
+			userShoppingItemsService.deleteItem(id, token);
+		} catch (RestClientException e) {
+			return "redirect:/user/shoplist?error=delete";
+		}
+		return "redirect:/user/shoplist";
+
+	}
+
+	@PostMapping("/clear")
+	public String clearShoppingList(HttpSession session) {
+
+		String token = (String) session.getAttribute("jwt");
+		if (token == null) return "redirect:/login";
+
+		try {
+			userShoppingItemsService.clearShoppingList(token);
+
+		} catch (HttpClientErrorException | HttpServerErrorException e) {
+			return "redirect:/user/shoplist?error=delete";
+		}
+		return "redirect:/user/shoplist";
+
+	}
 }

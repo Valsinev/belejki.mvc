@@ -1,122 +1,57 @@
 package belejki.com.mvc.service.impl;
 
-import belejki.com.mvc.config.AppConfig;
-import belejki.com.mvc.dto.ShoppingItemDto;
+import belejki.com.mvc.dto.UserShoppingItemDto;
+import belejki.com.mvc.model.binding.UserShoppingItemBindingModel;
+import belejki.com.mvc.repository.UserShoppingItemRepository;
 import belejki.com.mvc.service.UserShoppingItemsService;
-import belejki.com.mvc.util.PagedResponse;
 import jakarta.servlet.http.HttpSession;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserShoppingItemsServiceImpl implements UserShoppingItemsService {
-	private final AppConfig appConfig;
-	private final RestTemplate restTemplate;
+
+	private final UserShoppingItemRepository userShoppingItemRepository;
+	private final ModelMapper modelMapper;
 
 	@Autowired
-	public UserShoppingItemsServiceImpl(AppConfig appConfig, RestTemplate restTemplate) {
-		this.appConfig = appConfig;
-		this.restTemplate = restTemplate;
+	public UserShoppingItemsServiceImpl(UserShoppingItemRepository userShoppingItemRepository, ModelMapper modelMapper) {
+		this.userShoppingItemRepository = userShoppingItemRepository;
+		this.modelMapper = modelMapper;
 	}
 
 	@Override
-	public String getShoppingList(Model model, HttpSession session) {
-		String token = (String) session.getAttribute("jwt");
-		if (token == null) return "redirect:/login";
+	public Set<UserShoppingItemDto> getShoppingList(String jwtToken) {
 
-		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(token);
+		return userShoppingItemRepository.getAll(jwtToken);
 
-		HttpEntity<Void> request = new HttpEntity<>(headers);
-
-		ResponseEntity<PagedResponse<ShoppingItemDto>> response = restTemplate.exchange(
-				appConfig.getBackendApiUrl() + "/user/shopping-list",
-				HttpMethod.GET,
-				request,
-				new ParameterizedTypeReference<PagedResponse<ShoppingItemDto>>() {
-				}
-		);
-		List<ShoppingItemDto> shoplist = response.getBody().getContent();
-
-		model.addAttribute("item", new ShoppingItemDto());
-		model.addAttribute("shoplist", shoplist);
-
-		return "user_shoplist";
 	}
 
 	@Override
-	public String addShoppingItem(ShoppingItemDto item, HttpSession session) {
-		String token = (String) session.getAttribute("jwt");
-		if (token == null) return "redirect:/user/dashboard";
+	public UserShoppingItemDto addShoppingItem(UserShoppingItemBindingModel userShoppingItemBindingModel, String jwtToken) {
 
-		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(token);
-		headers.setContentType(MediaType.APPLICATION_JSON);
+		UserShoppingItemDto item = modelMapper.map(userShoppingItemBindingModel, UserShoppingItemDto.class);
+		return userShoppingItemRepository.add(item, jwtToken);
 
-		HttpEntity<ShoppingItemDto> request = new HttpEntity<>(item, headers);
-
-		restTemplate.postForEntity(
-				appConfig.getBackendApiUrl() + "/user/shopping-list",
-				request,
-				Void.class
-		);
-
-		return "redirect:/user/shoplist";
 	}
 
 	@Override
-	public String deleteItem(Long id, HttpSession session) {
-		String token = (String) session.getAttribute("jwt");
-		if (token == null) return "redirect:/login";
+	public UserShoppingItemDto deleteItem(Long id, String jwtToken) {
 
-		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(token);
+		return userShoppingItemRepository.deleteById(id, jwtToken);
 
-		HttpEntity<Void> request = new HttpEntity<>(headers);
-
-		try {
-
-			restTemplate.exchange(
-					appConfig.getBackendApiUrl() + "/user/shopping-list/" + id,
-					HttpMethod.DELETE,
-					request,
-					Void.class
-			);
-		} catch (HttpClientErrorException | HttpServerErrorException e) {
-			return "redirect:/user/shoplist?error=delete";
-		}
-		return "redirect:/user/shoplist";
 	}
 
 	@Override
-	public String clearShoppingList(HttpSession session) {
-		String token = (String) session.getAttribute("jwt");
-		if (token == null) return "redirect:/login";
+	public void clearShoppingList(String jwtToken) {
 
-		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(token);
+		userShoppingItemRepository.deleteAll(jwtToken);
 
-		HttpEntity<Void> request = new HttpEntity<>(headers);
-
-		try {
-
-			restTemplate.exchange(
-					appConfig.getBackendApiUrl() + "/user/shopping-list/empty",
-					HttpMethod.DELETE,
-					request,
-					Void.class
-			);
-		} catch (HttpClientErrorException | HttpServerErrorException e) {
-			return "redirect:/user/shoplist?error=delete";
-		}
-		return "redirect:/user/shoplist";
 	}
 }

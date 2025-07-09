@@ -1,6 +1,7 @@
 package belejki.com.mvc.controller;
 
 import belejki.com.mvc.dto.WishDto;
+import belejki.com.mvc.model.binding.UserWishBindingModel;
 import belejki.com.mvc.service.UserWishlistService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -9,79 +10,139 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/user/wishes")
 public class WishlistController {
 
-    private final UserWishlistService userWishlistService;
+	private final UserWishlistService userWishlistService;
 
-    @Autowired
+	@Autowired
 	public WishlistController(UserWishlistService userWishlistService) {
 		this.userWishlistService = userWishlistService;
 	}
 
 	@GetMapping
-    public String getUserWishlist(Model model, HttpSession session) {
-        return userWishlistService.getWishlist(model, session);
+	public String getUserWishlist(Model model, HttpSession session) {
+		String token = (String) session.getAttribute("jwt");
+		if (token == null) return "redirect:/login";
 
-    }
+		List<WishDto> wishlist = userWishlistService.getWishlist(token);
 
-    @GetMapping("/create")
-    public String GetWishForm(Model model) {
-        model.addAttribute("wish", new WishDto());
-        return "create_wish";
-    }
+		model.addAttribute("wishlist", wishlist);
 
-    @PostMapping("/create")
-    public String createWish(@Valid @ModelAttribute("wish") WishDto wish,
-                             BindingResult result,
-                             HttpSession session,
-                             Model model) {
-        return userWishlistService.createWish(wish, result, session, model);
+		return "user_wishlist";
 
-    }
+	}
 
-    @GetMapping("/edit/{id}")
-    public String editWish(@PathVariable Long id,
-                               HttpSession session,
-                               Model model) {
+	@GetMapping("/create")
+	public String GetWishForm(Model model) {
+		model.addAttribute("wish", new WishDto());
+		return "create_wish";
+	}
 
-        return userWishlistService.editWish(id, session, model);
+	@PostMapping("/create")
+	public String createWish(@Valid @ModelAttribute("wish") UserWishBindingModel wish,
+	                         BindingResult result,
+	                         HttpSession session,
+	                         Model model) {
+		if (result.hasErrors()) {
+			model.addAttribute("editing", false);
+			return "create_wish";
+		}
 
-    }
+		String token = (String) session.getAttribute("jwt");
+		if (token == null) return "redirect:/login";
 
-    @PostMapping("/update/{id}")
-    public String updateWish(@PathVariable Long id,
-                           @Valid @ModelAttribute("wish") WishDto wish,
-                           BindingResult result,
-                           HttpSession session,
-                           Model model) {
-        return userWishlistService.updateWish(id, wish, result, session, model);
+		userWishlistService.createWish(wish, token);
 
-    }
+		return "redirect:/user/wishes";
+	}
+
+	@GetMapping("/edit/{id}")
+	public String editWish(@PathVariable Long id,
+	                       HttpSession session,
+	                       Model model) {
+
+		String token = (String) session.getAttribute("jwt");
+		if (token == null) return "redirect:/login";
+
+		WishDto wish = userWishlistService.editWish(id, token);
+
+		model.addAttribute("wish", wish);
+		model.addAttribute("editing", true);
+
+		return "create_wish";
+
+	}
+
+	@PostMapping("/update/{id}")
+	public String updateWish(@PathVariable Long id,
+	                         @Valid @ModelAttribute("wish") UserWishBindingModel wish,
+	                         BindingResult result,
+	                         HttpSession session,
+	                         Model model) {
+		if (result.hasErrors()) {
+			model.addAttribute("editing", true);
+			return "create_wish";
+		}
+
+		String token = (String) session.getAttribute("jwt");
+		if (token == null) return "redirect:/login";
+
+		userWishlistService.updateWish(id, wish, token);
+
+		return "redirect:/user/wishes";
+	}
 
 
+	@GetMapping("/delete/{id}")
+	public String deleteWish(@PathVariable Long id, HttpSession session) {
 
-    @GetMapping("/delete/{id}")
-    public String deleteWish(@PathVariable Long id, HttpSession session) {
-        return userWishlistService.deleteWish(id, session);
+		String token = (String) session.getAttribute("jwt");
+		if (token == null) return "redirect:/login";
 
-    }
+		try {
+			userWishlistService.deleteWish(id, token);
 
-    @GetMapping("/search")
-    public String searchByNameContaining(@RequestParam("searchValue") String searchValue,
-                                         Model model,
-                                         HttpSession session) {
-        return userWishlistService.searchByNameContaining(searchValue, model, session);
+		} catch (HttpClientErrorException | HttpServerErrorException e) {
+			return "redirect:/user/wishes?error=delete";
+		}
+		return "redirect:/user/wishes";
 
-    }
+	}
 
-    @GetMapping("/filter")
-    public String filterByPriceLessThan(@RequestParam("maxPrice") Long maxPrice,
-                                         Model model,
-                                         HttpSession session) {
-        return userWishlistService.filterByPriceLessThan(maxPrice, model, session);
+	@GetMapping("/search")
+	public String searchByNameContaining(@RequestParam("searchValue") String searchValue,
+	                                     Model model,
+	                                     HttpSession session) {
 
-    }
+		String token = (String) session.getAttribute("jwt");
+		if (token == null) return "redirect:/login";
+
+		List<WishDto> wishlist = userWishlistService.searchByNameContaining(searchValue, token);
+
+		model.addAttribute("wishlist", wishlist);
+
+		return "user_wishlist";
+	}
+
+	@GetMapping("/filter")
+	public String filterByPriceLessThan(@RequestParam("maxPrice") Long maxPrice,
+	                                    Model model,
+	                                    HttpSession session) {
+
+		String token = (String) session.getAttribute("jwt");
+		if (token == null) return "redirect:/login";
+
+		List<WishDto> wishlist = userWishlistService.filterByPriceLessThan(maxPrice, token);
+
+		model.addAttribute("wishlist", wishlist);
+
+		return "user_wishlist";
+	}
 }

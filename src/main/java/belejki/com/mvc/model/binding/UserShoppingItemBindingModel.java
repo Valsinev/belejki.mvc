@@ -1,4 +1,4 @@
-package belejki.com.mvc.dto;
+package belejki.com.mvc.model.binding;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class ShoppingItemDto {
+public class UserShoppingItemBindingModel {
     private Long id;
     private Long userId;
     @NotNull
