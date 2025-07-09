@@ -28,38 +28,6 @@ public class UserFriendsServiceImpl implements UserFriendsService {
 
 	}
 
-	@Override
-	public List<UserRecipeBindingModel> getFriendRecipesByTitle(String searchValue, String username, String jwtToken) {
-
-		return userFriendsRepository.getFriendRecipesByTitle(searchValue, username, jwtToken);
-
-	}
-
-	@Override
-	public List<UserRecipeBindingModel> getFriendRecipesByIngredients(List<String> ingredients, String username, String jwtToken) {
-
-		return userFriendsRepository.getFriendRecipesByIngredients(ingredients, username, jwtToken);
-
-	}
-
-	@Override
-	public List<WishDto> getFriendWishlistFilteredByPrice(Long maxPrice, String username, String jwtToken) {
-
-		List<WishDto> wishlist = userFriendsRepository.getFriendWishlistFilteredByPrice(maxPrice, username, jwtToken);
-		wishlist.sort(Comparator.comparing(WishDto::getApproximatePrice).reversed());
-
-		return wishlist;
-	}
-
-	@Override
-	public List<WishDto> prepareFriendWishlistPage(String username, String jwtToken) {
-
-		List<WishDto> wishlist = userFriendsRepository.getFriendWishlistByFriendUsername(username, jwtToken);
-
-		wishlist.sort(Comparator.comparing(WishDto::getApproximatePrice).reversed());
-
-		return wishlist;
-	}
 
 	@Override
 	public void addFriend(String friendEmail, String jwtToken) {

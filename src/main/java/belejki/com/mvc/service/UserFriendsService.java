@@ -9,14 +9,6 @@ import java.util.List;
 public interface UserFriendsService {
 	List<FriendshipDto> getFriends(String jwtToken);
 
-	List<UserRecipeBindingModel> getFriendRecipesByTitle(String searchValue, String username, String jwtToken);
-
-	List<UserRecipeBindingModel> getFriendRecipesByIngredients(List<String> ingredients, String username, String jwtToken);
-
-	List<WishDto> getFriendWishlistFilteredByPrice(Long maxPrice, String username, String jwtToken);
-
-	List<WishDto> prepareFriendWishlistPage(String username, String jwtToken);
-
 	void addFriend(String friendEmail, String jwtToken);
 
 	void removeFriend(Long id, String jwtToken);

@@ -1,56 +1,52 @@
 package belejki.com.mvc.service.impl;
 
+import belejki.com.mvc.dto.RecipeDto;
 import belejki.com.mvc.model.binding.UserRecipeBindingModel;
 import belejki.com.mvc.repository.UserRecipesRepository;
 import belejki.com.mvc.service.UserRecipesService;
-import belejki.com.mvc.util.PagedResponse;
-import jakarta.servlet.http.HttpSession;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Service
 public class UserRecipesServiceImpl implements UserRecipesService {
 
 	private final UserRecipesRepository userRecipesRepository;
+	private final ModelMapper modelMapper;
 
-	public UserRecipesServiceImpl(UserRecipesRepository userRecipesRepository) {
+	@Autowired
+	public UserRecipesServiceImpl(UserRecipesRepository userRecipesRepository, ModelMapper modelMapper) {
 		this.userRecipesRepository = userRecipesRepository;
+		this.modelMapper = modelMapper;
 	}
 
 	@Override
-	public void save(UserRecipeBindingModel recipe, String jwtToken) {
+	public RecipeDto save(UserRecipeBindingModel userRecipeBindingModel, String jwtToken) {
 
-		userRecipesRepository.save(recipe, jwtToken);
+		RecipeDto recipe = modelMapper.map(userRecipeBindingModel, RecipeDto.class);
+
+		return userRecipesRepository.save(recipe, jwtToken);
 	}
 
 	@Override
-	public List<UserRecipeBindingModel> searchByNameContaining(String searchValue, String jwtToken) {
+	public List<RecipeDto> searchByNameContaining(String searchValue, String jwtToken) {
 
-		return userRecipesRepository.searchByNameContaining(searchValue, jwtToken);
-
-	}
-
-	@Override
-	public List<UserRecipeBindingModel> searchByIngredients(List<String> ingredients, String jwtToken) {
-
-		return userRecipesRepository.searchByIngredients(ingredients, jwtToken);
+		return userRecipesRepository.findAllByNameContaining(searchValue, jwtToken);
 
 	}
 
 	@Override
-	public void deleteRecipeById(Long id, String jwtToken) {
+	public List<RecipeDto> searchByIngredients(List<String> ingredients, String jwtToken) {
 
-		userRecipesRepository.deleteById(id, jwtToken);
+		return userRecipesRepository.findAllByIngredients(ingredients, jwtToken);
+
+	}
+
+	@Override
+	public RecipeDto deleteRecipeById(Long id, String jwtToken) {
+
+		return userRecipesRepository.deleteById(id, jwtToken);
 	}
 }

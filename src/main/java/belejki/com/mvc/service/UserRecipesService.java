@@ -1,5 +1,6 @@
 package belejki.com.mvc.service;
 
+import belejki.com.mvc.dto.RecipeDto;
 import belejki.com.mvc.model.binding.UserRecipeBindingModel;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -9,11 +10,11 @@ import java.util.List;
 import java.util.Locale;
 
 public interface UserRecipesService {
-	void save(@Valid UserRecipeBindingModel recipe, String jwtToken);
+	RecipeDto save(UserRecipeBindingModel recipe, String jwtToken);
 
-	List<UserRecipeBindingModel> searchByNameContaining(String searchValue, String jwtToken);
+	List<RecipeDto> searchByNameContaining(String searchValue, String jwtToken);
 
-	List<UserRecipeBindingModel> searchByIngredients(List<String> ingredients, String jwtToken);
+	List<RecipeDto> searchByIngredients(List<String> ingredients, String jwtToken);
 
-	void deleteRecipeById(Long id, String jwtToken);
+	RecipeDto deleteRecipeById(Long id, String jwtToken);
 }

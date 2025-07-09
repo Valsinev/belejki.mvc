@@ -1,5 +1,6 @@
 package belejki.com.mvc.controller;
 
+import belejki.com.mvc.dto.RecipeDto;
 import belejki.com.mvc.model.binding.UserRecipeBindingModel;
 import belejki.com.mvc.exceptions.UnauthorizedException;
 import belejki.com.mvc.service.UserRecipesService;
@@ -17,7 +18,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Locale;
 
 @Controller
 @RequestMapping("/user/recipes")
@@ -84,7 +84,7 @@ public class RecipesController {
         String token = (String) session.getAttribute("jwt");
         if (token == null) return "redirect:/user/dashboard";
 
-        List<UserRecipeBindingModel> recipes = userRecipesService.searchByNameContaining(searchValue, token);
+        List<RecipeDto> recipes = userRecipesService.searchByNameContaining(searchValue, token);
 
         model.addAttribute("theYear", LocalDate.now().getYear());
         model.addAttribute("recipes", recipes);
@@ -96,12 +96,11 @@ public class RecipesController {
     @GetMapping("/search/ingredients")
     public String searchByIngredients(@RequestParam("ingredients") List<String> ingredients,
                                          Model model,
-                                         HttpSession session,
-                                      Locale locale) {
+                                         HttpSession session) {
         String token = (String) session.getAttribute("jwt");
         if (token == null) return "redirect:/user/dashboard";
 
-        List<UserRecipeBindingModel> recipes = userRecipesService.searchByIngredients(ingredients, token);
+        List<RecipeDto> recipes = userRecipesService.searchByIngredients(ingredients, token);
 
         model.addAttribute("theYear", LocalDate.now().getYear());
         model.addAttribute("recipes", recipes);
