@@ -1,5 +1,6 @@
-package belejki.com.mvc.dto;
+package belejki.com.mvc.model.binding;
 
+import belejki.com.mvc.dto.RecipeIngredientDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -11,9 +12,10 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class RecipeDto {
+public class UserRecipeBindingModel {
 
     private Long id;
+    @NotNull
     private Long userId;
     @NotBlank
     @Size(min = 2, max = 64, message = "Recipe name must be between 2 and 64 characters.")

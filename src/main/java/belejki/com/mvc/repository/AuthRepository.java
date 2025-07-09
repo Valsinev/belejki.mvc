@@ -7,5 +7,5 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.Locale;
 
 public interface AuthRepository {
-	void authUser(UserLogingBindingModel userLogingBindingModel, Locale locale, HttpSession session, RedirectAttributes redirectAttributes);
+	String authUser(UserLogingBindingModel userLogingBindingModel, Locale locale);
 }

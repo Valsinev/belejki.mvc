@@ -1,25 +1,14 @@
 package belejki.com.mvc.controller;
 
-import belejki.com.mvc.config.AppConfig;
-import belejki.com.mvc.dto.ReminderDto;
 import belejki.com.mvc.dto.WishDto;
 import belejki.com.mvc.service.UserWishlistService;
-import belejki.com.mvc.util.PagedResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.RestTemplate;
-
-import java.util.Comparator;
-import java.util.List;
 
 @Controller
 @RequestMapping("/user/wishes")

@@ -17,7 +17,7 @@
 <body>
 
 <!--navigation-->
-<div th:replace="fragments/navbar::navbar"></div>
+<div th:replace="~{fragments/head::head}"></div>
 
 
 
@@ -27,33 +27,7 @@
 
 
         <aside class="left-side col-lg-2 col-md-12 border-right border-left border-dark mt-2">
-            <div class="container">
-                <div class="row h-100">
-                    <div class="container">
-                        <div class="row mt-2">
-                            <a class="btn btn-success" href="/user" th:text="#{dashboard}">Dashboard</a>
-                        </div>
-                        <div class="row mt-2">
-                            <a class="btn btn-success" href="/user/reminders" th:text="#{reminders}">Reminders</a>
-                        </div>
-                        <div class="row mt-2">
-                            <a class="btn btn-success" href="/user/wishlist" th:text="#{wishlist}">Wishlist</a>
-                        </div>
-                        <div class="row mt-2 mb-2">
-                            <a class="btn btn-success" href="/user/friends" th:text="#{friends}">Friends</a>
-                        </div>
-                        <div class="row mt-2 mb-2">
-                            <a class="btn btn-warning" href="#" th:text="#{friend.wishlist}">Friends Wishlist</a>
-                        </div>
-                        <div class="row mt-2 mb-2">
-                            <a class="btn btn-success" href="/user/shoplist" th:text="#{shoplist}">Shopping List</a>
-                        </div>
-                        <div class="row mb-2" sec:authorize="hasRole('ROLE_ADMIN')">
-                            <a class="btn btn-success" href="/admin" th:text="#{admin.dashboard}">Admin Dashboard</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div th:replace="~{fragments/sidebar-nav::sidebar-nav}"></div>
         </aside>
 
         <!-- Upcoming Events -->
@@ -115,7 +89,7 @@
 
 
 <!-- Footer -->
-<div th:replace="fragments/footer::footer"></div>
+<div th:replace="~{fragments/footer::footer}"></div>
 
 <!-- Bootstrap JS and dependencies -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -123,4 +97,16 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 </body>
+
+
+<style>
+    .friend-wishlist {
+        background: #ffca2c;
+        color: black;
+    }
+    .friend-wishlist:hover {
+        background: #ffca2c;
+        color: black;
+    }
+</style>
 </html>

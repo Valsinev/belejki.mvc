@@ -1,4 +1,4 @@
-package belejki.com.mvc.dto;
+package belejki.com.mvc.model.binding;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.*;
@@ -8,7 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDate;
 
 @Data
-public class ReminderDto {
+public class UserReminderBindingModel {
 
     private Long id;
     private Long userId;

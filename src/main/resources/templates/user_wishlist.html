@@ -19,7 +19,7 @@
 <body>
 
 <!--navigation-->
-<div th:replace="fragments/navbar::navbar"></div>
+<div th:replace="~{fragments/head::head}"></div>
 
     <section class="main-content container-fluid">
 
@@ -27,30 +27,7 @@
 
 
             <aside class="left-side col-lg-2 col-md-12 border-right border-left border-dark mt-2">
-                <div class="container">
-                    <div class="row h-100">
-                        <div class="container">
-                            <div class="row mt-2">
-                                <a class="btn btn-success" href="/user" th:text="#{dashboard}">Dashboard</a>
-                            </div>
-                            <div class="row mt-2">
-                                <a class="btn btn-success" href="/user/reminders" th:text="#{reminders}">Reminders</a>
-                            </div>
-                            <div class="row mt-2">
-                                <a class="btn btn-warning" href="/user/wishes" th:text="#{wishlist}">Wishlist</a>
-                            </div>
-                            <div class="row mt-2 mb-2">
-                                <a class="btn btn-success" href="/user/friends" th:text="#{friends}">Friends</a>
-                            </div>
-                            <div class="row mt-2 mb-2">
-                                <a class="btn btn-success" href="/user/shoplist" th:text="#{shoplist}">Shopping List</a>
-                            </div>
-                            <div class="row mt-2 mb-2">
-                                <a class="btn btn-success" href="/user/recipes" th:text="#{recipes}">Cooking Recipes</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <div th:replace="~{fragments/sidebar-nav::sidebar-nav}"></div>
             </aside>
 
             <aside class="right-side col-xl-10 col-md-12">
@@ -124,7 +101,7 @@
 
 
 <!-- Footer -->
-<div th:replace="fragments/footer::footer"></div>
+<div th:replace="~{fragments/footer::footer}"></div>
 
 
     <!-- Bootstrap JS and dependencies -->
@@ -135,5 +112,17 @@
 
 
 </body>
+
+<style>
+    .wishlist {
+        background: #ffca2c;
+        color: black;
+    }
+
+    .wishlist:hover {
+        background: #ffca2c;
+        color: black;
+    }
+</style>
 
 </html>

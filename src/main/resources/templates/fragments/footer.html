@@ -16,6 +16,11 @@
 
 <div th:fragment="footer">
 
+	<footer class="footer bg-dark text-white text-center pt-3" style="position: fixed; bottom: 0; width: 100%;">
+		<div class="container">
+			<h6 th:text="'&copy; ' + ${theYear} + ' ' + #{belejki}"></h6>
+		</div>
+	</footer>
 </div>
 
 </body>

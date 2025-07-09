@@ -30,7 +30,7 @@ public class AuthRepositoryImpl implements AuthRepository {
 	}
 
 	@Override
-	public void authUser(UserLogingBindingModel userLogingBindingModel, Locale locale, HttpSession session, RedirectAttributes redirectAttributes) {
+	public String authUser(UserLogingBindingModel userLogingBindingModel, Locale locale) {
 		//constructs the backend endpoint for post login requests
 		String loginUrl = appConfig.getBackendApiUrl() + "/login";
 		HttpHeaders headers = new HttpHeaders();
@@ -45,10 +45,7 @@ public class AuthRepositoryImpl implements AuthRepository {
 
 		ResponseEntity<Map> response = restTemplate.postForEntity(loginUrl, request, Map.class);
 		//gets the jwt token
-		String token = (String) response.getBody().get("token");
-
-		// Save token in session
-		session.setAttribute("jwt", token);
+		return  (String) response.getBody().get("token");
 
 	}
 }

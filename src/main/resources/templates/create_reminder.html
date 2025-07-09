@@ -16,7 +16,8 @@
 <body class="">
 
 <!--navigation-->
-<div th:replace="fragments/navbar::navbar"></div>
+<div th:replace="~{fragments/head::head}"></div>
+
 
 <div class="container mt-5 mb-5">
     <div class="row justify-content-center">
@@ -55,7 +56,7 @@
 
 
 <!-- Footer -->
-<div th:replace="fragments/footer::footer"></div>
+<div th:replace="~{fragments/footer::footer}"></div>
 
 <!-- Bootstrap JS (optional, only if needed) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

@@ -1,6 +1,6 @@
 package belejki.com.mvc.controller;
 
-import belejki.com.mvc.dto.RecipeDto;
+import belejki.com.mvc.model.binding.UserRecipeBindingModel;
 import belejki.com.mvc.exceptions.UnauthorizedException;
 import belejki.com.mvc.service.UserRecipesService;
 import jakarta.servlet.http.HttpSession;
@@ -10,7 +10,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
 
@@ -28,28 +33,32 @@ public class RecipesController {
 
 	@GetMapping("/create")
     public String showCreateForm(Model model) {
-        if (!model.containsAttribute("recipe")) {
-            model.addAttribute("recipe", new RecipeDto());
+        model.addAttribute("theYear", LocalDate.now().getYear());
+        if (!model.containsAttribute("userRecipeBindingModel")) {
+            model.addAttribute("userRecipeBindingModel", new UserRecipeBindingModel());
         }
         return "create_recipe";
     }
 
 
     @PostMapping("/create")
-    public String createNewRecipe(@Valid @ModelAttribute("recipe") RecipeDto recipe,
+    public String createNewRecipe(@Valid @ModelAttribute("recipe") UserRecipeBindingModel userRecipeBindingModel,
                                   BindingResult bindingResult,
                                   HttpSession session,
                                   RedirectAttributes redirectAttributes) {
 
+        String token = (String) session.getAttribute("jwt");
+        if (token == null) throw new UnauthorizedException("User authentication failed.");
+
         if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("recipe", recipe);
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.recipe", bindingResult);
+            redirectAttributes.addFlashAttribute("userRecipeBindingModel", userRecipeBindingModel);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userRecipeBindingModel", bindingResult);
             return "redirect:/user/recipes/create";
         }
         try {
-            userRecipesService.createRecipe(recipe, bindingResult, session);
+            userRecipesService.save(userRecipeBindingModel, token);
             return "redirect:/user/recipes";
-        } catch (UnauthorizedException e) {
+        } catch (RestClientException e) {
             return "redirect:/login";
         }
 
@@ -57,8 +66,13 @@ public class RecipesController {
 
 
     @GetMapping
-    public String getUserRecipes(HttpSession session) {
-        return userRecipesService.getRecipes(session);
+    public String getUserRecipesPage(HttpSession session, Model model) {
+        model.addAttribute("theYear", LocalDate.now().getYear());
+
+        String token = (String) session.getAttribute("jwt");
+        if (token == null) return "redirect:/user/dashboard";
+
+        return "user_recipes";
     }
 
 
@@ -66,10 +80,16 @@ public class RecipesController {
     @GetMapping("/search/title")
     public String searchByNameContaining(@RequestParam("searchValue") String searchValue,
                                          Model model,
-                                         HttpSession session,
-                                         Locale locale) {
+                                         HttpSession session) {
+        String token = (String) session.getAttribute("jwt");
+        if (token == null) return "redirect:/user/dashboard";
 
-        return userRecipesService.searchByNameContaining(searchValue, model, session, locale);
+        List<UserRecipeBindingModel> recipes = userRecipesService.searchByNameContaining(searchValue, token);
+
+        model.addAttribute("theYear", LocalDate.now().getYear());
+        model.addAttribute("recipes", recipes);
+
+        return "user_recipes";
     }
 
 
@@ -78,15 +98,32 @@ public class RecipesController {
                                          Model model,
                                          HttpSession session,
                                       Locale locale) {
-        return userRecipesService.searchByIngredients(ingredients, model, session, locale);
+        String token = (String) session.getAttribute("jwt");
+        if (token == null) return "redirect:/user/dashboard";
+
+        List<UserRecipeBindingModel> recipes = userRecipesService.searchByIngredients(ingredients, token);
+
+        model.addAttribute("theYear", LocalDate.now().getYear());
+        model.addAttribute("recipes", recipes);
+
+
+        return "user_recipes";
 
     }
 
     @GetMapping("/delete/{id}")
     public String deleteRecipe(@PathVariable Long id, HttpSession session) {
-        return userRecipesService.deleteRecipeById(id, session);
-    }
+        String token = (String) session.getAttribute("jwt");
+        if (token == null) return "redirect:/login";
 
+        try {
+            userRecipesService.deleteRecipeById(id, token);
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            return "redirect:/user/reminders?error=delete";
+        }
+        return "redirect:/user/recipes";
+
+    }
 
 
 }

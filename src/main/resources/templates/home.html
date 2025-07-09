@@ -1,106 +1,104 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="#{home}">Home</title>
+    <title th:text="#{user.dashboard}">User Dashboard</title>
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Custom styles -->
+    <link rel="icon" type="images/x-icon" href="/images/dashboard.icon.png" >
+    <link rel="stylesheet" href="/css/dashboard.css">
 
-    <link rel="icon" type="images/x-icon" href="/images/home.icon.png" >
-    <link rel="stylesheet" href="/css/default.css">
 </head>
 
 <body class="body">
 
-
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="/" th:text="#{home}">Home</a>
-
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav align-items-center">
-                    <li class="nav-item me-3 d-flex align-items-center text-white">
-                        <a class="nav-link" th:href="@{/login(lang=${#locale.language})}" th:text="#{login}">Login</a>
-                    </li>
-                    <li class="nav-item d-flex align-items-center text-white">
-                        <a class="nav-link" th:text="#{registration}" href="/registration">Registration</a>
-                    </li>
-                    <li class="nav-item dropdown ms-3">
-                        <button class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                            🌐
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="?lang=bg">🇧🇬 Български</a></li>
-                            <li><a class="dropdown-item" href="?lang=ru">🇷🇺 Русский</a></li>
-                            <li><a class="dropdown-item" href="?lang=en">🇬🇧 English</a></li>
-                        </ul>
-                    </li>
-
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-
-    <!--end nav-->
+    <div th:replace="~{fragments/head::head}"></div>
 
     <section class="main-content container-fluid">
 
-        <div class="row mt-3">
-            <div class="col-xl-6 col-md-12">
-                <div class="custom-card text-white bg-warning">
-                    <img src="/home.jpg" class="card-img-top  p-2" alt="...">
-                    <div class="card-body text-dark text-center mt-5">
-                        <h1 class="card-title" th:text="#{home.card1.title}">Never Miss an Event Again!</h1>
-                        <p >
-                        <h3 class="card-text mb-6" th:text="#{home.card1.text}">Stay organized and on top of your schedule with our event reminder service.</h3>
-                        </p>
+        <div class="row">
+
+<!--            Sidebar Left nav-->
+
+            <aside class="left-side col-lg-2 col-md-12 border-right border-dark mt-2">
+                <div th:replace="~{fragments/sidebar-nav::sidebar-nav}"></div>
+            </aside>
+
+            <!-- Upcoming Events -->
+            <aside class="right-side col-xl-10 col-md-12">
+                <div class="container mt-4">
+
+
+
+                    <div class="row">
+                        <h1 class="border-bottom border-dark" th:text="#{hello} + ', ' + (${user} ?: 'user') + ', ' + #{you.have} + ' ' + ${remindersCount} + ' ' + #{events}">
+                            Hello, user, you have 0 events.</h1>
+                    </div>
+
+
+
+
+                    <div class="row mt-4">
+
+                        <div class="btn-group">
+                            <button type="button button col-xl-4" th:text="#{expired.reminders} + (${expiredCount} ?: '0')" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Dropright
+                            </button>
+                            <div class="dropdown-menu">
+                                <div th:each="expiredReminder : ${expiredReminders}">
+                                    <div class="dropdown-item" th:text="${expiredReminder.name + ' ' + expiredReminder.expiration}">ReminderName ReminderExpiration</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="row mt-3">
+
+                        <div class="btn-group ">
+                            <button type="button col-xl-4" th:text="#{almost.expired.reminders} + ${almost} ?: '0'" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Dropright
+                            </button>
+                            <div class="dropdown-menu">
+                                <div th:each="almostExpiredReminder : ${almostExpiredReminders}">
+                                    <div class="dropdown-item" th:text="${almostExpiredReminder.name + ' ' + almostExpiredReminder.expiration}">ReminderName ReminderExpiration</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-xl-6 col-md-12">
-                <div class="custom-card text-white bg-warning">
-                    <div class="card-body text-dark text-center">
-                        <h1 class="card-title" th:text="#{home.card2.title}">Be prepared with the ideal gift.</h1>
-                        <p >
-                        <h3 class="card-text" th:text="#{home.card2.text.paragraph1}">Create and exchange</h3>
-                        </p>
-                        <p >
-                        <h3 class="card-text" th:text="#{home.card2.text.paragraph2}">wishlists with your</h3>
-                        </p>
-                        <p >
-                        <h3 class="card-text" th:text="#{home.card2.text.paragraph3}">family and friends.</h3>
-                        </p>
-                    </div>
-                    <img src="/present.avif" class="card-img-bottom p-2 mb-6" alt="...">
-                </div>
-            </div>
+            </aside>
+
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="footer bg-dark text-white text-center pt-3" style="position: fixed; bottom: 0; width: 100%;">
-        <div class="container">
-            <p th:text="'&copy; ' + ${theYear} + ' Event Reminder'"></p>
-        </div>
-    </footer>
 
+    <!-- Footer -->
+    <div th:replace="~{fragments/footer::footer}"></div>
 
     <!-- Bootstrap JS and dependencies -->
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 
 </body>
+
+<style>
+    .dash {
+        background: #ffca2c;
+        color: black;
+    }
+    .dash:hover {
+        background: #ffca2c;
+        color: black;
+    }
+</style>
 
 </html>

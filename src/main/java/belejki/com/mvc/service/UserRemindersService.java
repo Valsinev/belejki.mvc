@@ -1,21 +1,23 @@
 package belejki.com.mvc.service;
 
-import belejki.com.mvc.dto.ReminderDto;
-import jakarta.servlet.http.HttpSession;
+import belejki.com.mvc.dto.UserReminderDto;
+import belejki.com.mvc.model.binding.UserReminderBindingModel;
 import jakarta.validation.Valid;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+import org.springframework.web.client.RestClientException;
+
+import java.util.List;
 
 public interface UserRemindersService {
-	String getUserReminders(Model model, HttpSession session);
 
-	String createReminder(@Valid ReminderDto reminder, BindingResult result, HttpSession session, Model model);
+	List<UserReminderDto> getUserReminders(String jwtToken);
 
-	String editReminder(Long id, HttpSession session, Model model);
+	UserReminderDto save(UserReminderBindingModel reminder, String jwtToken);
 
-	String updateReminder(Long id, @Valid ReminderDto reminder, BindingResult result, HttpSession session, Model model);
+	UserReminderDto editReminder(Long id, String jwtToken);
 
-	String deleteReminder(Long id, HttpSession session);
+	UserReminderDto updateReminder(Long id, UserReminderBindingModel reminder, String jwtToken);
 
-	String searchByNameContaining(String searchValue, Model model, HttpSession session);
+	UserReminderDto deleteById(Long id, String jwtToken);
+
+	List<UserReminderDto> searchByNameContaining(String searchValue, String jwtToken);
 }
