@@ -1,14 +1,11 @@
 package belejki.com.mvc.service.impl;
 
 import belejki.com.mvc.dto.FriendshipDto;
-import belejki.com.mvc.model.binding.UserRecipeBindingModel;
-import belejki.com.mvc.dto.WishDto;
 import belejki.com.mvc.repository.UserFriendsRepository;
 import belejki.com.mvc.service.UserFriendsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -22,29 +19,29 @@ public class UserFriendsServiceImpl implements UserFriendsService {
 		this.userFriendsRepository = userFriendsRepository;
 	}
 
-	public List<FriendshipDto> getFriends(String token) {
+	public List<FriendshipDto> getFriends() {
 
-		return userFriendsRepository.getFriends(token);
+		return userFriendsRepository.findAll();
 
 	}
 
 
 	@Override
-	public void addFriend(String friendEmail, String jwtToken) {
+	public void addFriend(String friendEmail) {
 
-		userFriendsRepository.addFriend(friendEmail, jwtToken);
+		userFriendsRepository.save(friendEmail);
 
 	}
 
 	@Override
-	public List<FriendshipDto> findAllByFirstName(String searchValue, String token) {
-		return userFriendsRepository.findAllByFirstName(searchValue, token);
+	public List<FriendshipDto> findAllByFirstName(String searchValue) {
+		return userFriendsRepository.findAllByFirstName(searchValue);
 	}
 
 	@Override
-	public void removeFriend(Long id,  String jwtToken) {
+	public void removeFriend(Long id) {
 
-		userFriendsRepository.removeFriend(id, jwtToken);
+		userFriendsRepository.delete(id);
 
 	}
 

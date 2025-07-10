@@ -23,21 +23,21 @@ public class FriendWishRepositoryImpl implements FriendWishRepository {
 
 	private final AppConfig appConfig;
 	private final RestTemplate restTemplate;
-	private final UserSessionInformation userSessionInformation;
+	private final UserSessionInformation userInformation;
 
 	@Autowired
-	public FriendWishRepositoryImpl(AppConfig appConfig, RestTemplate restTemplate, UserSessionInformation userSessionInformation) {
+	public FriendWishRepositoryImpl(AppConfig appConfig, RestTemplate restTemplate, UserSessionInformation userInformation) {
 		this.appConfig = appConfig;
 		this.restTemplate = restTemplate;
-		this.userSessionInformation = userSessionInformation;
+		this.userInformation = userInformation;
 	}
 
 
 	@Override
-	public List<WishDto> getFriendWishlistFilteredByPrice(Long maxPrice, String username, String jwtToken) {
+	public List<WishDto> getFriendWishlistFilteredByPrice(Long maxPrice, String username) {
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(jwtToken);
+		headers.setBearerAuth(userInformation.getJwtToken());
 
 		HttpEntity<Void> request = new HttpEntity<>(headers);
 
@@ -60,10 +60,10 @@ public class FriendWishRepositoryImpl implements FriendWishRepository {
 	}
 
 	@Override
-	public List<WishDto> getFriendWishlistByFriendUsername(String username, String jwtToken) {
+	public List<WishDto> getFriendWishlistByFriendUsername(String username) {
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(jwtToken);
+		headers.setBearerAuth(userInformation.getJwtToken());
 
 		HttpEntity<Void> request = new HttpEntity<>(headers);
 

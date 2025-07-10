@@ -6,17 +6,18 @@ import belejki.com.mvc.model.binding.UserWishBindingModel;
 import java.util.List;
 
 public interface UserWishlistService {
-	List<WishDto> getWishlist(String jwtToken);
 
-	WishDto createWish(UserWishBindingModel userWishBindingModel, String jwtToken);
+	List<WishDto> getWishlist();
 
-	WishDto editWish(Long id, String jwtToken);
+	WishDto createWish(UserWishBindingModel userWishBindingModel);
 
-	WishDto updateWish(Long id, UserWishBindingModel userWishBindingModel, String jwtToken);
+	WishDto editWish(Long id);
 
-	WishDto deleteWish(Long id, String jwtToken);
+	WishDto updateWish(Long id, UserWishBindingModel userWishBindingModel);
 
-	List<WishDto> searchByNameContaining(String searchValue, String jwtToken);
+	WishDto deleteWish(Long id);
 
-	List<WishDto> filterByPriceLessThan(Long maxPrice, String jwtToken);
+	List<WishDto> searchByNameContaining(String searchValue);
+
+	List<WishDto> filterByPriceLessThan(Long maxPrice);
 }

@@ -2,7 +2,6 @@ package belejki.com.mvc.repository.impl;
 
 import belejki.com.mvc.config.AppConfig;
 import belejki.com.mvc.dto.UserReminderDto;
-import belejki.com.mvc.model.binding.UserReminderBindingModel;
 import belejki.com.mvc.model.session.UserSessionInformation;
 import belejki.com.mvc.repository.UserReminderRepository;
 import belejki.com.mvc.util.PagedResponse;
@@ -50,10 +49,10 @@ public class UserReminderRepositoryImpl implements UserReminderRepository {
 	}
 
 	@Override
-	public UserReminderDto save(UserReminderDto reminder, String jwtToken) throws RestClientException {
+	public UserReminderDto save(UserReminderDto reminder) throws RestClientException {
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(jwtToken);
+		headers.setBearerAuth(userSessionInformation.getJwtToken());
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
 		HttpEntity<UserReminderDto> request = new HttpEntity<>(reminder, headers);
@@ -67,9 +66,9 @@ public class UserReminderRepositoryImpl implements UserReminderRepository {
 	}
 
 	@Override
-	public UserReminderDto edit(Long id, String jwtToken) throws RestClientException {
+	public UserReminderDto edit(Long id) throws RestClientException {
 		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(jwtToken);
+		headers.setBearerAuth(userSessionInformation.getJwtToken());
 
 		HttpEntity<Void> request = new HttpEntity<>(headers);
 
@@ -84,9 +83,9 @@ public class UserReminderRepositoryImpl implements UserReminderRepository {
 	}
 
 	@Override
-	public UserReminderDto update(Long id, UserReminderDto reminder, String token) {
+	public UserReminderDto update(Long id, UserReminderDto reminder) {
 		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(token);
+		headers.setBearerAuth(userSessionInformation.getJwtToken());
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
 		HttpEntity<UserReminderDto> request = new HttpEntity<>(reminder, headers);
@@ -100,10 +99,10 @@ public class UserReminderRepositoryImpl implements UserReminderRepository {
 	}
 
 	@Override
-	public UserReminderDto deleteById(Long id, String token) {
+	public UserReminderDto deleteById(Long id) {
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(token);
+		headers.setBearerAuth(userSessionInformation.getJwtToken());
 
 		HttpEntity<Void> request = new HttpEntity<>(headers);
 
@@ -117,10 +116,10 @@ public class UserReminderRepositoryImpl implements UserReminderRepository {
 	}
 
 	@Override
-	public List<UserReminderDto> searchByNameContaining(String searchValue, String token) {
+	public List<UserReminderDto> searchByNameContaining(String searchValue) {
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(token);
+		headers.setBearerAuth(userSessionInformation.getJwtToken());
 
 		HttpEntity<Void> request = new HttpEntity<>(headers);
 

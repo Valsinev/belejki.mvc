@@ -1,24 +1,13 @@
 package belejki.com.mvc.service.impl;
 
-import belejki.com.mvc.config.AppConfig;
 import belejki.com.mvc.dto.WishDto;
 import belejki.com.mvc.model.binding.UserWishBindingModel;
 import belejki.com.mvc.repository.UserWishRepository;
 import belejki.com.mvc.service.UserWishlistService;
-import belejki.com.mvc.util.PagedResponse;
-import jakarta.servlet.http.HttpSession;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -34,57 +23,57 @@ public class UserWishlistServiceImpl implements UserWishlistService {
 	}
 
 	@Override
-	public List<WishDto> getWishlist(String jwtToken) {
+	public List<WishDto> getWishlist() {
 
-		return userWishRepository.getAll(jwtToken);
+		return userWishRepository.findAll();
 	}
 
 	@Override
-	public WishDto createWish(UserWishBindingModel userWishBindingModel, String jwtToken) {
+	public WishDto createWish(UserWishBindingModel userWishBindingModel) {
 
 		WishDto wish = modelMapper.map(userWishBindingModel, WishDto.class);
 
-		return userWishRepository.save(wish, jwtToken);
+		return userWishRepository.save(wish);
 
 	}
 
 	@Override
-	public WishDto editWish(Long id, String jwtToken) {
+	public WishDto editWish(Long id) {
 
-		return userWishRepository.edit(id, jwtToken);
+		return userWishRepository.edit(id);
 
 	}
 
 	@Override
-	public WishDto updateWish(Long id, UserWishBindingModel userWishBindingModel, String jwtToken) {
+	public WishDto updateWish(Long id, UserWishBindingModel userWishBindingModel) {
 
 		WishDto wish = modelMapper.map(userWishBindingModel, WishDto.class);
 
-		return userWishRepository.update(id, wish, jwtToken);
+		return userWishRepository.update(id, wish);
 
 	}
 
 	@Override
-	public WishDto deleteWish(Long id, String jwtToken) {
+	public WishDto deleteWish(Long id) {
 
-		return userWishRepository.deleteById(id, jwtToken);
+		return userWishRepository.deleteById(id);
 
 	}
 
 	@Override
-	public List<WishDto> searchByNameContaining(String searchValue, String jwtToken) {
+	public List<WishDto> searchByNameContaining(String searchValue) {
 
 		if (searchValue.isEmpty()) {
 			return List.of();
 		}
-		return userWishRepository.findAllByNameContaining(searchValue, jwtToken);
+		return userWishRepository.findAllByNameContaining(searchValue);
 
 	}
 
 	@Override
-	public List<WishDto> filterByPriceLessThan(Long maxPrice, String jwtToken) {
+	public List<WishDto> filterByPriceLessThan(Long maxPrice) {
 
-		return userWishRepository.findAllByPriceLessThan(maxPrice, jwtToken);
+		return userWishRepository.findAllByPriceLessThan(maxPrice);
 
 	}
 }

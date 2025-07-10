@@ -6,11 +6,12 @@ import belejki.com.mvc.model.binding.UserRecipeBindingModel;
 import java.util.List;
 
 public interface UserRecipesRepository {
-	RecipeDto save(RecipeDto recipe, String jwtToken);
 
-	List<RecipeDto> findAllByNameContaining(String searchValue, String jwtToken);
+	RecipeDto save(RecipeDto recipe);
 
-	List<RecipeDto> findAllByIngredients(List<String> ingredients, String jwtToken);
+	List<RecipeDto> findAllByNameContaining(String searchValue);
 
-	RecipeDto deleteById(Long id, String jwtToken);
+	List<RecipeDto> findAllByIngredients(List<String> ingredients);
+
+	RecipeDto deleteById(Long id);
 }

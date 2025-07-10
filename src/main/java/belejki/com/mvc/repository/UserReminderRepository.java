@@ -9,13 +9,13 @@ public interface UserReminderRepository {
 
 	List<UserReminderDto> findAll();
 
-	UserReminderDto save(UserReminderDto reminder, String jwtToken);
+	UserReminderDto save(UserReminderDto reminder);
 
-	UserReminderDto edit(Long id, String jwtToken);
+	UserReminderDto edit(Long id);
 
-	UserReminderDto update(Long id, UserReminderDto reminder, String token);
+	UserReminderDto update(Long id, UserReminderDto reminder);
 
-	UserReminderDto deleteById(Long id, String token);
+	UserReminderDto deleteById(Long id);
 
-	List<UserReminderDto> searchByNameContaining(String searchValue, String token);
+	List<UserReminderDto> searchByNameContaining(String searchValue);
 }

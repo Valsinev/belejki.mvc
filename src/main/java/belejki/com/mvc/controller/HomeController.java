@@ -1,10 +1,8 @@
 package belejki.com.mvc.controller;
 
 import belejki.com.mvc.dto.UserReminderDto;
-import belejki.com.mvc.model.binding.UserReminderBindingModel;
+import belejki.com.mvc.model.session.UserSessionInformation;
 import belejki.com.mvc.service.HomepageService;
-import belejki.com.mvc.service.JwtService;
-import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,12 +17,12 @@ import java.util.List;
 public class HomeController {
 
     private final HomepageService homepageService;
-    private final JwtService jwtService;
+    private final UserSessionInformation userinfo;
 
     @Autowired
-	public HomeController(HomepageService homepageService, JwtService jwtService) {
+	public HomeController(HomepageService homepageService, UserSessionInformation userSessionInformation) {
 		this.homepageService = homepageService;
-	    this.jwtService = jwtService;
+	    this.userinfo = userSessionInformation;
     }
 
 
@@ -36,10 +34,9 @@ public class HomeController {
 
 
     @GetMapping("/home")
-    public String getUserDashboard(HttpSession session, Model model) {
-        String token = (String) session.getAttribute("jwt");
-        if (token == null) return "redirect:/login";
-        String username = jwtService.extractUsername(token);
+    public String getUserDashboard(Model model) {
+
+        if (userinfo.getJwtToken() == null) return "redirect:/login";
 
         List<UserReminderDto> reminders = homepageService.getUserReminders();
 
@@ -48,7 +45,8 @@ public class HomeController {
 
 
         model.addAttribute("theYear", LocalDate.now().getYear());
-        model.addAttribute("user", username);
+        model.addAttribute("user", userinfo.getFirstName().concat(" ")
+                .concat(userinfo.getLastName()));
         model.addAttribute("remindersCount", reminders.size());
         model.addAttribute("expiredCount", expired.size());
         model.addAttribute("almost", expiresSoon.size());

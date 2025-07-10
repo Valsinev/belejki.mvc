@@ -4,6 +4,7 @@ import belejki.com.mvc.config.AppConfig;
 import belejki.com.mvc.dto.FriendshipDto;
 import belejki.com.mvc.model.binding.UserRecipeBindingModel;
 import belejki.com.mvc.dto.WishDto;
+import belejki.com.mvc.model.session.UserSessionInformation;
 import belejki.com.mvc.repository.UserFriendsRepository;
 import belejki.com.mvc.util.PagedResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,24 +21,21 @@ import java.util.List;
 public class UserFriendsRepositoryImpl implements UserFriendsRepository {
 	private final AppConfig appConfig;
 	private final RestTemplate restTemplate;
+	private final UserSessionInformation userinfo;
 
 	@Autowired
-	public UserFriendsRepositoryImpl(AppConfig appConfig, RestTemplate restTemplate) {
+	public UserFriendsRepositoryImpl(AppConfig appConfig, RestTemplate restTemplate, UserSessionInformation userinfo) {
 		this.appConfig = appConfig;
 		this.restTemplate = restTemplate;
+		this.userinfo = userinfo;
 	}
 
-	/***
-	 * gets all the friends of the user
-	 * @param token
-	 * @return
-	 */
 	@Override
-	public List<FriendshipDto> getFriends(String token) {
+	public List<FriendshipDto> findAll() {
 
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(token);
+		headers.setBearerAuth(userinfo.getJwtToken());
 
 		HttpEntity<Void> request = new HttpEntity<>(headers);
 
@@ -53,11 +51,11 @@ public class UserFriendsRepositoryImpl implements UserFriendsRepository {
 	}
 
 	@Override
-	public void addFriend(String friendEmail, String jwtToken) {
+	public void save(String friendEmail) {
 
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(jwtToken);
+		headers.setBearerAuth(userinfo.getJwtToken());
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
 		// Assuming backend expects no body, friendEmail only in URL:
@@ -71,10 +69,10 @@ public class UserFriendsRepositoryImpl implements UserFriendsRepository {
 	}
 
 	@Override
-	public List<FriendshipDto> findAllByFirstName(String searchValue, String jwtToken) {
+	public List<FriendshipDto> findAllByFirstName(String searchValue) {
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(jwtToken);
+		headers.setBearerAuth(userinfo.getJwtToken());
 
 		HttpEntity<Void> request = new HttpEntity<>(headers);
 
@@ -89,9 +87,9 @@ public class UserFriendsRepositoryImpl implements UserFriendsRepository {
 	}
 
 	@Override
-	public void removeFriend(Long id, String jwtToken) {
+	public void delete(Long id) {
 		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(jwtToken);
+		headers.setBearerAuth(userinfo.getJwtToken());
 
 		HttpEntity<Void> request = new HttpEntity<>(headers);
 

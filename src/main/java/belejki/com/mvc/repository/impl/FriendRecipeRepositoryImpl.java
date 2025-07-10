@@ -2,7 +2,7 @@ package belejki.com.mvc.repository.impl;
 
 import belejki.com.mvc.config.AppConfig;
 import belejki.com.mvc.dto.RecipeDto;
-import belejki.com.mvc.model.binding.UserRecipeBindingModel;
+import belejki.com.mvc.model.session.UserSessionInformation;
 import belejki.com.mvc.repository.FriendRecipeRepository;
 import belejki.com.mvc.util.PagedResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,25 +23,20 @@ public class FriendRecipeRepositoryImpl implements FriendRecipeRepository {
 
 	private final AppConfig appConfig;
 	private final RestTemplate restTemplate;
+	private final UserSessionInformation userInformation;
 
 	@Autowired
-	public FriendRecipeRepositoryImpl(AppConfig appConfig, RestTemplate restTemplate) {
+	public FriendRecipeRepositoryImpl(AppConfig appConfig, RestTemplate restTemplate, UserSessionInformation userInformation) {
 		this.appConfig = appConfig;
 		this.restTemplate = restTemplate;
+		this.userInformation = userInformation;
 	}
 
-	/***
-	 * gets all user's friend recipes that contain the passed string in their title
-	 * @param searchValue - String to search in friend recipes title.
-	 * @param username - email of the user's friend
-	 * @param jwtToken
-	 * @return
-	 */
 	@Override
-	public List<RecipeDto> getFriendRecipesByTitle(String searchValue, String username, String jwtToken) {
+	public List<RecipeDto> getFriendRecipesByTitle(String searchValue, String username) {
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(jwtToken);
+		headers.setBearerAuth(userInformation.getJwtToken());
 
 		HttpEntity<Void> request = new HttpEntity<>(headers);
 
@@ -63,10 +58,10 @@ public class FriendRecipeRepositoryImpl implements FriendRecipeRepository {
 	}
 
 	@Override
-	public List<RecipeDto> getFriendRecipesByIngredients(List<String> ingredients, String username, String jwtToken) {
+	public List<RecipeDto> getFriendRecipesByIngredients(List<String> ingredients, String username) {
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(jwtToken);
+		headers.setBearerAuth(userInformation.getJwtToken());
 
 		HttpEntity<Void> request = new HttpEntity<>(headers);
 

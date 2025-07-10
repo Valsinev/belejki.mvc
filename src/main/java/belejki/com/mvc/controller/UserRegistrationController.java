@@ -4,7 +4,6 @@ import belejki.com.mvc.config.AppConfig;
 import belejki.com.mvc.model.binding.UserRegisterBindingModel;
 import belejki.com.mvc.service.UserRegistrationService;
 import belejki.com.mvc.service.impl.RecaptchaValidationService;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -52,8 +51,6 @@ public class UserRegistrationController {
 	public String saveUser(
 			@Valid @ModelAttribute("userRegisterBindingModel") UserRegisterBindingModel userRegisterBindingModel,
 			BindingResult bindingResult,
-			Model model,
-			HttpServletResponse response,
 			RedirectAttributes redirectAttributes,
 			@RequestParam("g-recaptcha-response") String captchaToken) {
 		//registration form validation

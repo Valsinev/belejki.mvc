@@ -2,16 +2,14 @@ package belejki.com.mvc.controller;
 
 import belejki.com.mvc.dto.UserReminderDto;
 import belejki.com.mvc.model.binding.UserReminderBindingModel;
+import belejki.com.mvc.model.session.UserSessionInformation;
 import belejki.com.mvc.service.UserRemindersService;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -24,16 +22,17 @@ public class RemindersController {
 
 
 	private final UserRemindersService userRemindersService;
+	private final UserSessionInformation userinfo;
 
 	@Autowired
-	public RemindersController(UserRemindersService userRemindersService) {
+	public RemindersController(UserRemindersService userRemindersService, UserSessionInformation userSessionInformation) {
 		this.userRemindersService = userRemindersService;
+		this.userinfo = userSessionInformation;
 	}
 
 	@GetMapping
-	public String getUserReminders(Model model, HttpSession session) {
-		String token = (String) session.getAttribute("jwt");
-		if (token == null) return "redirect:/login";
+	public String getUserReminders(Model model) {
+		if (userinfo.getJwtToken() == null) return "redirect:/login";
 
 		List<UserReminderDto> reminders = userRemindersService.getUserReminders();
 
@@ -54,7 +53,6 @@ public class RemindersController {
 	@PostMapping("/create")
 	public String createNewReminder(@Valid @ModelAttribute("reminder") UserReminderBindingModel reminder,
 	                                BindingResult result,
-	                                HttpSession session,
 	                                Model model,
 	                                RedirectAttributes redirectAttributes) {
 		if (result.hasErrors()) {
@@ -62,8 +60,7 @@ public class RemindersController {
 			return "create_reminder";
 		}
 
-		String token = (String) session.getAttribute("jwt");
-		if (token == null) return "redirect:/login";
+		if (userinfo.getJwtToken() == null) return "redirect:/login";
 
 
 		if (result.hasErrors()) {
@@ -73,7 +70,7 @@ public class RemindersController {
 		}
 
 		try {
-			userRemindersService.save(reminder, token);
+			userRemindersService.save(reminder);
 		} catch (RestClientException e) {
 			redirectAttributes.addFlashAttribute("reminder", reminder);
 			redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.reminder", reminder);
@@ -86,12 +83,12 @@ public class RemindersController {
 
 
 	@GetMapping("/edit/{id}")
-	public String editReminder(@PathVariable("id") Long id, HttpSession session, Model model) {
-		String token = (String) session.getAttribute("jwt");
-		if (token == null) return "redirect:/login";
+	public String editReminder(@PathVariable("id") Long id, Model model) {
+
+		if (userinfo.getJwtToken() == null) return "redirect:/login";
 
 		try {
-			UserReminderDto reminder = userRemindersService.editReminder(id, token);
+			UserReminderDto reminder = userRemindersService.editReminder(id);
 			model.addAttribute("reminder", reminder);
 			model.addAttribute("editing", true);
 		} catch (RestClientException e) {
@@ -105,18 +102,16 @@ public class RemindersController {
 	public String updateReminder(@PathVariable Long id,
 	                             @Valid @ModelAttribute("reminder") UserReminderBindingModel reminder,
 	                             BindingResult result,
-	                             HttpSession session,
 	                             Model model) {
 		if (result.hasErrors()) {
 			model.addAttribute("editing", true);
 			return "create_reminder";
 		}
 
-		String token = (String) session.getAttribute("jwt");
-		if (token == null) return "redirect:/login";
+		if (userinfo.getJwtToken() == null) return "redirect:/login";
 
 		try {
-			userRemindersService.updateReminder(id, reminder, token);
+			userRemindersService.updateReminder(id, reminder);
 		} catch (RestClientException e) {
 			return "redirect:/user/reminders/update/" + id;
 		}
@@ -125,13 +120,12 @@ public class RemindersController {
 	}
 
 	@GetMapping("/delete/{id}")
-	public String deleteReminder(@PathVariable Long id,
-	                             HttpSession session) {
-		String token = (String) session.getAttribute("jwt");
-		if (token == null) return "redirect:/login";
+	public String deleteReminder(@PathVariable Long id) {
+
+		if (userinfo.getJwtToken() == null) return "redirect:/login";
 
 		try {
-			userRemindersService.deleteById(id, token);
+			userRemindersService.deleteById(id);
 
 		} catch (RestClientException e) {
 			return "redirect:/user/reminders?error=delete";
@@ -141,13 +135,11 @@ public class RemindersController {
 	}
 
 	@GetMapping("/search")
-	public String searchByNameContaining(@RequestParam("searchValue") String searchValue,
-	                                     Model model,
-	                                     HttpSession session) {
-		String token = (String) session.getAttribute("jwt");
-		if (token == null) return "redirect:/user/dashboard";
+	public String searchByNameContaining(@RequestParam("searchValue") String searchValue, Model model) {
 
-		List<UserReminderDto> reminders = userRemindersService.searchByNameContaining(searchValue, token);
+		if (userinfo.getJwtToken() == null) return "redirect:/user/dashboard";
+
+		List<UserReminderDto> reminders = userRemindersService.searchByNameContaining(searchValue);
 
 		model.addAttribute("reminders", reminders);
 

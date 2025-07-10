@@ -1,10 +1,8 @@
 package belejki.com.mvc.controller;
 
 import belejki.com.mvc.dto.FriendshipDto;
-import belejki.com.mvc.model.binding.UserRecipeBindingModel;
-import belejki.com.mvc.dto.WishDto;
+import belejki.com.mvc.model.session.UserSessionInformation;
 import belejki.com.mvc.service.UserFriendsService;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,39 +11,42 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 
 import java.util.List;
-import java.util.Locale;
 
 @Controller
 @RequestMapping("/user/friends")
 public class UserFriendController {
 
 	private final UserFriendsService userFriendsService;
+	private final UserSessionInformation userinfo;
 
 	@Autowired
-	public UserFriendController(UserFriendsService userFriendsService) {
+	public UserFriendController(UserFriendsService userFriendsService, UserSessionInformation userinfo) {
 
 		this.userFriendsService = userFriendsService;
+		this.userinfo = userinfo;
 	}
 
 
 	@GetMapping
-	public String getUserFriends(Model model, HttpSession session) {
-		String token = (String) session.getAttribute("jwt");
-		if (token == null) return "redirect:/login";
-		List<FriendshipDto> friends = userFriendsService.getFriends(token);
+	public String getUserFriends(Model model) {
+
+		if (userinfo.getJwtToken() == null) return "redirect:/login";
+
+		List<FriendshipDto> friends = userFriendsService.getFriends();
+
 		model.addAttribute("friends", friends);
+
 		return "user_friends";
 	}
 
 
 	@PostMapping
-	public String addFriend(@RequestParam("friend") String friendEmail, Model model, HttpSession session) {
+	public String addFriend(@RequestParam("friend") String friendEmail, Model model) {
 
-		String token = (String) session.getAttribute("jwt");
-		if (token == null) return "redirect:/login";
+		if (userinfo.getJwtToken() == null) return "redirect:/login";
 
 		try {
-			userFriendsService.addFriend(friendEmail, token);
+			userFriendsService.addFriend(friendEmail);
 		} catch (HttpClientErrorException.Conflict ex) {  // HTTP 409 Conflict for duplicates
 			model.addAttribute("errorMessage", "Failed to add friend, maybe is already in the friendlist or does not exist.");
 			return "user_friends";  // Show friends page with error message
@@ -58,12 +59,11 @@ public class UserFriendController {
 	}
 
 	@GetMapping("/search")
-	public String findFriend(@RequestParam("searchValue") String searchValue, HttpSession session, Model model) {
+	public String findFriend(@RequestParam("searchValue") String searchValue, Model model) {
 
-		String token = (String) session.getAttribute("jwt");
-		if (token == null) return "redirect:/login";
+		if (userinfo.getJwtToken() == null) return "redirect:/login";
 
-		List<FriendshipDto> friends = userFriendsService.findAllByFirstName(searchValue, token);
+		List<FriendshipDto> friends = userFriendsService.findAllByFirstName(searchValue);
 
 		model.addAttribute("friends", friends);
 		return "user_friends";
@@ -71,13 +71,12 @@ public class UserFriendController {
 	}
 
 	@GetMapping("/remove/{id}")
-	public String removeFriend(@PathVariable Long id, HttpSession session) {
+	public String removeFriend(@PathVariable Long id) {
 
-		String token = (String) session.getAttribute("jwt");
-		if (token == null) return "redirect:/login";
+		if (userinfo.getJwtToken() == null) return "redirect:/login";
 
 		try {
-			userFriendsService.removeFriend(id, token);
+			userFriendsService.removeFriend(id);
 		} catch (HttpClientErrorException | HttpServerErrorException e) {
 			return "redirect:/user/friends?error=delete";
 		}

@@ -23,30 +23,30 @@ public class UserRecipesServiceImpl implements UserRecipesService {
 	}
 
 	@Override
-	public RecipeDto save(UserRecipeBindingModel userRecipeBindingModel, String jwtToken) {
+	public RecipeDto save(UserRecipeBindingModel userRecipeBindingModel) {
 
 		RecipeDto recipe = modelMapper.map(userRecipeBindingModel, RecipeDto.class);
 
-		return userRecipesRepository.save(recipe, jwtToken);
+		return userRecipesRepository.save(recipe);
 	}
 
 	@Override
-	public List<RecipeDto> searchByNameContaining(String searchValue, String jwtToken) {
+	public List<RecipeDto> searchByNameContaining(String searchValue) {
 
-		return userRecipesRepository.findAllByNameContaining(searchValue, jwtToken);
-
-	}
-
-	@Override
-	public List<RecipeDto> searchByIngredients(List<String> ingredients, String jwtToken) {
-
-		return userRecipesRepository.findAllByIngredients(ingredients, jwtToken);
+		return userRecipesRepository.findAllByNameContaining(searchValue);
 
 	}
 
 	@Override
-	public RecipeDto deleteRecipeById(Long id, String jwtToken) {
+	public List<RecipeDto> searchByIngredients(List<String> ingredients) {
 
-		return userRecipesRepository.deleteById(id, jwtToken);
+		return userRecipesRepository.findAllByIngredients(ingredients);
+
+	}
+
+	@Override
+	public RecipeDto deleteRecipeById(Long id) {
+
+		return userRecipesRepository.deleteById(id);
 	}
 }

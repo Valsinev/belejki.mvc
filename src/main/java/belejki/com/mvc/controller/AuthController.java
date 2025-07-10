@@ -55,9 +55,7 @@ public class AuthController {
 		}
 
 		try {
-			String jwtToken = authService.authenticate(userLogingBindingModel, locale);
-			// Save token in session
-			session.setAttribute("jwt", jwtToken);
+			authService.authenticate(userLogingBindingModel, locale);
 			return "redirect:/home";
 		} catch (HttpClientErrorException ex) {
 			redirectAttributes.addFlashAttribute("error", "{login.invalid.username.or.password}");

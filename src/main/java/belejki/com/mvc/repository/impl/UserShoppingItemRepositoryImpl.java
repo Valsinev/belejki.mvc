@@ -3,6 +3,7 @@ package belejki.com.mvc.repository.impl;
 import belejki.com.mvc.config.AppConfig;
 import belejki.com.mvc.dto.UserShoppingItemDto;
 import belejki.com.mvc.model.binding.UserShoppingItemBindingModel;
+import belejki.com.mvc.model.session.UserSessionInformation;
 import belejki.com.mvc.repository.UserShoppingItemRepository;
 import belejki.com.mvc.util.PagedResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,18 +21,20 @@ public class UserShoppingItemRepositoryImpl implements UserShoppingItemRepositor
 
 	private final AppConfig appConfig;
 	private final RestTemplate restTemplate;
+	private final UserSessionInformation userinfo;
 
 	@Autowired
-	public UserShoppingItemRepositoryImpl(AppConfig appConfig, RestTemplate restTemplate) {
+	public UserShoppingItemRepositoryImpl(AppConfig appConfig, RestTemplate restTemplate, UserSessionInformation userinfo) {
 		this.appConfig = appConfig;
 		this.restTemplate = restTemplate;
+		this.userinfo = userinfo;
 	}
 
 	@Override
-	public Set<UserShoppingItemDto> getAll(String jwtToken) {
+	public Set<UserShoppingItemDto> getAll() {
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(jwtToken);
+		headers.setBearerAuth(userinfo.getJwtToken());
 
 		HttpEntity<Void> request = new HttpEntity<>(headers);
 
@@ -47,10 +50,10 @@ public class UserShoppingItemRepositoryImpl implements UserShoppingItemRepositor
 	}
 
 	@Override
-	public UserShoppingItemDto add(UserShoppingItemDto item, String jwtToken) {
+	public UserShoppingItemDto add(UserShoppingItemDto item) {
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(jwtToken);
+		headers.setBearerAuth(userinfo.getJwtToken());
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
 		HttpEntity<UserShoppingItemDto> request = new HttpEntity<>(item, headers);
@@ -65,9 +68,9 @@ public class UserShoppingItemRepositoryImpl implements UserShoppingItemRepositor
 	}
 
 	@Override
-	public UserShoppingItemDto deleteById(Long id, String jwtToken) {
+	public UserShoppingItemDto deleteById(Long id) {
 		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(jwtToken);
+		headers.setBearerAuth(userinfo.getJwtToken());
 
 		HttpEntity<UserShoppingItemDto> request = new HttpEntity<>(headers);
 
@@ -82,9 +85,9 @@ public class UserShoppingItemRepositoryImpl implements UserShoppingItemRepositor
 	}
 
 	@Override
-	public void deleteAll(String jwtToken) {
+	public void deleteAll() {
 		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(jwtToken);
+		headers.setBearerAuth(userinfo.getJwtToken());
 
 		HttpEntity<Void> request = new HttpEntity<>(headers);
 

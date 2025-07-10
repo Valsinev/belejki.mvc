@@ -11,13 +11,13 @@ public interface UserRemindersService {
 
 	List<UserReminderDto> getUserReminders();
 
-	UserReminderDto save(UserReminderBindingModel reminder, String jwtToken);
+	UserReminderDto save(UserReminderBindingModel reminder);
 
-	UserReminderDto editReminder(Long id, String jwtToken);
+	UserReminderDto editReminder(Long id);
 
-	UserReminderDto updateReminder(Long id, UserReminderBindingModel reminder, String jwtToken);
+	UserReminderDto updateReminder(Long id, UserReminderBindingModel reminder);
 
-	UserReminderDto deleteById(Long id, String jwtToken);
+	UserReminderDto deleteById(Long id);
 
-	List<UserReminderDto> searchByNameContaining(String searchValue, String jwtToken);
+	List<UserReminderDto> searchByNameContaining(String searchValue);
 }

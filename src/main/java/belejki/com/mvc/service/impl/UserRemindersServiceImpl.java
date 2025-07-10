@@ -40,38 +40,38 @@ public class UserRemindersServiceImpl implements UserRemindersService {
 	}
 
 	@Override
-	public UserReminderDto save(UserReminderBindingModel userReminderBindingModel, String jwtToken) {
+	public UserReminderDto save(UserReminderBindingModel userReminderBindingModel) {
 
 		UserReminderDto reminder = modelMapper.map(userReminderBindingModel, UserReminderDto.class);
 
-		return userReminderRepository.save(reminder, jwtToken);
+		return userReminderRepository.save(reminder);
 	}
 
 	@Override
-	public UserReminderDto editReminder(Long id, String jwtToken) {
+	public UserReminderDto editReminder(Long id) {
 
-		return userReminderRepository.edit(id, jwtToken);
+		return userReminderRepository.edit(id);
 	}
 
 	@Override
-	public UserReminderDto updateReminder(Long id, UserReminderBindingModel userReminderBindingModel, String token) {
+	public UserReminderDto updateReminder(Long id, UserReminderBindingModel userReminderBindingModel) {
 
 		UserReminderDto reminder = modelMapper.map(userReminderBindingModel, UserReminderDto.class);
 
-		return userReminderRepository.update(id, reminder, token);
+		return userReminderRepository.update(id, reminder);
 	}
 
 	@Override
-	public UserReminderDto deleteById(Long id, String token) {
+	public UserReminderDto deleteById(Long id) {
 
-		return userReminderRepository.deleteById(id, token);
+		return userReminderRepository.deleteById(id);
 
 	}
 
 	@Override
-	public List<UserReminderDto> searchByNameContaining(String searchValue, String token) {
+	public List<UserReminderDto> searchByNameContaining(String searchValue) {
 
-		return userReminderRepository.searchByNameContaining(searchValue, token);
+		return userReminderRepository.searchByNameContaining(searchValue);
 
 	}
 }

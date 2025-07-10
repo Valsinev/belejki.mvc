@@ -3,8 +3,10 @@ package belejki.com.mvc.repository.impl;
 import belejki.com.mvc.config.AppConfig;
 import belejki.com.mvc.dto.RecipeDto;
 import belejki.com.mvc.model.binding.UserRecipeBindingModel;
+import belejki.com.mvc.model.session.UserSessionInformation;
 import belejki.com.mvc.repository.UserRecipesRepository;
 import belejki.com.mvc.util.PagedResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -20,17 +22,20 @@ public class UserRecipesRepositoryImpl implements UserRecipesRepository {
 
 	private final RestTemplate restTemplate;
 	private final AppConfig appConfig;
+	private final UserSessionInformation userInfo;
 
-	public UserRecipesRepositoryImpl(RestTemplate restTemplate, AppConfig appConfig) {
+	@Autowired
+	public UserRecipesRepositoryImpl(RestTemplate restTemplate, AppConfig appConfig, UserSessionInformation userInfo) {
 		this.restTemplate = restTemplate;
 		this.appConfig = appConfig;
+		this.userInfo = userInfo;
 	}
 
 	@Override
-	public RecipeDto save(RecipeDto recipe, String jwtToken) {
+	public RecipeDto save(RecipeDto recipe) {
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(jwtToken);
+		headers.setBearerAuth(userInfo.getJwtToken());
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
 		HttpEntity<RecipeDto> request = new HttpEntity<>(recipe, headers);
@@ -44,11 +49,11 @@ public class UserRecipesRepositoryImpl implements UserRecipesRepository {
 	}
 
 	@Override
-	public List<RecipeDto> findAllByNameContaining(String searchValue, String jwtToken) {
+	public List<RecipeDto> findAllByNameContaining(String searchValue) {
 
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(jwtToken);
+		headers.setBearerAuth(userInfo.getJwtToken());
 
 		HttpEntity<Void> request = new HttpEntity<>(headers);
 
@@ -63,11 +68,11 @@ public class UserRecipesRepositoryImpl implements UserRecipesRepository {
 	}
 
 	@Override
-	public List<RecipeDto> findAllByIngredients(List<String> ingredients, String jwtToken) {
+	public List<RecipeDto> findAllByIngredients(List<String> ingredients) {
 
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(jwtToken);
+		headers.setBearerAuth(userInfo.getJwtToken());
 
 		HttpEntity<Void> request = new HttpEntity<>(headers);
 
@@ -89,10 +94,10 @@ public class UserRecipesRepositoryImpl implements UserRecipesRepository {
 	}
 
 	@Override
-	public RecipeDto deleteById(Long id, String jwtToken) {
+	public RecipeDto deleteById(Long id) {
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(jwtToken);
+		headers.setBearerAuth(userInfo.getJwtToken());
 
 		HttpEntity<Void> request = new HttpEntity<>(headers);
 

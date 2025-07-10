@@ -5,17 +5,17 @@ import belejki.com.mvc.dto.WishDto;
 import java.util.List;
 
 public interface UserWishRepository {
-	List<WishDto> getAll(String jwtToken);
+	List<WishDto> findAll();
 
-	WishDto save(WishDto wish, String jwtToken);
+	WishDto save(WishDto wish);
 
-	WishDto edit(Long id, String jwtToken);
+	WishDto edit(Long id);
 
-	WishDto update(Long id, WishDto wish, String jwtToken);
+	WishDto update(Long id, WishDto wish);
 
-	WishDto deleteById(Long id, String jwtToken);
+	WishDto deleteById(Long id);
 
-	List<WishDto> findAllByNameContaining(String searchValue, String jwtToken);
+	List<WishDto> findAllByNameContaining(String searchValue);
 
-	List<WishDto> findAllByPriceLessThan(Long maxPrice, String jwtToken);
+	List<WishDto> findAllByPriceLessThan(Long maxPrice);
 }

@@ -7,11 +7,12 @@ import belejki.com.mvc.dto.WishDto;
 import java.util.List;
 
 public interface UserFriendsService {
-	List<FriendshipDto> getFriends(String jwtToken);
 
-	void addFriend(String friendEmail, String jwtToken);
+	List<FriendshipDto> getFriends();
 
-	void removeFriend(Long id, String jwtToken);
+	void addFriend(String friendEmail);
 
-	List<FriendshipDto> findAllByFirstName(String searchValue, String token);
+	void removeFriend(Long id);
+
+	List<FriendshipDto> findAllByFirstName(String searchValue);
 }

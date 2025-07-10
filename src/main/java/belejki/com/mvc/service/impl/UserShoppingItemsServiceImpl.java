@@ -27,31 +27,31 @@ public class UserShoppingItemsServiceImpl implements UserShoppingItemsService {
 	}
 
 	@Override
-	public Set<UserShoppingItemDto> getShoppingList(String jwtToken) {
+	public Set<UserShoppingItemDto> getShoppingList() {
 
-		return userShoppingItemRepository.getAll(jwtToken);
+		return userShoppingItemRepository.getAll();
 
 	}
 
 	@Override
-	public UserShoppingItemDto addShoppingItem(UserShoppingItemBindingModel userShoppingItemBindingModel, String jwtToken) {
+	public UserShoppingItemDto addShoppingItem(UserShoppingItemBindingModel userShoppingItemBindingModel) {
 
 		UserShoppingItemDto item = modelMapper.map(userShoppingItemBindingModel, UserShoppingItemDto.class);
-		return userShoppingItemRepository.add(item, jwtToken);
+		return userShoppingItemRepository.add(item);
 
 	}
 
 	@Override
-	public UserShoppingItemDto deleteItem(Long id, String jwtToken) {
+	public UserShoppingItemDto deleteItem(Long id) {
 
-		return userShoppingItemRepository.deleteById(id, jwtToken);
+		return userShoppingItemRepository.deleteById(id);
 
 	}
 
 	@Override
-	public void clearShoppingList(String jwtToken) {
+	public void clearShoppingList() {
 
-		userShoppingItemRepository.deleteAll(jwtToken);
+		userShoppingItemRepository.deleteAll();
 
 	}
 }

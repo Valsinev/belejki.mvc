@@ -4,11 +4,12 @@ import belejki.com.mvc.dto.UserShoppingItemDto;
 import java.util.Set;
 
 public interface UserShoppingItemRepository {
-	Set<UserShoppingItemDto> getAll(String jwtToken);
 
-	UserShoppingItemDto add(UserShoppingItemDto item, String jwtToken);
+	Set<UserShoppingItemDto> getAll();
 
-	UserShoppingItemDto deleteById(Long id, String jwtToken);
+	UserShoppingItemDto add(UserShoppingItemDto item);
 
-	void deleteAll(String jwtToken);
+	UserShoppingItemDto deleteById(Long id);
+
+	void deleteAll();
 }

@@ -2,6 +2,7 @@ package belejki.com.mvc.repository.impl;
 
 import belejki.com.mvc.config.AppConfig;
 import belejki.com.mvc.dto.WishDto;
+import belejki.com.mvc.model.session.UserSessionInformation;
 import belejki.com.mvc.repository.UserWishRepository;
 import belejki.com.mvc.util.PagedResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,18 +17,20 @@ import java.util.List;
 public class UserWishRepositoryImpl implements UserWishRepository {
 	private final AppConfig appConfig;
 	private final RestTemplate restTemplate;
+	private final UserSessionInformation userinfo;
 
 	@Autowired
-	public UserWishRepositoryImpl(AppConfig appConfig, RestTemplate restTemplate) {
+	public UserWishRepositoryImpl(AppConfig appConfig, RestTemplate restTemplate, UserSessionInformation userinfo) {
 		this.appConfig = appConfig;
 		this.restTemplate = restTemplate;
+		this.userinfo = userinfo;
 	}
 
 	@Override
-	public List<WishDto> getAll(String jwtToken) {
+	public List<WishDto> findAll() {
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(jwtToken);
+		headers.setBearerAuth(userinfo.getJwtToken());
 
 		HttpEntity<Void> request = new HttpEntity<>(headers);
 
@@ -42,10 +45,10 @@ public class UserWishRepositoryImpl implements UserWishRepository {
 	}
 
 	@Override
-	public WishDto save(WishDto wish, String jwtToken) {
+	public WishDto save(WishDto wish) {
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(jwtToken);
+		headers.setBearerAuth(userinfo.getJwtToken());
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
 		HttpEntity<WishDto> request = new HttpEntity<>(wish, headers);
@@ -58,10 +61,10 @@ public class UserWishRepositoryImpl implements UserWishRepository {
 	}
 
 	@Override
-	public WishDto edit(Long id, String jwtToken) {
+	public WishDto edit(Long id) {
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(jwtToken);
+		headers.setBearerAuth(userinfo.getJwtToken());
 
 		HttpEntity<Void> request = new HttpEntity<>(headers);
 
@@ -76,9 +79,9 @@ public class UserWishRepositoryImpl implements UserWishRepository {
 	}
 
 	@Override
-	public WishDto update(Long id, WishDto wish, String jwtToken) {
+	public WishDto update(Long id, WishDto wish) {
 		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(jwtToken);
+		headers.setBearerAuth(userinfo.getJwtToken());
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
 		HttpEntity<WishDto> request = new HttpEntity<>(wish, headers);
@@ -94,9 +97,9 @@ public class UserWishRepositoryImpl implements UserWishRepository {
 	}
 
 	@Override
-	public WishDto deleteById(Long id, String jwtToken) {
+	public WishDto deleteById(Long id) {
 		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(jwtToken);
+		headers.setBearerAuth(userinfo.getJwtToken());
 
 		HttpEntity<WishDto> request = new HttpEntity<>(headers);
 
@@ -112,10 +115,10 @@ public class UserWishRepositoryImpl implements UserWishRepository {
 	}
 
 	@Override
-	public List<WishDto> findAllByNameContaining(String searchValue, String jwtToken) {
+	public List<WishDto> findAllByNameContaining(String searchValue) {
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(jwtToken);
+		headers.setBearerAuth(userinfo.getJwtToken());
 
 		HttpEntity<Void> request = new HttpEntity<>(headers);
 
@@ -130,10 +133,10 @@ public class UserWishRepositoryImpl implements UserWishRepository {
 	}
 
 	@Override
-	public List<WishDto> findAllByPriceLessThan(Long maxPrice, String jwtToken) {
+	public List<WishDto> findAllByPriceLessThan(Long maxPrice) {
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(jwtToken);
+		headers.setBearerAuth(userinfo.getJwtToken());
 
 		HttpEntity<Void> request = new HttpEntity<>(headers);
 

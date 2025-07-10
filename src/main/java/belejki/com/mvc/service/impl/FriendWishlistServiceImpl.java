@@ -19,17 +19,17 @@ public class FriendWishlistServiceImpl implements FriendWishlistService {
 	}
 
 	@Override
-	public List<WishDto> getFriendWishlistFilteredByPrice(Long maxPrice, String username, String jwtToken) {
+	public List<WishDto> getFriendWishlistFilteredByPrice(Long maxPrice, String username) {
 
-		List<WishDto> wishlist = friendWishRepository.getFriendWishlistFilteredByPrice(maxPrice, username, jwtToken);
+		List<WishDto> wishlist = friendWishRepository.getFriendWishlistFilteredByPrice(maxPrice, username);
 
 		return wishlist;
 	}
 
 	@Override
-	public List<WishDto> prepareFriendWishlistPage(String username, String jwtToken) {
+	public List<WishDto> prepareFriendWishlistPage(String username) {
 
-		List<WishDto> wishlist = friendWishRepository.getFriendWishlistByFriendUsername(username, jwtToken);
+		List<WishDto> wishlist = friendWishRepository.getFriendWishlistByFriendUsername(username);
 
 		return wishlist;
 	}

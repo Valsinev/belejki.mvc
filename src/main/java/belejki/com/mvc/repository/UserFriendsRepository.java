@@ -1,17 +1,16 @@
 package belejki.com.mvc.repository;
 
 import belejki.com.mvc.dto.FriendshipDto;
-import belejki.com.mvc.model.binding.UserRecipeBindingModel;
-import belejki.com.mvc.dto.WishDto;
 
 import java.util.List;
 
 public interface UserFriendsRepository {
-	List<FriendshipDto> getFriends(String token);
 
-	void addFriend(String friendEmail, String jwtToken);
+	List<FriendshipDto> findAll();
 
-	void removeFriend(Long id, String jwtToken);
+	void save(String friendEmail);
 
-	List<FriendshipDto> findAllByFirstName(String searchValue, String jwtToken);
+	void delete(Long id);
+
+	List<FriendshipDto> findAllByFirstName(String searchValue);
 }

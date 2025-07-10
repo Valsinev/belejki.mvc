@@ -10,11 +10,11 @@ import java.util.List;
 import java.util.Locale;
 
 public interface UserRecipesService {
-	RecipeDto save(UserRecipeBindingModel recipe, String jwtToken);
+	RecipeDto save(UserRecipeBindingModel recipe);
 
-	List<RecipeDto> searchByNameContaining(String searchValue, String jwtToken);
+	List<RecipeDto> searchByNameContaining(String searchValue);
 
-	List<RecipeDto> searchByIngredients(List<String> ingredients, String jwtToken);
+	List<RecipeDto> searchByIngredients(List<String> ingredients);
 
-	RecipeDto deleteRecipeById(Long id, String jwtToken);
+	RecipeDto deleteRecipeById(Long id);
 }

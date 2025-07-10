@@ -1,8 +1,8 @@
 package belejki.com.mvc.controller;
 
 import belejki.com.mvc.dto.WishDto;
+import belejki.com.mvc.model.session.UserSessionInformation;
 import belejki.com.mvc.service.FriendWishlistService;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,22 +19,22 @@ public class FriendWishController {
 
 
 	private final FriendWishlistService userFriendsService;
+	private final UserSessionInformation userinfo;
 
 	@Autowired
-	public FriendWishController(FriendWishlistService userFriendsService) {
+	public FriendWishController(FriendWishlistService userFriendsService, UserSessionInformation userInformation) {
 		this.userFriendsService = userFriendsService;
+		this.userinfo = userInformation;
 	}
 
 	@GetMapping("/wishlist/filter")
 	public String filterFriendWishlistByPrice(@RequestParam("maxPrice") Long maxPrice,
 	                                          @RequestParam("username") String username,
-	                                          Model model,
-	                                          HttpSession session) {
+	                                          Model model) {
 
-		String token = (String) session.getAttribute("jwt");
-		if (token == null) return "redirect:/login";
+		if (userinfo.getJwtToken() == null) return "redirect:/login";
 
-		List<WishDto> wishlist = userFriendsService.getFriendWishlistFilteredByPrice(maxPrice, username, token);
+		List<WishDto> wishlist = userFriendsService.getFriendWishlistFilteredByPrice(maxPrice, username);
 
 		model.addAttribute("wishlist", wishlist);
 		model.addAttribute("username", username);
@@ -45,11 +45,11 @@ public class FriendWishController {
 
 
 	@GetMapping("/wishlist/{username}")
-	public String getFriendWishlistPage(@PathVariable String username, Model model, HttpSession session) {
-		String token = (String) session.getAttribute("jwt");
-		if (token == null) return "redirect:/login";
+	public String getFriendWishlistPage(@PathVariable String username, Model model) {
 
-		List<WishDto> wishlist = userFriendsService.prepareFriendWishlistPage(username, token);
+		if (userinfo.getJwtToken() == null) return "redirect:/login";
+
+		List<WishDto> wishlist = userFriendsService.prepareFriendWishlistPage(username);
 
 		model.addAttribute("wishlist", wishlist);
 		model.addAttribute("username", username);

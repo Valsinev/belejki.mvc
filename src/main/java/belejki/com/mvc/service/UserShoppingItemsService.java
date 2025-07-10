@@ -5,11 +5,12 @@ import belejki.com.mvc.model.binding.UserShoppingItemBindingModel;
 import java.util.Set;
 
 public interface UserShoppingItemsService {
-	Set<UserShoppingItemDto> getShoppingList(String jwtToken);
 
-	UserShoppingItemDto addShoppingItem(UserShoppingItemBindingModel item, String jwtToken);
+	Set<UserShoppingItemDto> getShoppingList();
 
-	UserShoppingItemDto deleteItem(Long id, String jwtToken);
+	UserShoppingItemDto addShoppingItem(UserShoppingItemBindingModel item);
 
-	void clearShoppingList(String jwtToken);
+	UserShoppingItemDto deleteItem(Long id);
+
+	void clearShoppingList();
 }
