@@ -1,5 +1,6 @@
 package belejki.com.mvc.config;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.client.RestTemplate;
@@ -8,13 +9,13 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import java.util.Locale;
 
 @org.springframework.context.annotation.Configuration
 public class Configuration implements WebMvcConfigurer {
 
+    //configures the message source
     @Bean
     public ResourceBundleMessageSource messageSource() {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
@@ -24,18 +25,11 @@ public class Configuration implements WebMvcConfigurer {
         return messageSource;
     }
 
-//    @Bean
-//    public LocaleResolver localeResolver() {
-//        SessionLocaleResolver slr = new SessionLocaleResolver();
-//        slr.setDefaultLocale(Locale.ENGLISH);
-////        slr.setDefaultLocale(Locale.forLanguageTag("bg"));
-//        return slr;
-//    }
 
     @Bean
     public LocaleResolver localeResolver() {
         CookieLocaleResolver clr = new CookieLocaleResolver();
-        clr.setDefaultLocale(Locale.ENGLISH);
+        clr.setDefaultLocale(Locale.forLanguageTag("BG"));
         clr.setCookieName("lang");
         clr.setCookieMaxAge(3600); // 1 hour
         return clr;
@@ -58,6 +52,9 @@ public class Configuration implements WebMvcConfigurer {
     public RestTemplate restTemplate() {
         return new RestTemplate();
     }
+
+    @Bean
+    public ModelMapper modelMapper() { return new ModelMapper(); }
 
 
 }

@@ -1,83 +1,75 @@
 package belejki.com.mvc.controller;
 
-import belejki.com.mvc.config.AppConfig;
 import belejki.com.mvc.dto.RecipeDto;
-import belejki.com.mvc.util.PagedResponse;
-import jakarta.servlet.http.HttpSession;
+import belejki.com.mvc.model.binding.UserRecipeBindingModel;
+import belejki.com.mvc.exceptions.UnauthorizedException;
+import belejki.com.mvc.model.session.UserSessionInformation;
+import belejki.com.mvc.service.UserRecipesService;
 import jakarta.validation.Valid;
-import org.springframework.context.MessageSource;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("/user/recipes")
 public class RecipesController {
 
-    private final AppConfig appConfig;
-    private final RestTemplate restTemplate;
-    private final MessageSource messageSource;
+    private final UserRecipesService userRecipesService;
+    private final UserSessionInformation userInfo;
 
-    public RecipesController(AppConfig appConfig, RestTemplate restTemplate, MessageSource messageSource) {
-        this.appConfig = appConfig;
-        this.restTemplate = restTemplate;
-        this.messageSource = messageSource;
+    @Autowired
+	public RecipesController(UserRecipesService userRecipesService, UserSessionInformation userInfo) {
+		this.userRecipesService = userRecipesService;
+	    this.userInfo = userInfo;
     }
 
 
-    @GetMapping("/create")
+	@GetMapping("/create")
     public String showCreateForm(Model model) {
-        model.addAttribute("recipe", new RecipeDto());
+        model.addAttribute("theYear", LocalDate.now().getYear());
+        if (!model.containsAttribute("userRecipeBindingModel")) {
+            model.addAttribute("userRecipeBindingModel", new UserRecipeBindingModel());
+        }
         return "create_recipe";
     }
 
 
     @PostMapping("/create")
-    public String createNewRecipe(@Valid @ModelAttribute("recipe") RecipeDto recipe,
-                                    BindingResult result,
-                                    HttpSession session,
-                                    Model model) {
+    public String createNewRecipe(@Valid @ModelAttribute("recipe") UserRecipeBindingModel userRecipeBindingModel,
+                                  BindingResult bindingResult,
+                                  RedirectAttributes redirectAttributes) {
 
-        String token = (String) session.getAttribute("jwt");
-        if (token == null) return "redirect:/login";
+        if (userInfo.getJwtToken() == null) throw new UnauthorizedException("User authentication failed.");
 
-        if (result.hasErrors()) {
-            return "create_recipe";
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("userRecipeBindingModel", userRecipeBindingModel);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userRecipeBindingModel", bindingResult);
+            return "redirect:/user/recipes/create";
         }
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(token);
-        headers.setContentType(MediaType.APPLICATION_JSON);
+        try {
+            userRecipesService.save(userRecipeBindingModel);
+            return "redirect:/user/recipes";
+        } catch (RestClientException e) {
+            return "redirect:/login";
+        }
 
-        HttpEntity<RecipeDto> request = new HttpEntity<>(recipe, headers);
-
-        restTemplate.postForEntity(
-                appConfig.getBackendApiUrl() + "/user/recipes",
-                request,
-                Void.class);
-
-        return "redirect:/user/recipes";
     }
 
 
     @GetMapping
-    public String getUserRecipes(Model model, HttpSession session, Locale locale) {String token = (String) session.getAttribute("jwt");
-        if (token == null) return "redirect:/user/dashboard";
+    public String getUserRecipesPage(Model model) {
+        model.addAttribute("theYear", LocalDate.now().getYear());
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(token);
+        if (userInfo.getJwtToken() == null) return "redirect:/user/dashboard";
 
         return "user_recipes";
     }
@@ -85,113 +77,49 @@ public class RecipesController {
 
 
     @GetMapping("/search/title")
-    public String searchByNameContaining(@RequestParam("searchValue") String searchValue,
-                                         Model model,
-                                         HttpSession session,
-                                         Locale locale) {
-        String token = (String) session.getAttribute("jwt");
-        if (token == null) return "redirect:/user/dashboard";
+    public String searchByNameContaining(@RequestParam("searchValue") String searchValue, Model model) {
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(token);
+        if (userInfo.getJwtToken() == null) return "redirect:/user/dashboard";
 
-        HttpEntity<Void> request = new HttpEntity<>(headers);
+        List<RecipeDto> recipes = userRecipesService.searchByNameContaining(searchValue);
 
-        ResponseEntity<PagedResponse<RecipeDto>> response = restTemplate.exchange(
-                appConfig.getBackendApiUrl() + "/user/recipes/" + searchValue,
-                HttpMethod.GET,
-                request,
-                new ParameterizedTypeReference<PagedResponse<RecipeDto>>() {
-                }
-        );
-        List<RecipeDto> recipes = response.getBody().getContent();
-
-        checkForVideoLink(locale, recipes);
-
+        model.addAttribute("theYear", LocalDate.now().getYear());
         model.addAttribute("recipes", recipes);
-
 
         return "user_recipes";
     }
 
 
     @GetMapping("/search/ingredients")
-    public String searchByIngredients(@RequestParam("ingredients") List<String> ingredients,
-                                         Model model,
-                                         HttpSession session,
-                                      Locale locale) {
-        String token = (String) session.getAttribute("jwt");
-        if (token == null) return "redirect:/user/dashboard";
+    public String searchByIngredients(@RequestParam("ingredients") List<String> ingredients, Model model) {
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(token);
+        if (userInfo.getJwtToken() == null) return "redirect:/user/dashboard";
 
-        HttpEntity<Void> request = new HttpEntity<>(headers);
+        List<RecipeDto> recipes = userRecipesService.searchByIngredients(ingredients);
 
-        URI uri = UriComponentsBuilder
-                .fromHttpUrl(appConfig.getBackendApiUrl() + "/user/recipes/by-ingredients")
-                .queryParam("ingredients", ingredients.toArray())
-                .build()
-                .encode()
-                .toUri();
-
-        ResponseEntity<PagedResponse<RecipeDto>> response = restTemplate.exchange(
-                uri,
-                HttpMethod.GET,
-                request,
-                new ParameterizedTypeReference<PagedResponse<RecipeDto>>() {
-                }
-        );
-        List<RecipeDto> recipes = response.getBody().getContent();
-
-        checkForVideoLink(locale, recipes);
-
+        model.addAttribute("theYear", LocalDate.now().getYear());
         model.addAttribute("recipes", recipes);
 
 
         return "user_recipes";
+
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteRecipe(@PathVariable Long id,
-                                 HttpSession session) {
-        String token = (String) session.getAttribute("jwt");
-        if (token == null) return "redirect:/login";
+    public String deleteRecipe(@PathVariable Long id) {
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(token);
-
-        HttpEntity<Void> request = new HttpEntity<>(headers);
+        if (userInfo.getJwtToken() == null) return "redirect:/login";
 
         try {
-            restTemplate.exchange(
-                    appConfig.getBackendApiUrl() + "/user/recipes/" + id,
-                    HttpMethod.DELETE,
-                    request,
-                    Void.class
-            );
+            userRecipesService.deleteRecipeById(id);
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             return "redirect:/user/reminders?error=delete";
         }
         return "redirect:/user/recipes";
+
     }
 
 
-    private void checkForVideoLink(Locale locale, List<RecipeDto> recipes) {
-        String videoPrefix = messageSource.getMessage("video.prefix", null, locale);
-        String linkText = messageSource.getMessage("video.watch.here", null, locale);
-
-        String regex = "(?i)[\\r\\n\\s]*" + Pattern.quote(videoPrefix) + ":\\s*(https?://\\S+)";
-        String replacement = "<strong>" + videoPrefix + ":</strong> <a href=\"$1\" target=\"_blank\">" + linkText + "</a>";
-
-        Pattern pattern = Pattern.compile(regex);
-
-        recipes.forEach(recipeDto -> {
-            Matcher matcher = pattern.matcher(recipeDto.getHowToMake());
-            String result = matcher.replaceAll(replacement);
-            recipeDto.setHowToMake(result);
-        });
-    }
 }
 
 
