@@ -74,6 +74,9 @@ public class UserWishlistServiceImpl implements UserWishlistService {
 	@Override
 	public List<WishDto> searchByNameContaining(String searchValue, String jwtToken) {
 
+		if (searchValue.isEmpty()) {
+			return List.of();
+		}
 		return userWishRepository.findAllByNameContaining(searchValue, jwtToken);
 
 	}

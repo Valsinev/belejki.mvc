@@ -71,6 +71,24 @@ public class UserFriendsRepositoryImpl implements UserFriendsRepository {
 	}
 
 	@Override
+	public List<FriendshipDto> findAllByFirstName(String searchValue, String jwtToken) {
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setBearerAuth(jwtToken);
+
+		HttpEntity<Void> request = new HttpEntity<>(headers);
+
+		ResponseEntity<PagedResponse<FriendshipDto>> response = restTemplate.exchange(
+				appConfig.getBackendApiUrl() + "/user/friendships/first-name/" + searchValue,
+				HttpMethod.GET,
+				request,
+				new ParameterizedTypeReference<PagedResponse<FriendshipDto>>() {
+				}
+		);
+		return response.getBody().getContent();
+	}
+
+	@Override
 	public void removeFriend(Long id, String jwtToken) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setBearerAuth(jwtToken);
@@ -84,4 +102,5 @@ public class UserFriendsRepositoryImpl implements UserFriendsRepository {
 					Void.class
 			);
 	}
+
 }

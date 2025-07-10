@@ -31,7 +31,9 @@
 	<div class="row mt-3 justify-content-md-center">
 		<input class="col-xl-8 text-center" name="username" th:field="*{username}" id="email" th:placeholder='#{email}'
 			   type='email' maxlength="44">
-		<span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-danger col-8"></span>
+		<div class="col-8">
+			<small th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="validation text-danger "></small>
+		</div>
 	</div>
 	<div class="row mt-3 justify-content-md-center">
 		<input class="col-xl-8 text-center" name='firstName' th:field="*{firstName}" th:placeholder=#{first.name}

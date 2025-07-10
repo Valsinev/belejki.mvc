@@ -13,7 +13,8 @@ public class UserSessionInformation {
 	private String userEmail;
 	private String firstName;
 	private String lastName;
-	private String role;
+	private String jwtToken;
 	private boolean isAdmin;
+	private boolean isRootAdmin;
 
 }

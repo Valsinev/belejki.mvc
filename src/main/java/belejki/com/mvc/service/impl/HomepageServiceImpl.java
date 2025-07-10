@@ -18,9 +18,9 @@ public class HomepageServiceImpl implements HomepageService {
 	}
 
 	@Override
-	public List<UserReminderDto> getUserReminders(String username, String token) {
+	public List<UserReminderDto> getUserReminders() {
 
-		return userReminderRepository.findAllByUsername(username, token);
+		return userReminderRepository.findAll();
 
 	}
 }

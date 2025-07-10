@@ -37,10 +37,16 @@ public class UserFriendsServiceImpl implements UserFriendsService {
 	}
 
 	@Override
+	public List<FriendshipDto> findAllByFirstName(String searchValue, String token) {
+		return userFriendsRepository.findAllByFirstName(searchValue, token);
+	}
+
+	@Override
 	public void removeFriend(Long id,  String jwtToken) {
 
 		userFriendsRepository.removeFriend(id, jwtToken);
 
 	}
+
 
 }

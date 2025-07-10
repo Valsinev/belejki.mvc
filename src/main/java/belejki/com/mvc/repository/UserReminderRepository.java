@@ -6,9 +6,8 @@ import belejki.com.mvc.model.binding.UserReminderBindingModel;
 import java.util.List;
 
 public interface UserReminderRepository {
-	List<UserReminderDto> findAllByUsername(String username, String token);
 
-	List<UserReminderDto> findAll(String jwtToken);
+	List<UserReminderDto> findAll();
 
 	UserReminderDto save(UserReminderDto reminder, String jwtToken);
 

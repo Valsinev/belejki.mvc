@@ -2,6 +2,7 @@ package belejki.com.mvc.repository.impl;
 
 import belejki.com.mvc.config.AppConfig;
 import belejki.com.mvc.dto.WishDto;
+import belejki.com.mvc.model.session.UserSessionInformation;
 import belejki.com.mvc.repository.FriendWishRepository;
 import belejki.com.mvc.util.PagedResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +23,13 @@ public class FriendWishRepositoryImpl implements FriendWishRepository {
 
 	private final AppConfig appConfig;
 	private final RestTemplate restTemplate;
+	private final UserSessionInformation userSessionInformation;
 
 	@Autowired
-	public FriendWishRepositoryImpl(AppConfig appConfig, RestTemplate restTemplate) {
+	public FriendWishRepositoryImpl(AppConfig appConfig, RestTemplate restTemplate, UserSessionInformation userSessionInformation) {
 		this.appConfig = appConfig;
 		this.restTemplate = restTemplate;
+		this.userSessionInformation = userSessionInformation;
 	}
 
 

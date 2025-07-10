@@ -41,7 +41,7 @@ public class HomeController {
         if (token == null) return "redirect:/login";
         String username = jwtService.extractUsername(token);
 
-        List<UserReminderDto> reminders = homepageService.getUserReminders(username, token);
+        List<UserReminderDto> reminders = homepageService.getUserReminders();
 
         List<UserReminderDto> expired = reminders.stream().filter(UserReminderDto::isExpired).toList();
         List<UserReminderDto> expiresSoon = reminders.stream().filter(UserReminderDto::isExpiresSoon).toList();
@@ -54,7 +54,7 @@ public class HomeController {
         model.addAttribute("almost", expiresSoon.size());
         model.addAttribute("expiredReminders", expired);
         model.addAttribute("almostExpiredReminders", expiresSoon);
-        return "home";
+        return "home.html";
     }
 
 

@@ -2,7 +2,6 @@ package belejki.com.mvc.controller;
 
 import belejki.com.mvc.model.binding.UserLogingBindingModel;
 import belejki.com.mvc.service.AuthService;
-import belejki.com.mvc.service.session.UserSessionService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -41,42 +40,41 @@ public class AuthController {
 	}
 
 	@PostMapping("/login")
-	public String login(@Valid @ModelAttribute("userLoginBindingModel") UserLogingBindingModel userLogingBindingModel,
+	public String login(@Valid @ModelAttribute("userLogingBindingModel") UserLogingBindingModel userLogingBindingModel,
+	                    BindingResult bindingResult,
 	                    Locale locale,
 	                    HttpSession session,
-	                    RedirectAttributes redirectAttributes,
-	                    BindingResult bindingResult) {
+	                    RedirectAttributes redirectAttributes) {
 
 		session.setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
 		//validates the login form
 		if (bindingResult.hasErrors()) {
-			// Preserve validation errors across redirect
 			redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userLogingBindingModel", bindingResult);
 			redirectAttributes.addFlashAttribute("userLogingBindingModel", userLogingBindingModel);
 			return "redirect:/login";
 		}
+
 		try {
 			String jwtToken = authService.authenticate(userLogingBindingModel, locale);
 			// Save token in session
 			session.setAttribute("jwt", jwtToken);
 			return "redirect:/home";
 		} catch (HttpClientErrorException ex) {
-			redirectAttributes.addFlashAttribute("error", "Invalid username or password.");
+			redirectAttributes.addFlashAttribute("error", "{login.invalid.username.or.password}");
 			redirectAttributes.addFlashAttribute("userLogingBindingModel", userLogingBindingModel);
 			return "redirect:login";
 		}
 	}
 
 	@GetMapping("/logout")
-	public String logout(HttpServletRequest request) {
-		request.getSession().invalidate();
-		authService.logout();
-		return "index";
+	public String logout(HttpSession session) {
+		session.invalidate();
+		return "redirect:/";
 	}
 
 	@GetMapping("/login/error")
 	public String getLoginPageWithErrorNotification(Model model) {
-		model.addAttribute("message", "Invalid credentials.");
+		model.addAttribute("message", "{invalid.credentials}");
 		return "login";
 	}
 }

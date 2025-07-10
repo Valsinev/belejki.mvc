@@ -5,6 +5,7 @@ import belejki.com.mvc.model.binding.UserWishBindingModel;
 import belejki.com.mvc.service.UserWishlistService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -120,6 +121,10 @@ public class WishlistController {
 	public String searchByNameContaining(@RequestParam("searchValue") String searchValue,
 	                                     Model model,
 	                                     HttpSession session) {
+		if (searchValue == null || searchValue.trim().isEmpty()) {
+			model.addAttribute("error", "Search value cannot be empty");
+			return "redirect:/user/wishes"; // or your actual view name
+		}
 
 		String token = (String) session.getAttribute("jwt");
 		if (token == null) return "redirect:/login";

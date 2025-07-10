@@ -9,5 +9,4 @@ public interface AuthService {
 
 	String authenticate(UserLogingBindingModel userLogingBindingModel, Locale locale);
 
-	void logout();
 }

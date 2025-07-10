@@ -14,9 +14,6 @@ import java.util.List;
 @NoArgsConstructor
 public class UserRecipeBindingModel {
 
-    private Long id;
-    @NotNull
-    private Long userId;
     @NotBlank
     @Size(min = 2, max = 64, message = "Recipe name must be between 2 and 64 characters.")
     private String name;

@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
@@ -42,8 +43,12 @@ public class ShoppingItemsController {
 
 	@PostMapping
 	public String addShoppingItem(@Valid @ModelAttribute("item") UserShoppingItemBindingModel item,
-	                              Model model,
-	                              HttpSession session) {
+	                              HttpSession session,
+	                              BindingResult bindingResult) {
+
+		if (bindingResult.hasErrors()) {
+			return "redirect:/user/shoplist";
+		}
 
 		String token = (String) session.getAttribute("jwt");
 		if (token == null) return "redirect:/login";

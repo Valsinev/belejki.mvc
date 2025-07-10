@@ -35,8 +35,8 @@ public class UserRemindersServiceImpl implements UserRemindersService {
 	}
 
 	@Override
-	public List<UserReminderDto> getUserReminders(String jwtToken) {
-		return userReminderRepository.findAll(jwtToken);
+	public List<UserReminderDto> getUserReminders() {
+		return userReminderRepository.findAll();
 	}
 
 	@Override

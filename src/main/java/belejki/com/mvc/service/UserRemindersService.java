@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface UserRemindersService {
 
-	List<UserReminderDto> getUserReminders(String jwtToken);
+	List<UserReminderDto> getUserReminders();
 
 	UserReminderDto save(UserReminderBindingModel reminder, String jwtToken);
 

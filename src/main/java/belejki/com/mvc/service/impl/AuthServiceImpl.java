@@ -1,9 +1,11 @@
 package belejki.com.mvc.service.impl;
 
+import belejki.com.mvc.dto.UserSessionDto;
 import belejki.com.mvc.model.binding.UserLogingBindingModel;
 import belejki.com.mvc.repository.AuthRepository;
 import belejki.com.mvc.service.AuthService;
-import belejki.com.mvc.service.session.UserSessionService;
+import belejki.com.mvc.service.UserService;
+import belejki.com.mvc.service.UserSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +16,13 @@ public class AuthServiceImpl implements AuthService {
 
 	private final AuthRepository authRepository;
 	private final UserSessionService userSessionService;
+	private final UserService userService;
 	@Autowired
-	public AuthServiceImpl(AuthRepository authRepository, UserSessionService userSessionService) {
+	public AuthServiceImpl(AuthRepository authRepository, UserSessionService userSessionService, UserService userService) {
 
 		this.authRepository = authRepository;
 		this.userSessionService = userSessionService;
+		this.userService = userService;
 	}
 
 	@Override
@@ -26,21 +30,12 @@ public class AuthServiceImpl implements AuthService {
 
 		String jwtToken = authRepository.authUser(userLogingBindingModel, locale);
 
+		UserSessionDto userByUsername = userService.findUserByUsername(jwtToken);
 
-		//TODO: initialize UserSessionInformation class
-		/*
-			1.fetch the user from userRepository
-			2.check if isAdmin == true
-			3.set role = "admin"
-			4.mapp to UserSessionInformation with userSessionService.initializeSession(...)
-		 */
+		//populates the SessionScope class UserSessionInformation
+		userSessionService.initUserSessionInfo(userByUsername, jwtToken);
 
 		return jwtToken;
 
-	}
-
-	@Override
-	public void logout() {
-		userSessionService.logout();
 	}
 }

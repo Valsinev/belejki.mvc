@@ -35,7 +35,7 @@ public class RemindersController {
 		String token = (String) session.getAttribute("jwt");
 		if (token == null) return "redirect:/login";
 
-		List<UserReminderDto> reminders = userRemindersService.getUserReminders(token);
+		List<UserReminderDto> reminders = userRemindersService.getUserReminders();
 
 		model.addAttribute("theYear", LocalDate.now().getYear());
 		model.addAttribute("reminders", reminders);

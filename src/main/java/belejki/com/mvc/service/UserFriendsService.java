@@ -12,4 +12,6 @@ public interface UserFriendsService {
 	void addFriend(String friendEmail, String jwtToken);
 
 	void removeFriend(Long id, String jwtToken);
+
+	List<FriendshipDto> findAllByFirstName(String searchValue, String token);
 }

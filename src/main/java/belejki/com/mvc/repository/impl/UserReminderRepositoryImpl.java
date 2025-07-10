@@ -3,6 +3,7 @@ package belejki.com.mvc.repository.impl;
 import belejki.com.mvc.config.AppConfig;
 import belejki.com.mvc.dto.UserReminderDto;
 import belejki.com.mvc.model.binding.UserReminderBindingModel;
+import belejki.com.mvc.model.session.UserSessionInformation;
 import belejki.com.mvc.repository.UserReminderRepository;
 import belejki.com.mvc.util.PagedResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,19 +20,21 @@ import java.util.List;
 public class UserReminderRepositoryImpl implements UserReminderRepository {
 	private final AppConfig appConfig;
 	private final RestTemplate restTemplate;
+	private final UserSessionInformation userSessionInformation;
 
 	@Autowired
-	public UserReminderRepositoryImpl(AppConfig appConfig, RestTemplate restTemplate) {
+	public UserReminderRepositoryImpl(AppConfig appConfig, RestTemplate restTemplate, UserSessionInformation userSessionInformation) {
 		this.appConfig = appConfig;
 		this.restTemplate = restTemplate;
+		this.userSessionInformation = userSessionInformation;
 	}
 
 	@Override
-	public List<UserReminderDto> findAllByUsername(String username, String token) throws RestClientException {
+	public List<UserReminderDto> findAll() throws RestClientException {
 
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(token);
+		headers.setBearerAuth(userSessionInformation.getJwtToken());
 
 		HttpEntity<Void> request = new HttpEntity<>(headers);
 
@@ -43,24 +46,6 @@ public class UserReminderRepositoryImpl implements UserReminderRepository {
 				}
 		);
 
-		return response.getBody().getContent();
-	}
-
-	@Override
-	public List<UserReminderDto> findAll(String jwtToken) {
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(jwtToken);
-
-		HttpEntity<Void> request = new HttpEntity<>(headers);
-
-		ResponseEntity<PagedResponse<UserReminderDto>> response = restTemplate.exchange(
-				appConfig.getBackendApiUrl() + "/user/reminders",
-				HttpMethod.GET,
-				request,
-				new ParameterizedTypeReference<PagedResponse<UserReminderDto>>() {
-				}
-		);
 		return response.getBody().getContent();
 	}
 

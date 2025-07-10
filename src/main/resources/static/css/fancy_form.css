@@ -79,3 +79,10 @@ input[type="submit"]:hover {
     transform: translateX(10px);
   }
 }
+
+.validation{
+    font-size: 12px !important;
+    text-align: center;
+    display: block;
+
+}

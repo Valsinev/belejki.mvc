@@ -57,6 +57,19 @@ public class UserFriendController {
 		return "redirect:/user/friends";
 	}
 
+	@GetMapping("/search")
+	public String findFriend(@RequestParam("searchValue") String searchValue, HttpSession session, Model model) {
+
+		String token = (String) session.getAttribute("jwt");
+		if (token == null) return "redirect:/login";
+
+		List<FriendshipDto> friends = userFriendsService.findAllByFirstName(searchValue, token);
+
+		model.addAttribute("friends", friends);
+		return "user_friends";
+
+	}
+
 	@GetMapping("/remove/{id}")
 	public String removeFriend(@PathVariable Long id, HttpSession session) {
 
