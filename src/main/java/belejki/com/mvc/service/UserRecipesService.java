@@ -1,13 +1,9 @@
 package belejki.com.mvc.service;
 
-import belejki.com.mvc.dto.RecipeDto;
+import belejki.com.mvc.model.dto.RecipeDto;
 import belejki.com.mvc.model.binding.UserRecipeBindingModel;
-import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
-import org.springframework.ui.Model;
 
 import java.util.List;
-import java.util.Locale;
 
 public interface UserRecipesService {
 	RecipeDto save(UserRecipeBindingModel recipe);

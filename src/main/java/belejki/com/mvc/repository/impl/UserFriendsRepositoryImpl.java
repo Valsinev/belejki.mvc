@@ -1,9 +1,7 @@
 package belejki.com.mvc.repository.impl;
 
 import belejki.com.mvc.config.AppConfig;
-import belejki.com.mvc.dto.FriendshipDto;
-import belejki.com.mvc.model.binding.UserRecipeBindingModel;
-import belejki.com.mvc.dto.WishDto;
+import belejki.com.mvc.model.dto.FriendshipDto;
 import belejki.com.mvc.model.session.UserSessionInformation;
 import belejki.com.mvc.repository.UserFriendsRepository;
 import belejki.com.mvc.util.PagedResponse;
@@ -12,9 +10,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 
 @Repository

@@ -1,6 +1,6 @@
 package belejki.com.mvc.controller;
 
-import belejki.com.mvc.dto.UserReminderDto;
+import belejki.com.mvc.model.dto.UserReminderDto;
 import belejki.com.mvc.model.session.UserSessionInformation;
 import belejki.com.mvc.service.HomepageService;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +40,8 @@ public class HomeController {
 
         List<UserReminderDto> reminders = homepageService.getUserReminders();
 
+        //TODO: DONT FILTER GET THEM FROM DATABASE
+        //UserRemindersService.getExpiredReminders()  UserRemindersService.getAlmostExpiredReminders() UserRemindersService.getFutureReminders()(not expired and not almost expired)
         List<UserReminderDto> expired = reminders.stream().filter(UserReminderDto::isExpired).toList();
         List<UserReminderDto> expiresSoon = reminders.stream().filter(UserReminderDto::isExpiresSoon).toList();
 

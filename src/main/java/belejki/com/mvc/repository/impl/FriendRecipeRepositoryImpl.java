@@ -1,7 +1,7 @@
 package belejki.com.mvc.repository.impl;
 
 import belejki.com.mvc.config.AppConfig;
-import belejki.com.mvc.dto.RecipeDto;
+import belejki.com.mvc.model.dto.RecipeDto;
 import belejki.com.mvc.model.session.UserSessionInformation;
 import belejki.com.mvc.repository.FriendRecipeRepository;
 import belejki.com.mvc.util.PagedResponse;

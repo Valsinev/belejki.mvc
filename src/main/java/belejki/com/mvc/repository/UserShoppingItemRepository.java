@@ -1,6 +1,6 @@
 package belejki.com.mvc.repository;
 
-import belejki.com.mvc.dto.UserShoppingItemDto;
+import belejki.com.mvc.model.dto.UserShoppingItemDto;
 import java.util.Set;
 
 public interface UserShoppingItemRepository {

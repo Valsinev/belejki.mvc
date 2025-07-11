@@ -1,6 +1,6 @@
 package belejki.com.mvc.controller;
 
-import belejki.com.mvc.dto.RecipeDto;
+import belejki.com.mvc.model.dto.RecipeDto;
 import belejki.com.mvc.model.binding.UserRecipeBindingModel;
 import belejki.com.mvc.exceptions.UnauthorizedException;
 import belejki.com.mvc.model.session.UserSessionInformation;

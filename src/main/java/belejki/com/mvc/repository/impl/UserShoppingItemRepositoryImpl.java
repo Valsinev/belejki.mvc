@@ -1,8 +1,7 @@
 package belejki.com.mvc.repository.impl;
 
 import belejki.com.mvc.config.AppConfig;
-import belejki.com.mvc.dto.UserShoppingItemDto;
-import belejki.com.mvc.model.binding.UserShoppingItemBindingModel;
+import belejki.com.mvc.model.dto.UserShoppingItemDto;
 import belejki.com.mvc.model.session.UserSessionInformation;
 import belejki.com.mvc.repository.UserShoppingItemRepository;
 import belejki.com.mvc.util.PagedResponse;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Repository

@@ -19,11 +19,11 @@ public class UserReminderBindingModel {
     @Min(value = 1, message = "Importance level must be between 1 and 10 number.")
     @Max(value = 10, message = "Importance level must be between 1 and 10 number.")
     private Integer importanceLevel;
-    @Size(max = 128, message = "Reminder name name must be between 2 and 64 characters.")
+    @Size(max = 128, message = "Reminder description must not exceed 128 characters.")
     private String description;
     @NotNull
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonFormat(pattern = "yyyy-MM-dd")  // Optional if used in REST serialization
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    @JsonFormat(pattern = "dd-MM-yyyy")  // Optional if used in REST serialization
     private LocalDate expiration;
     private boolean expired;
     private boolean expiresSoon;

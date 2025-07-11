@@ -1,6 +1,6 @@
 package belejki.com.mvc.repository;
 
-import belejki.com.mvc.dto.WishDto;
+import belejki.com.mvc.model.dto.WishDto;
 
 import java.util.List;
 

@@ -1,7 +1,5 @@
-package belejki.com.mvc.dto;
+package belejki.com.mvc.model.dto;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data

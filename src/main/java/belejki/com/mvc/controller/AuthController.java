@@ -6,6 +6,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,10 +24,12 @@ import java.util.Locale;
 @Controller
 public class AuthController {
 	private final AuthService authService;
+	private final MessageSource messageSource;
 
 	@Autowired
-	public AuthController(AuthService authService) {
+	public AuthController(AuthService authService, MessageSource messageSource) {
 		this.authService = authService;
+		this.messageSource = messageSource;
 	}
 
 	@GetMapping("/login")
@@ -58,8 +62,12 @@ public class AuthController {
 			authService.authenticate(userLogingBindingModel, locale);
 			return "redirect:/home";
 		} catch (HttpClientErrorException ex) {
-			redirectAttributes.addFlashAttribute("error", "{login.invalid.username.or.password}");
-			redirectAttributes.addFlashAttribute("userLogingBindingModel", userLogingBindingModel);
+
+			if (ex.getStatusCode() == HttpStatus.UNAUTHORIZED) {
+				String errorMsg = messageSource.getMessage("login.invalid.username.or.password", null, locale);
+				redirectAttributes.addFlashAttribute("error", errorMsg);
+				redirectAttributes.addFlashAttribute("userLogingBindingModel", userLogingBindingModel);
+			}
 			return "redirect:login";
 		}
 	}

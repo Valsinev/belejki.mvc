@@ -1,6 +1,6 @@
 package belejki.com.mvc.service.impl;
 
-import belejki.com.mvc.dto.UserSessionDto;
+import belejki.com.mvc.model.dto.UserSessionDto;
 import belejki.com.mvc.model.binding.UserLogingBindingModel;
 import belejki.com.mvc.repository.AuthRepository;
 import belejki.com.mvc.service.AuthService;

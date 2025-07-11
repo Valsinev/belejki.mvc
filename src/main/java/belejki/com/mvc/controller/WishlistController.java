@@ -1,6 +1,6 @@
 package belejki.com.mvc.controller;
 
-import belejki.com.mvc.dto.WishDto;
+import belejki.com.mvc.model.dto.WishDto;
 import belejki.com.mvc.model.binding.UserWishBindingModel;
 import belejki.com.mvc.model.session.UserSessionInformation;
 import belejki.com.mvc.service.UserWishlistService;

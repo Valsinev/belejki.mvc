@@ -1,6 +1,6 @@
 package belejki.com.mvc.controller;
 
-import belejki.com.mvc.dto.FriendshipDto;
+import belejki.com.mvc.model.dto.FriendshipDto;
 import belejki.com.mvc.model.session.UserSessionInformation;
 import belejki.com.mvc.service.UserFriendsService;
 import org.springframework.beans.factory.annotation.Autowired;

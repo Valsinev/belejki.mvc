@@ -1,7 +1,6 @@
 package belejki.com.mvc.service;
 
-import belejki.com.mvc.dto.RecipeDto;
-import belejki.com.mvc.model.binding.UserRecipeBindingModel;
+import belejki.com.mvc.model.dto.RecipeDto;
 
 import java.util.List;
 

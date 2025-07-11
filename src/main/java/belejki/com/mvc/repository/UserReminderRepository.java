@@ -1,7 +1,6 @@
 package belejki.com.mvc.repository;
 
-import belejki.com.mvc.dto.UserReminderDto;
-import belejki.com.mvc.model.binding.UserReminderBindingModel;
+import belejki.com.mvc.model.dto.UserReminderDto;
 
 import java.util.List;
 

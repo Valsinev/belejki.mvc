@@ -1,6 +1,6 @@
 package belejki.com.mvc.repository;
 
-import belejki.com.mvc.dto.FriendshipDto;
+import belejki.com.mvc.model.dto.FriendshipDto;
 
 import java.util.List;
 

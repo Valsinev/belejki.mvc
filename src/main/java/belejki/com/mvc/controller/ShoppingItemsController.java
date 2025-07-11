@@ -1,6 +1,6 @@
 package belejki.com.mvc.controller;
 
-import belejki.com.mvc.dto.UserShoppingItemDto;
+import belejki.com.mvc.model.dto.UserShoppingItemDto;
 import belejki.com.mvc.model.binding.UserShoppingItemBindingModel;
 import belejki.com.mvc.model.session.UserSessionInformation;
 import belejki.com.mvc.service.UserShoppingItemsService;

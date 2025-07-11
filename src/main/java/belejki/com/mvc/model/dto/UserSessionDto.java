@@ -1,4 +1,4 @@
-package belejki.com.mvc.dto;
+package belejki.com.mvc.model.dto;
 
 import lombok.Data;
 

@@ -1,6 +1,6 @@
 package belejki.com.mvc.controller;
 
-import belejki.com.mvc.dto.UserReminderDto;
+import belejki.com.mvc.model.dto.UserReminderDto;
 import belejki.com.mvc.model.binding.UserReminderBindingModel;
 import belejki.com.mvc.model.session.UserSessionInformation;
 import belejki.com.mvc.service.UserRemindersService;

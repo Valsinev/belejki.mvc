@@ -1,6 +1,6 @@
 package belejki.com.mvc.model.binding;
 
-import belejki.com.mvc.dto.RecipeIngredientDto;
+import belejki.com.mvc.model.dto.RecipeIngredientDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

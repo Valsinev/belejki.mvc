@@ -1,13 +1,11 @@
 package belejki.com.mvc.repository.impl;
 
 import belejki.com.mvc.config.AppConfig;
-import belejki.com.mvc.dto.RecipeDto;
-import belejki.com.mvc.model.binding.UserRecipeBindingModel;
+import belejki.com.mvc.model.dto.RecipeDto;
 import belejki.com.mvc.model.session.UserSessionInformation;
 import belejki.com.mvc.repository.UserRecipesRepository;
 import belejki.com.mvc.util.PagedResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Repository;

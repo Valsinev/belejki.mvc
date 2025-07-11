@@ -1,6 +1,6 @@
 package belejki.com.mvc.service;
 
-import belejki.com.mvc.dto.UserReminderDto;
+import belejki.com.mvc.model.dto.UserReminderDto;
 
 import java.util.List;
 

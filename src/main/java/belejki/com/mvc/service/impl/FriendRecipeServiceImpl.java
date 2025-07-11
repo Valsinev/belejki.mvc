@@ -1,6 +1,6 @@
 package belejki.com.mvc.service.impl;
 
-import belejki.com.mvc.dto.RecipeDto;
+import belejki.com.mvc.model.dto.RecipeDto;
 import belejki.com.mvc.repository.FriendRecipeRepository;
 import belejki.com.mvc.service.FriendRecipeService;
 import org.springframework.beans.factory.annotation.Autowired;

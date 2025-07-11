@@ -1,16 +1,12 @@
 package belejki.com.mvc.service.impl;
 
-import belejki.com.mvc.dto.UserShoppingItemDto;
+import belejki.com.mvc.model.dto.UserShoppingItemDto;
 import belejki.com.mvc.model.binding.UserShoppingItemBindingModel;
 import belejki.com.mvc.repository.UserShoppingItemRepository;
 import belejki.com.mvc.service.UserShoppingItemsService;
-import jakarta.servlet.http.HttpSession;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
 
 import java.util.Set;
 

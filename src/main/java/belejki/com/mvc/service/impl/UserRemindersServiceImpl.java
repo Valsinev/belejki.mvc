@@ -1,23 +1,14 @@
 package belejki.com.mvc.service.impl;
 
 import belejki.com.mvc.model.binding.UserReminderBindingModel;
-import belejki.com.mvc.dto.UserReminderDto;
+import belejki.com.mvc.model.dto.UserReminderDto;
 import belejki.com.mvc.repository.UserReminderRepository;
 import belejki.com.mvc.service.JwtService;
 import belejki.com.mvc.service.UserRemindersService;
-import belejki.com.mvc.util.PagedResponse;
-import jakarta.servlet.http.HttpSession;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
 
-import java.util.Comparator;
 import java.util.List;
 
 @Service

@@ -1,6 +1,6 @@
 package belejki.com.mvc.service.impl;
 
-import belejki.com.mvc.dto.UserReminderDto;
+import belejki.com.mvc.model.dto.UserReminderDto;
 import belejki.com.mvc.repository.UserReminderRepository;
 import belejki.com.mvc.service.HomepageService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
 package belejki.com.mvc.service.impl;
 
-import belejki.com.mvc.dto.WishDto;
+import belejki.com.mvc.model.dto.WishDto;
 import belejki.com.mvc.model.binding.UserWishBindingModel;
 import belejki.com.mvc.repository.UserWishRepository;
 import belejki.com.mvc.service.UserWishlistService;

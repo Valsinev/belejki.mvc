@@ -1,10 +1,8 @@
 package belejki.com.mvc.repository.impl;
 
 import belejki.com.mvc.config.AppConfig;
-import belejki.com.mvc.dto.RecipeDto;
-import belejki.com.mvc.dto.UserRegistrationDto;
-import belejki.com.mvc.dto.UserSessionDto;
-import belejki.com.mvc.model.binding.UserRegisterBindingModel;
+import belejki.com.mvc.model.dto.UserRegistrationDto;
+import belejki.com.mvc.model.dto.UserSessionDto;
 import belejki.com.mvc.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;

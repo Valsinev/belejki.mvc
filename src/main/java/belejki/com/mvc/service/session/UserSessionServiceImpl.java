@@ -1,9 +1,8 @@
 package belejki.com.mvc.service.session;
 
-import belejki.com.mvc.dto.UserSessionDto;
+import belejki.com.mvc.model.dto.UserSessionDto;
 import belejki.com.mvc.model.session.UserSessionInformation;
 import belejki.com.mvc.service.UserSessionService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

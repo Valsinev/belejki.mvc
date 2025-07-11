@@ -1,8 +1,6 @@
 package belejki.com.mvc.service;
 
-import belejki.com.mvc.dto.FriendshipDto;
-import belejki.com.mvc.model.binding.UserRecipeBindingModel;
-import belejki.com.mvc.dto.WishDto;
+import belejki.com.mvc.model.dto.FriendshipDto;
 
 import java.util.List;
 
