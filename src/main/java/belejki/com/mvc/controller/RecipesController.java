@@ -4,6 +4,7 @@ import belejki.com.mvc.model.dto.RecipeDto;
 import belejki.com.mvc.model.binding.UserRecipeBindingModel;
 import belejki.com.mvc.exceptions.UnauthorizedException;
 import belejki.com.mvc.model.session.UserSessionInformation;
+import belejki.com.mvc.model.view.RecipeViewModel;
 import belejki.com.mvc.service.UserRecipesService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,7 +82,7 @@ public class RecipesController {
 
         if (userInfo.getJwtToken() == null) return "redirect:/user/dashboard";
 
-        List<RecipeDto> recipes = userRecipesService.searchByNameContaining(searchValue);
+        List<RecipeViewModel> recipes = userRecipesService.searchByNameContaining(searchValue);
 
         model.addAttribute("theYear", LocalDate.now().getYear());
         model.addAttribute("recipes", recipes);
@@ -95,7 +96,7 @@ public class RecipesController {
 
         if (userInfo.getJwtToken() == null) return "redirect:/user/dashboard";
 
-        List<RecipeDto> recipes = userRecipesService.searchByIngredients(ingredients);
+        List<RecipeViewModel> recipes = userRecipesService.searchByIngredients(ingredients);
 
         model.addAttribute("theYear", LocalDate.now().getYear());
         model.addAttribute("recipes", recipes);

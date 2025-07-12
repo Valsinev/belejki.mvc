@@ -2,6 +2,7 @@ package belejki.com.mvc.controller;
 
 import belejki.com.mvc.model.dto.RecipeDto;
 import belejki.com.mvc.model.session.UserSessionInformation;
+import belejki.com.mvc.model.view.RecipeViewModel;
 import belejki.com.mvc.service.FriendRecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -43,7 +44,7 @@ public class FriendRecipeController {
 
 		if (userinfo.getJwtToken() == null) return "redirect:/login";
 
-		List<RecipeDto> recipes = userFriendsService.getFriendRecipesByTitle(searchValue, username);
+		List<RecipeViewModel> recipes = userFriendsService.getFriendRecipesByTitle(searchValue, username);
 
 		model.addAttribute("recipes", recipes);
 		model.addAttribute("username", username);
@@ -60,7 +61,7 @@ public class FriendRecipeController {
 
 		if (userinfo.getJwtToken() == null) return "redirect:/login";
 
-		List<RecipeDto> recipes = userFriendsService.getFriendRecipesByIngredients(ingredients, username);
+		List<RecipeViewModel> recipes = userFriendsService.getFriendRecipesByIngredients(ingredients, username);
 
 		model.addAttribute("recipes", recipes);
 		model.addAttribute("username", username);

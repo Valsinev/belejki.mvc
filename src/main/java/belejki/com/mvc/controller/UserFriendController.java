@@ -2,6 +2,7 @@ package belejki.com.mvc.controller;
 
 import belejki.com.mvc.model.dto.FriendshipDto;
 import belejki.com.mvc.model.session.UserSessionInformation;
+import belejki.com.mvc.model.view.FriendshipViewModel;
 import belejki.com.mvc.service.UserFriendsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,7 +33,7 @@ public class UserFriendController {
 
 		if (userinfo.getJwtToken() == null) return "redirect:/login";
 
-		List<FriendshipDto> friends = userFriendsService.getFriends();
+		List<FriendshipViewModel> friends = userFriendsService.getFriends();
 
 		model.addAttribute("friends", friends);
 
@@ -63,7 +64,7 @@ public class UserFriendController {
 
 		if (userinfo.getJwtToken() == null) return "redirect:/login";
 
-		List<FriendshipDto> friends = userFriendsService.findAllByFirstName(searchValue);
+		List<FriendshipViewModel> friends = userFriendsService.findAllByFirstName(searchValue);
 
 		model.addAttribute("friends", friends);
 		return "user_friends";

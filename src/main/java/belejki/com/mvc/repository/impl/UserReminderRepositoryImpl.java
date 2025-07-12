@@ -115,7 +115,7 @@ public class UserReminderRepositoryImpl implements UserReminderRepository {
 	}
 
 	@Override
-	public List<UserReminderDto> searchByNameContaining(String searchValue) {
+	public List<UserReminderDto> findAllByNameContaining(String searchValue) {
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setBearerAuth(userSessionInformation.getJwtToken());
@@ -129,6 +129,64 @@ public class UserReminderRepositoryImpl implements UserReminderRepository {
 				new ParameterizedTypeReference<PagedResponse<UserReminderDto>>() {
 				}
 		);
+		return response.getBody().getContent();
+	}
+
+	@Override
+	public List<UserReminderDto> findAllNotExpiredAndNotExpiresSoon() {
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setBearerAuth(userSessionInformation.getJwtToken());
+
+		HttpEntity<Void> request = new HttpEntity<>(headers);
+
+		ResponseEntity<PagedResponse<UserReminderDto>> response = restTemplate.exchange(
+				appConfig.getBackendApiUrl() + "/user/reminders/not-soon",
+				HttpMethod.GET,
+				request,
+				new ParameterizedTypeReference<PagedResponse<UserReminderDto>>() {
+				}
+		);
+
+		return response.getBody().getContent();
+	}
+
+	@Override
+	public List<UserReminderDto> findAllExpiredReminders() {
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setBearerAuth(userSessionInformation.getJwtToken());
+
+		HttpEntity<Void> request = new HttpEntity<>(headers);
+
+		ResponseEntity<PagedResponse<UserReminderDto>> response = restTemplate.exchange(
+				appConfig.getBackendApiUrl() + "/user/reminders/expired",
+				HttpMethod.GET,
+				request,
+				new ParameterizedTypeReference<PagedResponse<UserReminderDto>>() {
+				}
+		);
+
+		return response.getBody().getContent();
+	}
+
+	@Override
+	public List<UserReminderDto> findAllAlmostExpiredReminders() {
+
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setBearerAuth(userSessionInformation.getJwtToken());
+
+		HttpEntity<Void> request = new HttpEntity<>(headers);
+
+		ResponseEntity<PagedResponse<UserReminderDto>> response = restTemplate.exchange(
+				appConfig.getBackendApiUrl() + "/user/reminders/expires-soon",
+				HttpMethod.GET,
+				request,
+				new ParameterizedTypeReference<PagedResponse<UserReminderDto>>() {
+				}
+		);
+
 		return response.getBody().getContent();
 	}
 }

@@ -2,6 +2,8 @@ package belejki.com.mvc.service.impl;
 
 import belejki.com.mvc.model.dto.RecipeDto;
 import belejki.com.mvc.model.binding.UserRecipeBindingModel;
+import belejki.com.mvc.model.view.RecipeIngredientViewModel;
+import belejki.com.mvc.model.view.RecipeViewModel;
 import belejki.com.mvc.repository.UserRecipesRepository;
 import belejki.com.mvc.service.UserRecipesService;
 import org.modelmapper.ModelMapper;
@@ -23,30 +25,42 @@ public class UserRecipesServiceImpl implements UserRecipesService {
 	}
 
 	@Override
-	public RecipeDto save(UserRecipeBindingModel userRecipeBindingModel) {
+	public RecipeViewModel save(UserRecipeBindingModel userRecipeBindingModel) {
 
 		RecipeDto recipe = modelMapper.map(userRecipeBindingModel, RecipeDto.class);
 
-		return userRecipesRepository.save(recipe);
+		RecipeDto saved = userRecipesRepository.save(recipe);
+
+		return modelMapper.map(saved, RecipeViewModel.class);
 	}
 
 	@Override
-	public List<RecipeDto> searchByNameContaining(String searchValue) {
+	public List<RecipeViewModel> searchByNameContaining(String searchValue) {
 
-		return userRecipesRepository.findAllByNameContaining(searchValue);
+		List<RecipeDto> allByNameContaining = userRecipesRepository.findAllByNameContaining(searchValue);
 
-	}
-
-	@Override
-	public List<RecipeDto> searchByIngredients(List<String> ingredients) {
-
-		return userRecipesRepository.findAllByIngredients(ingredients);
+		return allByNameContaining.stream()
+				.map(recipeDto -> modelMapper.map(recipeDto, RecipeViewModel.class))
+				.toList();
 
 	}
 
 	@Override
-	public RecipeDto deleteRecipeById(Long id) {
+	public List<RecipeViewModel> searchByIngredients(List<String> ingredients) {
 
-		return userRecipesRepository.deleteById(id);
+		List<RecipeDto> allByIngredients = userRecipesRepository.findAllByIngredients(ingredients);
+
+		return allByIngredients.stream()
+				.map(recipeDto -> modelMapper.map(recipeDto, RecipeViewModel.class))
+				.toList();
+
+	}
+
+	@Override
+	public RecipeViewModel deleteRecipeById(Long id) {
+
+		RecipeDto deleted = userRecipesRepository.deleteById(id);
+
+		return modelMapper.map(deleted, RecipeViewModel.class);
 	}
 }

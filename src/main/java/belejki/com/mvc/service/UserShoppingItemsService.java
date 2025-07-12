@@ -2,15 +2,17 @@ package belejki.com.mvc.service;
 
 import belejki.com.mvc.model.dto.UserShoppingItemDto;
 import belejki.com.mvc.model.binding.UserShoppingItemBindingModel;
+import belejki.com.mvc.model.view.ShoppingItemViewModel;
+
 import java.util.Set;
 
 public interface UserShoppingItemsService {
 
-	Set<UserShoppingItemDto> getShoppingList();
+	Set<ShoppingItemViewModel> getShoppingList();
 
-	UserShoppingItemDto addShoppingItem(UserShoppingItemBindingModel item);
+	ShoppingItemViewModel addShoppingItem(UserShoppingItemBindingModel item);
 
-	UserShoppingItemDto deleteItem(Long id);
+	ShoppingItemViewModel deleteItem(Long id);
 
 	void clearShoppingList();
 }

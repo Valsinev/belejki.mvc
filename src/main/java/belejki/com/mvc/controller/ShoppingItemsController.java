@@ -3,6 +3,7 @@ package belejki.com.mvc.controller;
 import belejki.com.mvc.model.dto.UserShoppingItemDto;
 import belejki.com.mvc.model.binding.UserShoppingItemBindingModel;
 import belejki.com.mvc.model.session.UserSessionInformation;
+import belejki.com.mvc.model.view.ShoppingItemViewModel;
 import belejki.com.mvc.service.UserShoppingItemsService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class ShoppingItemsController {
 
 		if (userinfo.getJwtToken() == null) return "redirect:/login";
 
-		Set<UserShoppingItemDto> shoplist = userShoppingItemsService.getShoppingList();
+		Set<ShoppingItemViewModel> shoplist = userShoppingItemsService.getShoppingList();
 
 		model.addAttribute("item", new UserShoppingItemBindingModel());
 		model.addAttribute("shoplist", shoplist);

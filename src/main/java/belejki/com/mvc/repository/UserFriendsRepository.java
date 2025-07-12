@@ -8,9 +8,9 @@ public interface UserFriendsRepository {
 
 	List<FriendshipDto> findAll();
 
-	void save(String friendEmail);
+	FriendshipDto save(String friendEmail);
 
-	void delete(Long id);
+	FriendshipDto delete(Long id);
 
 	List<FriendshipDto> findAllByFirstName(String searchValue);
 }

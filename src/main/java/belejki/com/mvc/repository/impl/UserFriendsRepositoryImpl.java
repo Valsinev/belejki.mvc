@@ -47,7 +47,7 @@ public class UserFriendsRepositoryImpl implements UserFriendsRepository {
 	}
 
 	@Override
-	public void save(String friendEmail) {
+	public FriendshipDto save(String friendEmail) {
 
 
 		HttpHeaders headers = new HttpHeaders();
@@ -57,11 +57,13 @@ public class UserFriendsRepositoryImpl implements UserFriendsRepository {
 		// Assuming backend expects no body, friendEmail only in URL:
 		HttpEntity<Void> request = new HttpEntity<>(headers);
 
-			restTemplate.postForEntity(
-					appConfig.getBackendApiUrl() + "/user/friendships/" + friendEmail,
-					request,
-					Void.class
-			);
+		ResponseEntity<FriendshipDto> response = restTemplate.postForEntity(
+				appConfig.getBackendApiUrl() + "/user/friendships/" + friendEmail,
+				request,
+				FriendshipDto.class
+		);
+
+		return response.getBody();
 	}
 
 	@Override
@@ -83,18 +85,19 @@ public class UserFriendsRepositoryImpl implements UserFriendsRepository {
 	}
 
 	@Override
-	public void delete(Long id) {
+	public FriendshipDto delete(Long id) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setBearerAuth(userinfo.getJwtToken());
 
 		HttpEntity<Void> request = new HttpEntity<>(headers);
 
-			restTemplate.exchange(
-					appConfig.getBackendApiUrl() + "/user/friendships/" + id,
-					HttpMethod.DELETE,
-					request,
-					Void.class
-			);
+		ResponseEntity<FriendshipDto> response = restTemplate.exchange(
+				appConfig.getBackendApiUrl() + "/user/friendships/" + id,
+				HttpMethod.DELETE,
+				request,
+				FriendshipDto.class
+		);
+		return response.getBody();
 	}
 
 }

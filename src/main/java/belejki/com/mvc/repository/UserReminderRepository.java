@@ -16,5 +16,12 @@ public interface UserReminderRepository {
 
 	UserReminderDto deleteById(Long id);
 
-	List<UserReminderDto> searchByNameContaining(String searchValue);
+	List<UserReminderDto> findAllByNameContaining(String searchValue);
+
+	List<UserReminderDto> findAllNotExpiredAndNotExpiresSoon();
+
+	List<UserReminderDto> findAllExpiredReminders();
+
+	List<UserReminderDto> findAllAlmostExpiredReminders();
+
 }

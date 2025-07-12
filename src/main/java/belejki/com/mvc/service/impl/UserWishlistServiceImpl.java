@@ -2,6 +2,7 @@ package belejki.com.mvc.service.impl;
 
 import belejki.com.mvc.model.dto.WishDto;
 import belejki.com.mvc.model.binding.UserWishBindingModel;
+import belejki.com.mvc.model.view.WishViewModel;
 import belejki.com.mvc.repository.UserWishRepository;
 import belejki.com.mvc.service.UserWishlistService;
 import org.modelmapper.ModelMapper;
@@ -23,57 +24,68 @@ public class UserWishlistServiceImpl implements UserWishlistService {
 	}
 
 	@Override
-	public List<WishDto> getWishlist() {
+	public List<WishViewModel> getWishlist() {
 
-		return userWishRepository.findAll();
+		List<WishDto> all = userWishRepository.findAll();
+
+		return all.stream()
+				.map(wishDto -> modelMapper.map(wishDto, WishViewModel.class))
+				.toList();
 	}
 
 	@Override
-	public WishDto createWish(UserWishBindingModel userWishBindingModel) {
+	public WishViewModel createWish(UserWishBindingModel userWishBindingModel) {
 
 		WishDto wish = modelMapper.map(userWishBindingModel, WishDto.class);
 
-		return userWishRepository.save(wish);
+		WishDto saved = userWishRepository.save(wish);
 
+		return modelMapper.map(saved, WishViewModel.class);
 	}
 
 	@Override
-	public WishDto editWish(Long id) {
+	public WishViewModel editWish(Long id) {
 
-		return userWishRepository.edit(id);
+		WishDto edited = userWishRepository.edit(id);
 
+		return modelMapper.map(edited, WishViewModel.class);
 	}
 
 	@Override
-	public WishDto updateWish(Long id, UserWishBindingModel userWishBindingModel) {
+	public WishViewModel updateWish(Long id, UserWishBindingModel userWishBindingModel) {
 
 		WishDto wish = modelMapper.map(userWishBindingModel, WishDto.class);
 
-		return userWishRepository.update(id, wish);
+		WishDto updated = userWishRepository.update(id, wish);
 
+		return modelMapper.map(updated, WishViewModel.class);
 	}
 
 	@Override
-	public WishDto deleteWish(Long id) {
+	public WishViewModel deleteWish(Long id) {
 
-		return userWishRepository.deleteById(id);
+		WishDto deleted = userWishRepository.deleteById(id);
 
+		return modelMapper.map(deleted, WishViewModel.class);
 	}
 
 	@Override
-	public List<WishDto> searchByNameContaining(String searchValue) {
+	public List<WishViewModel> searchByNameContaining(String searchValue) {
 
-		if (searchValue.isEmpty()) {
-			return List.of();
-		}
-		return userWishRepository.findAllByNameContaining(searchValue);
+		List<WishDto> allByNameContaining = userWishRepository.findAllByNameContaining(searchValue);
 
+		return allByNameContaining.stream()
+				.map(wishDto -> modelMapper.map(wishDto, WishViewModel.class))
+				.toList();
 	}
 
 	@Override
-	public List<WishDto> filterByPriceLessThan(Long maxPrice) {
+	public List<WishViewModel> filterByPriceLessThan(Long maxPrice) {
 
-		return userWishRepository.findAllByPriceLessThan(maxPrice);
+		List<WishDto> allByPriceLessThan = userWishRepository.findAllByPriceLessThan(maxPrice);
 
+		return allByPriceLessThan.stream()
+				.map(wishDto -> modelMapper.map(wishDto, WishViewModel.class))
+				.toList();
 	}
 }

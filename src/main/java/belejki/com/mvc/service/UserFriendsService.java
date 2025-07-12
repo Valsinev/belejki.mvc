@@ -1,16 +1,17 @@
 package belejki.com.mvc.service;
 
 import belejki.com.mvc.model.dto.FriendshipDto;
+import belejki.com.mvc.model.view.FriendshipViewModel;
 
 import java.util.List;
 
 public interface UserFriendsService {
 
-	List<FriendshipDto> getFriends();
+	List<FriendshipViewModel> getFriends();
 
-	void addFriend(String friendEmail);
+	FriendshipViewModel addFriend(String friendEmail);
 
-	void removeFriend(Long id);
+	FriendshipViewModel removeFriend(Long id);
 
-	List<FriendshipDto> findAllByFirstName(String searchValue);
+	List<FriendshipViewModel> findAllByFirstName(String searchValue);
 }

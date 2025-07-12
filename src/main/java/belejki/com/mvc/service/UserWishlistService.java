@@ -2,22 +2,23 @@ package belejki.com.mvc.service;
 
 import belejki.com.mvc.model.dto.WishDto;
 import belejki.com.mvc.model.binding.UserWishBindingModel;
+import belejki.com.mvc.model.view.WishViewModel;
 
 import java.util.List;
 
 public interface UserWishlistService {
 
-	List<WishDto> getWishlist();
+	List<WishViewModel> getWishlist();
 
-	WishDto createWish(UserWishBindingModel userWishBindingModel);
+	WishViewModel createWish(UserWishBindingModel userWishBindingModel);
 
-	WishDto editWish(Long id);
+	WishViewModel editWish(Long id);
 
-	WishDto updateWish(Long id, UserWishBindingModel userWishBindingModel);
+	WishViewModel updateWish(Long id, UserWishBindingModel userWishBindingModel);
 
-	WishDto deleteWish(Long id);
+	WishViewModel deleteWish(Long id);
 
-	List<WishDto> searchByNameContaining(String searchValue);
+	List<WishViewModel> searchByNameContaining(String searchValue);
 
-	List<WishDto> filterByPriceLessThan(Long maxPrice);
+	List<WishViewModel> filterByPriceLessThan(Long maxPrice);
 }

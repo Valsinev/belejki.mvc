@@ -22,6 +22,6 @@ public class UserRecipeBindingModel {
     private String howToMake;
     @NotNull
     @Valid
-    private List<RecipeIngredientDto> ingredients;
+    private List<RecipeIngredientBindingModel> ingredients;
 
 }

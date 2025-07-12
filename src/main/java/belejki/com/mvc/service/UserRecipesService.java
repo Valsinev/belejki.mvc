@@ -2,15 +2,16 @@ package belejki.com.mvc.service;
 
 import belejki.com.mvc.model.dto.RecipeDto;
 import belejki.com.mvc.model.binding.UserRecipeBindingModel;
+import belejki.com.mvc.model.view.RecipeViewModel;
 
 import java.util.List;
 
 public interface UserRecipesService {
-	RecipeDto save(UserRecipeBindingModel recipe);
+	RecipeViewModel save(UserRecipeBindingModel recipe);
 
-	List<RecipeDto> searchByNameContaining(String searchValue);
+	List<RecipeViewModel> searchByNameContaining(String searchValue);
 
-	List<RecipeDto> searchByIngredients(List<String> ingredients);
+	List<RecipeViewModel> searchByIngredients(List<String> ingredients);
 
-	RecipeDto deleteRecipeById(Long id);
+	RecipeViewModel deleteRecipeById(Long id);
 }

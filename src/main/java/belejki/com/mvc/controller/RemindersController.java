@@ -3,6 +3,7 @@ package belejki.com.mvc.controller;
 import belejki.com.mvc.model.dto.UserReminderDto;
 import belejki.com.mvc.model.binding.UserReminderBindingModel;
 import belejki.com.mvc.model.session.UserSessionInformation;
+import belejki.com.mvc.model.view.ReminderViewModel;
 import belejki.com.mvc.service.UserRemindersService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class RemindersController {
 	public String getUserReminders(Model model) {
 		if (userinfo.getJwtToken() == null) return "redirect:/login";
 
-		List<UserReminderDto> reminders = userRemindersService.getUserReminders();
+		List<ReminderViewModel> reminders = userRemindersService.getUserReminders();
 
 		model.addAttribute("theYear", LocalDate.now().getYear());
 		model.addAttribute("reminders", reminders);
@@ -88,7 +89,7 @@ public class RemindersController {
 		if (userinfo.getJwtToken() == null) return "redirect:/login";
 
 		try {
-			UserReminderDto reminder = userRemindersService.editReminder(id);
+			ReminderViewModel reminder = userRemindersService.editReminder(id);
 			model.addAttribute("reminder", reminder);
 			model.addAttribute("editing", true);
 		} catch (RestClientException e) {
@@ -139,7 +140,7 @@ public class RemindersController {
 
 		if (userinfo.getJwtToken() == null) return "redirect:/user/dashboard";
 
-		List<UserReminderDto> reminders = userRemindersService.searchByNameContaining(searchValue);
+		List<ReminderViewModel> reminders = userRemindersService.searchByNameContaining(searchValue);
 
 		model.addAttribute("reminders", reminders);
 

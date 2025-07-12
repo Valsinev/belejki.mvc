@@ -2,6 +2,7 @@ package belejki.com.mvc.service.impl;
 
 import belejki.com.mvc.model.binding.UserReminderBindingModel;
 import belejki.com.mvc.model.dto.UserReminderDto;
+import belejki.com.mvc.model.view.ReminderViewModel;
 import belejki.com.mvc.repository.UserReminderRepository;
 import belejki.com.mvc.service.JwtService;
 import belejki.com.mvc.service.UserRemindersService;
@@ -15,54 +16,94 @@ import java.util.List;
 public class UserRemindersServiceImpl implements UserRemindersService {
 
 	private final UserReminderRepository userReminderRepository;
-	private final JwtService jwtService;
 	private final ModelMapper modelMapper;
 
 	@Autowired
-	public UserRemindersServiceImpl(UserReminderRepository userReminderRepository, JwtService jwtService, ModelMapper modelMapper) {
+	public UserRemindersServiceImpl(UserReminderRepository userReminderRepository, ModelMapper modelMapper) {
 		this.userReminderRepository = userReminderRepository;
-		this.jwtService = jwtService;
 		this.modelMapper = modelMapper;
 	}
 
 	@Override
-	public List<UserReminderDto> getUserReminders() {
-		return userReminderRepository.findAll();
+	public List<ReminderViewModel> getUserReminders() {
+		List<UserReminderDto> all = userReminderRepository.findAll();
+
+		return all.stream()
+				.map(userReminderDto -> modelMapper.map(userReminderDto, ReminderViewModel.class))
+				.toList();
 	}
 
 	@Override
-	public UserReminderDto save(UserReminderBindingModel userReminderBindingModel) {
+	public ReminderViewModel save(UserReminderBindingModel userReminderBindingModel) {
 
 		UserReminderDto reminder = modelMapper.map(userReminderBindingModel, UserReminderDto.class);
 
-		return userReminderRepository.save(reminder);
+		UserReminderDto saved = userReminderRepository.save(reminder);
+
+		return modelMapper.map(saved, ReminderViewModel.class);
 	}
 
 	@Override
-	public UserReminderDto editReminder(Long id) {
+	public ReminderViewModel editReminder(Long id) {
 
-		return userReminderRepository.edit(id);
+		UserReminderDto edit = userReminderRepository.edit(id);
+
+		return modelMapper.map(edit, ReminderViewModel.class);
 	}
 
 	@Override
-	public UserReminderDto updateReminder(Long id, UserReminderBindingModel userReminderBindingModel) {
+	public ReminderViewModel updateReminder(Long id, UserReminderBindingModel userReminderBindingModel) {
 
 		UserReminderDto reminder = modelMapper.map(userReminderBindingModel, UserReminderDto.class);
 
-		return userReminderRepository.update(id, reminder);
+		UserReminderDto update = userReminderRepository.update(id, reminder);
+
+		return modelMapper.map(update, ReminderViewModel.class);
 	}
 
 	@Override
-	public UserReminderDto deleteById(Long id) {
+	public ReminderViewModel deleteById(Long id) {
 
-		return userReminderRepository.deleteById(id);
+		UserReminderDto deleted = userReminderRepository.deleteById(id);
+
+		return modelMapper.map(deleted, ReminderViewModel.class);
+	}
+
+	@Override
+	public List<ReminderViewModel> searchByNameContaining(String searchValue) {
+
+		List<UserReminderDto> founded = userReminderRepository.findAllByNameContaining(searchValue);
+
+		return founded.stream()
+				.map(userReminderDto -> modelMapper.map(userReminderDto, ReminderViewModel.class))
+				.toList();
 
 	}
 
 	@Override
-	public List<UserReminderDto> searchByNameContaining(String searchValue) {
+	public List<ReminderViewModel> getNotExpiredAndNotExpiresSoon() {
 
-		return userReminderRepository.searchByNameContaining(searchValue);
+		List<UserReminderDto> notExpiredAndNotExpiresSoon = userReminderRepository.findAllNotExpiredAndNotExpiresSoon();
 
+		return notExpiredAndNotExpiresSoon.stream()
+				.map(userReminderDto -> modelMapper.map(userReminderDto, ReminderViewModel.class))
+				.toList();
+	}
+
+	@Override
+	public List<ReminderViewModel> getExpiredReminders() {
+		List<UserReminderDto> expiredReminders = userReminderRepository.findAllExpiredReminders();
+		return expiredReminders.stream()
+				.map(userReminderDto -> modelMapper.map(userReminderDto, ReminderViewModel.class))
+				.toList();
+	}
+
+	@Override
+	public List<ReminderViewModel> getAlmostExpiredReminders() {
+
+		List<UserReminderDto> almostExpiredReminders = userReminderRepository.findAllAlmostExpiredReminders();
+		return almostExpiredReminders.stream()
+				.map(userReminderDto -> modelMapper.map(userReminderDto, ReminderViewModel.class))
+				.toList();
 	}
 }

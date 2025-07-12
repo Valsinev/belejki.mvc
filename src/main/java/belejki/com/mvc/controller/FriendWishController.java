@@ -2,6 +2,7 @@ package belejki.com.mvc.controller;
 
 import belejki.com.mvc.model.dto.WishDto;
 import belejki.com.mvc.model.session.UserSessionInformation;
+import belejki.com.mvc.model.view.WishViewModel;
 import belejki.com.mvc.service.FriendWishlistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,7 +35,7 @@ public class FriendWishController {
 
 		if (userinfo.getJwtToken() == null) return "redirect:/login";
 
-		List<WishDto> wishlist = userFriendsService.getFriendWishlistFilteredByPrice(maxPrice, username);
+		List<WishViewModel> wishlist = userFriendsService.getFriendWishlistFilteredByPrice(maxPrice, username);
 
 		model.addAttribute("wishlist", wishlist);
 		model.addAttribute("username", username);
@@ -49,7 +50,7 @@ public class FriendWishController {
 
 		if (userinfo.getJwtToken() == null) return "redirect:/login";
 
-		List<WishDto> wishlist = userFriendsService.prepareFriendWishlistPage(username);
+		List<WishViewModel> wishlist = userFriendsService.prepareFriendWishlistPage(username);
 
 		model.addAttribute("wishlist", wishlist);
 		model.addAttribute("username", username);

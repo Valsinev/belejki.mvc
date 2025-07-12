@@ -3,6 +3,7 @@ package belejki.com.mvc.controller;
 import belejki.com.mvc.model.dto.WishDto;
 import belejki.com.mvc.model.binding.UserWishBindingModel;
 import belejki.com.mvc.model.session.UserSessionInformation;
+import belejki.com.mvc.model.view.WishViewModel;
 import belejki.com.mvc.service.UserWishlistService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class WishlistController {
 
 		if (userinfo.getJwtToken() == null) return "redirect:/login";
 
-		List<WishDto> wishlist = userWishlistService.getWishlist();
+		List<WishViewModel> wishlist = userWishlistService.getWishlist();
 
 		model.addAttribute("wishlist", wishlist);
 
@@ -67,7 +68,7 @@ public class WishlistController {
 
 		if (userinfo.getJwtToken() == null) return "redirect:/login";
 
-		WishDto wish = userWishlistService.editWish(id);
+		WishViewModel wish = userWishlistService.editWish(id);
 
 		model.addAttribute("wish", wish);
 		model.addAttribute("editing", true);
@@ -120,7 +121,7 @@ public class WishlistController {
 
 		if (userinfo.getJwtToken() == null) return "redirect:/login";
 
-		List<WishDto> wishlist = userWishlistService.searchByNameContaining(searchValue);
+		List<WishViewModel> wishlist = userWishlistService.searchByNameContaining(searchValue);
 
 		model.addAttribute("wishlist", wishlist);
 
@@ -132,7 +133,7 @@ public class WishlistController {
 
 		if (userinfo.getJwtToken() == null) return "redirect:/login";
 
-		List<WishDto> wishlist = userWishlistService.filterByPriceLessThan(maxPrice);
+		List<WishViewModel> wishlist = userWishlistService.filterByPriceLessThan(maxPrice);
 
 		model.addAttribute("wishlist", wishlist);
 
