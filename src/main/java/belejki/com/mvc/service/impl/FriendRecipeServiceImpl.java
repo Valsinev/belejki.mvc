@@ -1,6 +1,7 @@
 package belejki.com.mvc.service.impl;
 
 import belejki.com.mvc.model.dto.RecipeDto;
+import belejki.com.mvc.model.view.RecipeIngredientViewModel;
 import belejki.com.mvc.model.view.RecipeViewModel;
 import belejki.com.mvc.repository.FriendRecipeRepository;
 import belejki.com.mvc.service.FriendRecipeService;
@@ -25,11 +26,7 @@ public class FriendRecipeServiceImpl implements FriendRecipeService {
 	@Override
 	public List<RecipeViewModel> getFriendRecipesByTitle(String searchValue, String username) {
 
-		List<RecipeDto> friendRecipesByTitle = friendRecipeRepository.getFriendRecipesByTitle(searchValue, username);
-
-		return friendRecipesByTitle.stream()
-				.map(recipeDto -> modelMapper.map(recipeDto, RecipeViewModel.class))
-				.toList();
+		return friendRecipeRepository.getFriendRecipesByTitle(searchValue, username);
 
 	}
 

@@ -88,4 +88,12 @@ public class UserWishlistServiceImpl implements UserWishlistService {
 				.map(wishDto -> modelMapper.map(wishDto, WishViewModel.class))
 				.toList();
 	}
+
+	@Override
+	public WishViewModel findById(Long id) {
+
+		WishDto byId = userWishRepository.findById(id);
+
+		return modelMapper.map(byId, WishViewModel.class);
+	}
 }

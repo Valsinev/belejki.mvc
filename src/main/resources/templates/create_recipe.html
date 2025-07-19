@@ -47,19 +47,33 @@
                     <button type="button" class="btn btn-outline-primary mb-3" th:text="#{add.ingredient}" onclick="addIngredient()">+ Add Ingredient</button>
 
 
+                    <!-- Video Link -->
+                    <div class="form-group">
+                        <div>
+                            <label for="videoLink" th:text="#{video.link}">Video Link</label>
+                        </div>
+                        <div>
+                            <input th:field="*{videoLink}" class="form-control" id="videoLink" maxlength="2000">
+                        </div>
+                    </div>
+
                     <!-- How to Make -->
                     <div class="form-group">
                         <div>
-                            <label for="howToMake" th:text="#{how.to.make}">How to Make</label>
+                            <label for="instructions" th:text="#{instructions}">How to Make</label>
                         </div>
                         <div>
-                            <textarea th:field="*{howToMake}" class="form-control" id="howToMake" rows="4" required minlength="10" maxlength="4000"></textarea>
+                            <textarea th:field="*{instructions}" class="form-control" id="instructions" rows="4" required minlength="10" maxlength="4000"></textarea>
                         </div>
                     </div>
 
                     <!-- Submit -->
                     <div class="mb-2">
                         <button type="submit" class="btn btn-primary" th:text="#{save.recipe}">Save Recipe</button>
+                    </div>
+
+                    <div class="col-4">
+                        <a class="btn btn-primary" href="/user/recipes" th:text="#{return}">Return</a>
                     </div>
 
                 </form>

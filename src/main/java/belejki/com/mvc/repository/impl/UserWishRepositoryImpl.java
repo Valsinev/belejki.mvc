@@ -149,4 +149,21 @@ public class UserWishRepositoryImpl implements UserWishRepository {
 		);
 		return response.getBody().getContent();
 	}
+
+	@Override
+	public WishDto findById(Long id) {
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setBearerAuth(userinfo.getJwtToken());
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<WishDto> request = new HttpEntity<>(headers);
+
+		ResponseEntity<WishDto> response = restTemplate.exchange(
+				appConfig.getBackendApiUrl() + "/user/wishlist/" + id,
+				HttpMethod.GET,
+				request,
+				WishDto.class);
+		return response.getBody();
+	}
 }

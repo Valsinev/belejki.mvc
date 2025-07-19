@@ -21,4 +21,6 @@ public interface UserWishlistService {
 	List<WishViewModel> searchByNameContaining(String searchValue);
 
 	List<WishViewModel> filterByPriceLessThan(Long maxPrice);
+
+	WishViewModel findById(Long id);
 }

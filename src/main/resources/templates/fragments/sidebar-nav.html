@@ -35,6 +35,10 @@
 				<div class="row mt-2 mb-2">
 					<a class="recipes btn btn-success" href="/user/recipes" th:text="#{recipes}">Cooking Recipes</a>
 				</div>
+
+				<div class="row mt-2 mb-2" th:if="${@userSessionInformation.isAdmin()}">
+					<a class="admin btn btn-success" href="/admin" th:text="#{admin.dashboard}">Admin Dashboard</a>
+				</div>
 			</div>
 		</div>
 	</div>

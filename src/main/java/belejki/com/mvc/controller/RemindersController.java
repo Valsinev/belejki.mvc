@@ -1,6 +1,6 @@
 package belejki.com.mvc.controller;
 
-import belejki.com.mvc.model.dto.UserReminderDto;
+import belejki.com.mvc.model.binding.SearchBindingModel;
 import belejki.com.mvc.model.binding.UserReminderBindingModel;
 import belejki.com.mvc.model.session.UserSessionInformation;
 import belejki.com.mvc.model.view.ReminderViewModel;
@@ -35,6 +35,10 @@ public class RemindersController {
 	public String getUserReminders(Model model) {
 		if (userinfo.getJwtToken() == null) return "redirect:/login";
 
+		if (!model.containsAttribute("searchBindingModel")) {
+			model.addAttribute("searchBindingModel", new SearchBindingModel());
+		}
+
 		List<ReminderViewModel> reminders = userRemindersService.getUserReminders();
 
 		model.addAttribute("theYear", LocalDate.now().getYear());
@@ -43,38 +47,56 @@ public class RemindersController {
 		return "user_reminders";
 	}
 
+	@GetMapping("/search")
+	public String searchByNameContaining(@Valid @ModelAttribute("searchBindingModel") SearchBindingModel searchBindingModel,
+	                                     BindingResult bindingResult,
+	                                     Model model,
+	                                     RedirectAttributes redirectAttributes) {
+
+		if (bindingResult.hasErrors()) {
+			redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.searchBindingModel", bindingResult);
+			redirectAttributes.addFlashAttribute("searchBindingModel", searchBindingModel);
+			return "redirect:/user/reminders";
+		}
+
+		if (userinfo.getJwtToken() == null) return "redirect:/user/dashboard";
+
+		List<ReminderViewModel> reminders = userRemindersService.searchByNameContaining(searchBindingModel.getSearchValue());
+
+		model.addAttribute("reminders", reminders);
+
+		return "user_reminders";
+	}
+
 	@GetMapping("/create")
 	public String showCreateForm(Model model) {
+		if (!model.containsAttribute("userReminderBindingModel")) {
+			model.addAttribute("userReminderBindingModel", new UserReminderBindingModel());
+		}
 		model.addAttribute("theYear", LocalDate.now().getYear());
-		model.addAttribute("reminder", new UserReminderBindingModel());
 		model.addAttribute("editing", false);
 		return "create_reminder";
 	}
 
 	@PostMapping("/create")
-	public String createNewReminder(@Valid @ModelAttribute("reminder") UserReminderBindingModel reminder,
-	                                BindingResult result,
-	                                Model model,
+	public String createNewReminder(@Valid @ModelAttribute("userReminderBindingModel") UserReminderBindingModel userReminderBindingModel,
+	                                BindingResult bindingResult,
 	                                RedirectAttributes redirectAttributes) {
-		if (result.hasErrors()) {
-			model.addAttribute("editing", false);
-			return "create_reminder";
-		}
 
 		if (userinfo.getJwtToken() == null) return "redirect:/login";
 
-
-		if (result.hasErrors()) {
-			redirectAttributes.addFlashAttribute("reminder", reminder);
-			redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.reminder", reminder);
+		if (bindingResult.hasErrors()) {
+			redirectAttributes.addFlashAttribute("userReminderBindingModel", userReminderBindingModel);
+			redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userReminderBindingModel", bindingResult);
+			redirectAttributes.addFlashAttribute("editing", false);
 			return "redirect:/user/reminders/create";
 		}
 
+
 		try {
-			userRemindersService.save(reminder);
+			userRemindersService.save(userReminderBindingModel);
 		} catch (RestClientException e) {
-			redirectAttributes.addFlashAttribute("reminder", reminder);
-			redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.reminder", reminder);
+			redirectAttributes.addFlashAttribute("userReminderBindingModel", userReminderBindingModel);
 			return "redirect:/user/reminders/create";
 		}
 
@@ -90,7 +112,7 @@ public class RemindersController {
 
 		try {
 			ReminderViewModel reminder = userRemindersService.editReminder(id);
-			model.addAttribute("reminder", reminder);
+			model.addAttribute("userReminderBindingModel", reminder);
 			model.addAttribute("editing", true);
 		} catch (RestClientException e) {
 			return "redirect:/user/reminders/edit/" + id;
@@ -101,7 +123,7 @@ public class RemindersController {
 
 	@PostMapping("/update/{id}")
 	public String updateReminder(@PathVariable Long id,
-	                             @Valid @ModelAttribute("reminder") UserReminderBindingModel reminder,
+	                             @Valid @ModelAttribute("userReminderBindingModel") UserReminderBindingModel reminder,
 	                             BindingResult result,
 	                             Model model) {
 		if (result.hasErrors()) {
@@ -133,18 +155,6 @@ public class RemindersController {
 		}
 		return "redirect:/user/reminders";
 
-	}
-
-	@GetMapping("/search")
-	public String searchByNameContaining(@RequestParam("searchValue") String searchValue, Model model) {
-
-		if (userinfo.getJwtToken() == null) return "redirect:/user/dashboard";
-
-		List<ReminderViewModel> reminders = userRemindersService.searchByNameContaining(searchValue);
-
-		model.addAttribute("reminders", reminders);
-
-		return "user_reminders";
 	}
 
 

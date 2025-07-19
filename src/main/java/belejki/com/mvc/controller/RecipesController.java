@@ -1,6 +1,5 @@
 package belejki.com.mvc.controller;
 
-import belejki.com.mvc.model.dto.RecipeDto;
 import belejki.com.mvc.model.binding.UserRecipeBindingModel;
 import belejki.com.mvc.exceptions.UnauthorizedException;
 import belejki.com.mvc.model.session.UserSessionInformation;
@@ -45,7 +44,7 @@ public class RecipesController {
 
 
     @PostMapping("/create")
-    public String createNewRecipe(@Valid @ModelAttribute("recipe") UserRecipeBindingModel userRecipeBindingModel,
+    public String createNewRecipe(@Valid @ModelAttribute("userRecipeBindingModel") UserRecipeBindingModel userRecipeBindingModel,
                                   BindingResult bindingResult,
                                   RedirectAttributes redirectAttributes) {
 
@@ -60,7 +59,7 @@ public class RecipesController {
             userRecipesService.save(userRecipeBindingModel);
             return "redirect:/user/recipes";
         } catch (RestClientException e) {
-            return "redirect:/login";
+            return "error";
         }
 
     }
@@ -119,6 +118,10 @@ public class RecipesController {
         return "redirect:/user/recipes";
 
     }
+
+
+
+
 
 
 }

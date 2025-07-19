@@ -42,13 +42,14 @@
                         <input id="to" th:name="maxPrice" type="number" class="form-control col-6"
                                th:placeholder="#{max}" aria-label="to" aria-describedby="basic-addon2" required>
                         <button class="btn btn-success" type="submit" th:text="#{filter}">Filter</button>
+                        <a class="btn btn-primary" href="/user/friends" th:text="#{return}">Return</a>
                     </div>
                 </form>
 
 
                 <section class="text-center mt-5">
                     <div class="container">
-                        <table class="table table-sm table-striped table-hover table-responsive mb-5">
+                        <table class="table table-sm table-striped table-bordered table-hover mb-5">
                             <thead class="thead-dark">
                             <tr>
                                 <th th:text="#{description}"> Description </th>
@@ -58,12 +59,12 @@
                             </thead>
                             <tbody>
                             <tr th:if="${wishlist.empty}">
-                                <td colspan="2" th:text="#{no.wishlist.items.found}"> No Wishlist items found.</td>
+                                <td colspan="" th:text="#{no.wishlist.items.found}"> No Wishlist items found.</td>
                             </tr>
                             <tr th:each="wish : ${wishlist}">
-                                <td><span th:text="${wish.description}"> Description </span></td>
-                                <td><span th:text="${wish.approximatePrice}"> Approximate Price </span></td>
-                                <td><a th:href="${wish.link}" th:text="${wish.link}" target="_blank">Link</a>
+                                <td class="table-primary"><span th:text="${wish.description}"> Description </span></td>
+                                <td class="table-success"><span th:text="${wish.approximatePrice}"> Approximate Price </span></td>
+                                <td class="table-primary"><a th:href="${wish.link}" th:text="#{link}" target="_blank">Link</a>
                                 </td>
                             </tr>
                             </tbody>

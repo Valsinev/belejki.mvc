@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -44,42 +45,46 @@ public class WishlistController {
 
 	@GetMapping("/create")
 	public String GetWishForm(Model model) {
-		model.addAttribute("wish", new WishDto());
+		if (!model.containsAttribute("userWishBindingModel")) {
+			model.addAttribute("userWishBindingModel", new UserWishBindingModel());
+		}
 		return "create_wish";
 	}
 
 	@PostMapping("/create")
-	public String createWish(@Valid @ModelAttribute("wish") UserWishBindingModel wish, BindingResult result, Model model) {
-
-		if (result.hasErrors()) {
-			model.addAttribute("editing", false);
-			return "create_wish";
-		}
+	public String createWish(@Valid @ModelAttribute("userWishBindingModel") UserWishBindingModel userWishBindingModel, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
 		if (userinfo.getJwtToken() == null) return "redirect:/login";
 
-		userWishlistService.createWish(wish);
+		if (bindingResult.hasErrors()) {
+			redirectAttributes.addFlashAttribute("editing", false);
+			redirectAttributes.addFlashAttribute("userWishBindingModel", userWishBindingModel);
+			redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userWishBindingModel", bindingResult);
+			return "redirect:/user/wishes/create";
+		}
+
+		userWishlistService.createWish(userWishBindingModel);
 
 		return "redirect:/user/wishes";
 	}
 
 	@GetMapping("/edit/{id}")
-	public String editWish(@PathVariable Long id, Model model) {
+	public String editWish(@PathVariable Long id, RedirectAttributes redirectAttributes) {
 
 		if (userinfo.getJwtToken() == null) return "redirect:/login";
 
-		WishViewModel wish = userWishlistService.editWish(id);
+		WishViewModel byId = userWishlistService.findById(id);
 
-		model.addAttribute("wish", wish);
-		model.addAttribute("editing", true);
+		redirectAttributes.addFlashAttribute("userWishBindingModel", byId);
+		redirectAttributes.addFlashAttribute("editing", true);
 
-		return "create_wish";
+		return "redirect:/user/wishes/create";
 
 	}
 
 	@PostMapping("/update/{id}")
 	public String updateWish(@PathVariable Long id,
-	                         @Valid @ModelAttribute("wish") UserWishBindingModel wish,
+	                         @Valid @ModelAttribute("userWishBindingModel") UserWishBindingModel userWishBindingModel,
 	                         BindingResult result,
 	                         Model model) {
 
@@ -90,7 +95,7 @@ public class WishlistController {
 
 		if (userinfo.getJwtToken() == null) return "redirect:/login";
 
-		userWishlistService.updateWish(id, wish);
+		userWishlistService.updateWish(id, userWishBindingModel);
 
 		return "redirect:/user/wishes";
 	}

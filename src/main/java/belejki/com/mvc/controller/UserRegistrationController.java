@@ -1,12 +1,10 @@
 package belejki.com.mvc.controller;
 
 import belejki.com.mvc.config.AppConfig;
-import belejki.com.mvc.exceptions.ErrorResponse;
 import belejki.com.mvc.model.binding.UserRegisterBindingModel;
 import belejki.com.mvc.service.UserRegistrationService;
 import belejki.com.mvc.service.impl.RecaptchaValidationService;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;

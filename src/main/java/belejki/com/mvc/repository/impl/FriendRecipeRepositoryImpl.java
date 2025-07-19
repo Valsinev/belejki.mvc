@@ -3,6 +3,7 @@ package belejki.com.mvc.repository.impl;
 import belejki.com.mvc.config.AppConfig;
 import belejki.com.mvc.model.dto.RecipeDto;
 import belejki.com.mvc.model.session.UserSessionInformation;
+import belejki.com.mvc.model.view.RecipeViewModel;
 import belejki.com.mvc.repository.FriendRecipeRepository;
 import belejki.com.mvc.util.PagedResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class FriendRecipeRepositoryImpl implements FriendRecipeRepository {
 	}
 
 	@Override
-	public List<RecipeDto> getFriendRecipesByTitle(String searchValue, String username) {
+	public List<RecipeViewModel> getFriendRecipesByTitle(String searchValue, String username) {
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setBearerAuth(userInformation.getJwtToken());
@@ -47,11 +48,11 @@ public class FriendRecipeRepositoryImpl implements FriendRecipeRepository {
 				.toUriString();
 
 
-		ResponseEntity<PagedResponse<RecipeDto>> response = restTemplate.exchange(
+		ResponseEntity<PagedResponse<RecipeViewModel>> response = restTemplate.exchange(
 				url,
 				HttpMethod.GET,
 				request,
-				new ParameterizedTypeReference<PagedResponse<RecipeDto>>() {
+				new ParameterizedTypeReference<PagedResponse<RecipeViewModel>>() {
 				}
 		);
 		return response.getBody().getContent();

@@ -13,4 +13,7 @@ public class ReminderViewModel {
 	private Integer importanceLevel;
 	private String description;
 	private LocalDate expiration;
+	private boolean expired;
+	private boolean expiresSoon;
+	private boolean expiresToday;
 }

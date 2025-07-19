@@ -18,4 +18,6 @@ public interface UserWishRepository {
 	List<WishDto> findAllByNameContaining(String searchValue);
 
 	List<WishDto> findAllByPriceLessThan(Long maxPrice);
+
+	WishDto findById(Long id);
 }

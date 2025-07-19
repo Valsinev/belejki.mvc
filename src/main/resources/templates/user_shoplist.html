@@ -56,11 +56,12 @@
                         <form th:action="@{/user/shoplist}" th:object="${item}" th:method="post">
                             <div class="col-2">
                                 <label for="exampleColorInput" th:text="#{color}" class="mt-2 form-label">Color</label>
-                                <input type="color" th:name="color" class="form-control form-control-color" id="exampleColorInput" value="#563d7c" title="Choose your color">
+                                <input type="color" th:name="color" th:field="*{color}" class="form-control form-control-color" id="exampleColorInput" value="#563d7c" title="Choose your color">
                             </div>
 
                             <div class="input-group col col-md-6 col-sm-12 col-xs-12 mt-4 mb-3">
-                                <input type="text" th:name="name" class="form-control" th:placeholder="#{add.product}" aria-label="Recipient's username" aria-describedby="basic-addon2" minlength="2" maxlength="20">
+                                <input type="text" th:name="name" th:field="*{name}" class="form-control" th:placeholder="#{add.product}" aria-label="Recipient's username" aria-describedby="basic-addon2" minlength="2" maxlength="20">
+                                <input type="number" th:name="price" th:field="*{price}" class="form-control" th:placeholder="#{price}" aria-label="Recipient's username" aria-describedby="basic-addon2" min="1">
                                 <div class="input-group-append">
                                     <button class="btn btn-success" type="submit" th:text="#{add}">Add</button>
                                 </div>
@@ -75,7 +76,7 @@
                             <button
                                     class="btn"
                                     type="submit"
-                                    th:text="${item.name}"
+                                    th:text="|${item.name}: ${item.price}|"
                                     th:style="'background-color:' + ${item.color} + '; color: white; border: none;'">
                             </button>
                         </form>

@@ -8,6 +8,7 @@ import java.util.List;
 @Data
 public class RecipeViewModel {
 	private String name;
-	private String howToMake;
+	private String instructions;
+	private String videoLink;
 	private List<RecipeIngredientViewModel> ingredients;
 }

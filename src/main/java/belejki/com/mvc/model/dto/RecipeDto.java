@@ -10,6 +10,7 @@ public class RecipeDto {
 	private Long id;
 	private Long userId;
 	private String name;
-	private String howToMake;
+	private String instructions;
+	private String videoLink;
 	private List<RecipeIngredientDto> ingredients;
 }
