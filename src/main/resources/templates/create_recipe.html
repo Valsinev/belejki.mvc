@@ -21,7 +21,9 @@
         <div class="col-md-8">
             <div class="card">
 
-                <form th:action="@{/user/recipes/create}" th:object="${userRecipeBindingModel}" method="post" class="container mt-4" onsubmit="return validateForm()">
+                <form th:action="@{/user/recipes/create}" th:object="${recipeBindingModel}" method="post" class="container mt-4" onsubmit="return validateForm()">
+
+                    <input type="hidden" th:field="*{id}" />
 
                     <!-- Recipe Title -->
                     <div class="form-group">
@@ -29,7 +31,10 @@
                             <label for="title" th:text="#{title}">Title</label>
                         </div>
                         <div>
-                            <input th:field="*{name}" type="text" class="form-control" id="title" required minlength="2" maxlength="64">
+                            <input th:field="*{name}" type="text" class="form-control" id="title" minlength="2" maxlength="64" required>
+                            <small class="col-12 text-danger"
+                                   th:if="${#fields.hasErrors('name')}"
+                                   th:errors="*{name}"></small>
                         </div>
                     </div>
 
@@ -47,19 +52,36 @@
                     <button type="button" class="btn btn-outline-primary mb-3" th:text="#{add.ingredient}" onclick="addIngredient()">+ Add Ingredient</button>
 
 
+                    <!-- Video Link -->
+                    <div class="form-group">
+                        <div>
+                            <label for="videoLink" th:text="#{video.link}">Video Link</label>
+                        </div>
+                        <div>
+                            <input th:field="*{videoLink}" class="form-control" id="videoLink" maxlength="2000">
+                        </div>
+                    </div>
+
                     <!-- How to Make -->
                     <div class="form-group">
                         <div>
-                            <label for="howToMake" th:text="#{how.to.make}">How to Make</label>
+                            <label for="instructions" th:text="#{instructions}">How to Make</label>
                         </div>
                         <div>
-                            <textarea th:field="*{howToMake}" class="form-control" id="howToMake" rows="4" required minlength="10" maxlength="4000"></textarea>
+                            <textarea th:field="*{instructions}" class="form-control" id="instructions" rows="4" required minlength="10" maxlength="4000"></textarea>
                         </div>
+                        <small class="col-12 text-danger"
+                               th:if="${#fields.hasErrors('instructions')}"
+                               th:errors="*{instructions}"></small>
                     </div>
 
                     <!-- Submit -->
                     <div class="mb-2">
                         <button type="submit" class="btn btn-primary" th:text="#{save.recipe}">Save Recipe</button>
+                    </div>
+
+                    <div class="col-4">
+                        <a class="btn btn-danger" href="/user/recipes" th:text="#{return}">Return</a>
                     </div>
 
                 </form>
@@ -72,8 +94,6 @@
 </div>
 
 
-<!-- Footer -->
-<div th:replace="~{fragments/footer::footer}"></div>
 
 
 </body>
@@ -119,7 +139,7 @@
             const nameInput = group.querySelector('.ingredient-name');
             const qtyInput = group.querySelector('.ingredient-quantity');
 
-            nameInput.name = `ingredients[${index}].ingredient`;
+            nameInput.name = `ingredients[${index}].ingredientName`;
             qtyInput.name = `ingredients[${index}].quantity`;
         });
     }

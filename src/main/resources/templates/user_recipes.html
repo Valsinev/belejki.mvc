@@ -85,13 +85,20 @@
                                 <h6 class="card-subtitle border-bottom border-dark mb-2 text-muted " th:text="#{ingredients}">Ingredients:</h6>
                                 <ul class="text-start">
                                     <li th:each="ingredient : ${recipe.ingredients}"
-                                        th:text="|${ingredient.ingredient} - ${ingredient.quantity}|">
+                                        th:text="|${ingredient.ingredientName} - ${ingredient.quantity}|">
                                         Ingredient - Quantity
                                     </li>
                                 </ul>
 
+                                <a class="card-subtitle border-bottom border-dark mb-2 text-success"
+                                   th:if="${recipe.videoLink != null}"
+                                   th:text="#{video.link}" th:href="${recipe.videoLink}"
+                                   target="_blank"
+                                   rel="noopener noreferrer">Video:
+                                </a>
+
                                 <h6 class="card-subtitle border-bottom border-dark mt-3" th:text="#{how.to.make}">Instructions:</h6>
-                                <p th:utext="${recipe.howToMake}">How to make the recipe...</p>
+                                <p th:utext="${recipe.instructions}">How to make the recipe...</p>
                             </div>
                             <div class="card-footer">
                                 <a class="btn btn-sm btn-danger"
@@ -108,9 +115,6 @@
     </div>
 </section>
 
-
-<!-- Footer -->
-<div th:replace="~{fragments/footer::footer}"></div>
 
 <script th:inline="javascript">
     let ingredientBase = /*[[#{ingredient.placeholder}]]*/ 'Ingredient';

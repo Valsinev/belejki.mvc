@@ -27,13 +27,17 @@
 					<a class="wishlist btn btn-success" href="/user/wishes" th:text="#{wishlist}">Wishlist</a>
 				</div>
 				<div class="row mt-2 mb-2">
-					<a class="friends btn btn-success" href="/user/friends" th:text="#{friends}">Friends</a>
-				</div>
-				<div class="row mt-2 mb-2">
 					<a class="shopplist btn btn-success" href="/user/shoplist" th:text="#{shoplist}">Shopping List</a>
 				</div>
 				<div class="row mt-2 mb-2">
 					<a class="recipes btn btn-success" href="/user/recipes" th:text="#{recipes}">Cooking Recipes</a>
+				</div>
+				<div class="row mt-2 mb-2">
+					<a class="friends btn btn-success" href="/user/friends" th:text="#{friends}">Friends</a>
+				</div>
+
+				<div class="row mt-2 mb-2" th:if="${@userSessionInformation.isAdmin()}">
+					<a class="admin btn btn-success" href="/admin" th:text="#{admin.dashboard}">Admin Dashboard</a>
 				</div>
 			</div>
 		</div>

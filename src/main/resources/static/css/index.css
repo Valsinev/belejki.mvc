@@ -1,0 +1,32 @@
+body {
+  background: #ffffd3;
+  background-image: url("/images/background.png");
+  color: #435160;
+  font-family: "Open Sans", sans-serif;
+}
+
+.custom-card {
+    min-height: 780px;
+    padding-top: 3rem;
+    padding-bottom: 4rem;
+    border-radius: 0.2rem;
+    background-color: rgba(255, 165, 0, 0.2);
+}
+
+.carousel-control-prev {
+
+    border-radius: 0.3rem;
+}
+
+.carousel-control-prev {
+
+    border-radius: 0.3rem;
+}
+
+.card-img-fixed {
+    width: 100%;
+    height: 700px; /* Or whatever height you want */
+    object-fit: cover; /* Ensures the image fills the space without distortion */
+    border-radius: 0.5rem; /* Optional: rounded corners */
+}
+

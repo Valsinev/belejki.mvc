@@ -2,17 +2,16 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="#{reminders}">Reminders</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <!-- Custom styles -->
-    <link rel="icon" type="images/x-icon" href="/images/reminders.icon.png" >
-    <link rel="stylesheet" href="/css/dashboard.css">
-
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title th:text="#{reminders}">Reminders</title>
+	<!-- Bootstrap CSS -->
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+		  integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+	<!-- Custom styles -->
+	<link rel="icon" type="images/x-icon" href="/images/reminders.icon.png">
+	<link rel="stylesheet" href="/css/dashboard.css">
 
 </head>
 
@@ -21,94 +20,105 @@
 <!--navigation-->
 <div th:replace="~{fragments/head::head}"></div>
 
-    <section class="main-content container-fluid">
-
-        <div class="row">
+<section class="main-content container-fluid">
 
 
-            <aside class="left-side col-lg-2 col-md-12 border-right border-left border-dark mt-2">
-                <div th:replace="~{fragments/sidebar-nav::sidebar-nav}"></div>
-            </aside>
+	<div class="row">
 
-            <!-- Upcoming Events -->
-            <aside class="right-side col-xl-10 col-md-12">
-                <div class="container mt-4">
 
-                    <h2 class="mt-2" th:text="#{event.page.description}">Add an event, we will monitor and notify you about it.</h2>
-                    <div class="row">
-                        <a class="btn btn-success" href="/user/reminders/create" th:text="#{add.new.event}">Add New Event</a>
-                    </div>
-                    <!-- Example event card -->
-                    <div class="row mt-4 border-top">
+		<aside class="left-side col-lg-2 col-md-12 border-right border-left border-dark mt-2">
+			<div th:replace="~{fragments/sidebar-nav::sidebar-nav}"></div>
+		</aside>
 
-                        <h2 class="mb-4" th:text="#{your.events}">Your Events:</h2>
-                        <div class="container-fluid mt-4">
-                            <form th:action="@{/user/reminders/search}" th:method="get">
-                                <div class="input-group mb-3">
-                                    <input id="searchInput" th:name="searchValue" type="text" class="form-control col-6"
-                                        th:placeholder="#{search.by.name}" aria-label="Search"
-                                        aria-describedby="basic-addon2" required>
-                                    <button class="btn btn-success" type="submit" th:text="#{search}">Search</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+		<!-- Upcoming Events -->
+		<aside class="right-side col-xl-10 col-md-12">
+			<div class="container mt-4">
 
-                    <table class="table table-sm table-striped table-hover table-responsive mb-5">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th th:text="#{name}"> Name </th>
-                                <th th:text="#{importance.level}"> Importance Level </th>
-                                <th th:text="#{description}"> Description</th>
-                                <th th:text="#{expiration}"> Expiration </th>
-                                <th th:text="#{action}"> Action </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:if="${reminders.empty}">
-                                <td colspan="2" th:text="#{no.reminders.available}"> No Reminders Available </td>
-                            </tr>
-                            <tr th:each="reminder : ${reminders}" th:class="${reminder.expired} ? 'table-danger' : (${reminder.expiresSoon} ? 'table-warning' : 'table-success')">
-                                <td><span th:text="${reminder.name}"> Name </span></td>
-                                <td><span th:text="${reminder.importanceLevel}"> Importance Level </span></td>
-                                <td><span th:text="${reminder.description}"> Description</span></td>
-                                <td><span th:text="${#temporals.format(reminder.expiration, 'dd-MMMM-yyyy')}"> Expiration </span></td>
-                                <td><span>
+				<div class="row">
+					<h2 class="mt-2" th:text="#{event.page.description}">Add an event, we will monitor and notify you about it.</h2>
+				</div>
+
+				<div class="row">
+					<a class="btn btn-success" href="/user/reminders/create" th:text="#{add.new.event}">Add New
+						Event</a>
+				</div>
+
+				<div class="row mt-4 border-top">
+					<div class="container-fluid mt-4">
+						<form th:action="@{/user/reminders/search}" th:object="${searchBindingModel}" th:method="get">
+							<small class="col-12 text-danger" th:if="${#fields.hasErrors('searchValue')}" th:errors="*{searchValue}"></small>
+							<div class="input-group mb-3">
+								<input id="searchInput" th:field="*{searchValue}" type="text" class="form-control col-6"
+									   th:placeholder="#{search.by.name}" aria-label="Search"
+									   aria-describedby="basic-addon2" required>
+								<button class="btn btn-success" type="submit" th:text="#{search}">Search</button>
+							</div>
+						</form>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-12">
+						<h2 class="mb-4" th:text="#{your.events}">Your Events:</h2>
+					</div>
+					<table class="table table-sm table-striped table-hover table-responsive mb-5">
+						<thead class="thead-dark">
+						<tr>
+							<th th:text="#{name}"> Name</th>
+							<th th:text="#{importance.level}"> Importance Level</th>
+							<th th:text="#{description}"> Description</th>
+							<th th:text="#{expiration}"> Expiration</th>
+							<th th:text="#{action}"> Action</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr th:if="${reminders.empty}">
+							<td colspan="2" th:text="#{no.reminders.available}"> No Reminders Available</td>
+						</tr>
+						<tr th:each="reminder : ${reminders}"
+							th:class="${reminder.expired} ? 'table-danger' : (${reminder.expiresSoon} ? 'table-warning' : 'table-success')">
+							<td><span th:text="${reminder.name}"> Name </span></td>
+							<td><span th:text="${reminder.importanceLevel}"> Importance Level </span></td>
+							<td><span th:text="${reminder.description}"> Description</span></td>
+							<td><span
+									th:text="${#temporals.format(reminder.expiration, 'dd-MMMM-yyyy')}"> Expiration </span>
+							</td>
+							<td><span>
                                         <a th:href="@{'/user/reminders/edit/' + ${reminder.id}}"
-                                            class="btn btn-primary" th:text="#{edit}">Edit</a>
+										   class="btn btn-primary" th:text="#{edit}">Edit</a>
                                         <a th:href="@{'/user/reminders/delete/' + ${reminder.id}}"
-                                            class="btn btn-danger" th:text="#{delete}">Delete</a>
+										   class="btn btn-danger" th:text="#{delete}">Delete</a>
                                     </span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+						</tr>
+						</tbody>
+					</table>
 
-            </aside>
+				</div>
+			</div>
 
-        </div>
-    </section>
+		</aside>
 
-<!-- Footer -->
-<div th:replace="~{fragments/footer::footer}"></div>
+	</div>
+</section>
 
-    <!-- Bootstrap JS and dependencies -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 </body>
 
 <style>
-    .reminders {
-        background: #ffca2c;
-        color: black;
-    }
+	.reminders {
+		background: #ffca2c;
+		color: black;
+	}
 
-    .reminders:hover {
-        background: #ffca2c;
-        color: black;
-    }
+	.reminders:hover {
+		background: #ffca2c;
+		color: black;
+	}
 </style>
 
 </html>
