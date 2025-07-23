@@ -48,7 +48,7 @@
     </div>
 </nav>
 
-<form class="container" id="registrationForm" th:object="${userLogingBindingModel}" th:action="@{/login}" method="post">
+<form class="container" id="registrationForm" th:object="${loginBindingModel}" th:action="@{/login}" method="post">
     <input type="hidden" name="lang" th:value="${#locale.language}" />
     <div class="header row mt-5">
         <h2 class="col" th:text="#{login}">Login</h2>

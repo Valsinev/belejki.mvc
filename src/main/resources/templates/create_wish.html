@@ -28,8 +28,11 @@
 					<h4 class="text-center" th:text="#{create.wish}">Create Wish</h4>
 				</div>
 				<div class="card-body">
-					<form th:action="${editing} ? @{'/user/wishes/update/' + ${userWishBindingModel.id}} : @{/user/wishes/create}"
-						  method="post" th:object="${userWishBindingModel}">
+					<form th:action="${editing} ? @{/user/wishes/update} : @{/user/wishes/create}"
+						  method="post" th:object="${wishBindingModel}">
+
+						<input type="hidden" th:field="*{id}" />
+
 						<div class="container-fluid">
 
 							<div class="form-group row">
@@ -45,6 +48,9 @@
 									Price</label>
 								<input type="number" class="form-control col-12" th:field="*{approximatePrice}"
 									   id="approximatePrice" name="approximatePrice" required>
+								<small class="col-12 text-danger"
+									   th:if="${#fields.hasErrors('approximatePrice')}"
+									   th:errors="*{approximatePrice}"></small>
 							</div>
 							<div class="form-group row">
 								<label for="link" class="form-label col-12" th:text="#{link}">Link</label>
@@ -77,9 +83,6 @@
 	</style>
 </div>
 
-
-<!-- Footer -->
-<div th:replace="~{fragments/footer::footer}"></div>
 
 <!-- Bootstrap JS (optional, only if needed) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

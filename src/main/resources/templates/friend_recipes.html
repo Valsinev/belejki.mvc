@@ -52,7 +52,7 @@
                     <h4 class="mb-2" th:text="#{search.by.ingredients}">Search by ingredients</h4>
 
                     <form th:action="@{/user/friends/recipes/search/ingredients}" method="get">
-                        <input type="hidden" name="username" th:value="${username}" />
+                        <input type="hidden" name="friendUsername" th:value="${friendUsername}" />
                         <div id="ingredient-inputs" class="mb-3">
                             <div class="input-group mb-2">
                                 <input name="ingredients" type="text" class="form-control" th:placeholder="#{ingredient.placeholder}">
@@ -79,13 +79,16 @@
                                         <h6 class="card-subtitle border-bottom border-dark mb-2 text-muted" th:text="#{ingredients}">Ingredients:</h6>
                                         <ul class="text-start">
                                             <li th:each="ingredient : ${recipe.ingredients}"
-                                                th:text="|${ingredient.ingredient} - ${ingredient.quantity}|">
+                                                th:text="|${ingredient.ingredientName} - ${ingredient.quantity}|">
                                                 Ingredient - Quantity
                                             </li>
                                         </ul>
-                                        <a class="card-subtitle border-bottom border-dark mb-2 text-muted" th:text="#{video.link}" th:href="${recipe.videoLink}"
+                                        <a class="card-subtitle border-bottom border-dark mb-2 text-success"
+                                           th:if="${recipe.videoLink != null}"
+                                           th:text="#{video.link}" th:href="${recipe.videoLink}"
                                            target="_blank"
-                                           rel="noopener noreferrer">Video:</a>
+                                           rel="noopener noreferrer">Video:
+                                        </a>
 
                                         <h6 class="card-subtitle border-bottom border-dark mt-3" th:text="#{instructions}">Instructions:</h6>
                                         <p th:utext="${recipe.instructions}">How to make the recipe...</p>

@@ -28,8 +28,10 @@
 					<h4 class="text-center" th:text="#{create.reminder}">Create Reminder</h4>
 				</div>
 				<div class="card-body">
-					<form th:action="${editing} ? @{'/user/reminders/update/' + ${userReminderBindingModel.id}} : @{/user/reminders/create}"
-						  method="post" th:object="${userReminderBindingModel}">
+					<form th:action="${editing} ? @{/user/reminders/update} : @{/user/reminders/create}"
+						  method="post" th:object="${reminderBindingModel}">
+
+						<input type="hidden" th:field="*{id}" />
 
 						<div class="container-fluid">
 
@@ -84,8 +86,6 @@
 </div>
 
 
-<!-- Footer -->
-<div th:replace="~{fragments/footer::footer}"></div>
 
 <!-- Bootstrap JS (optional, only if needed) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

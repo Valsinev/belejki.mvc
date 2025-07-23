@@ -41,12 +41,12 @@
                 <!--                    </div>-->
 
                 <div class="row">
-                    <form th:action="@{/user/friends}" th:method="post">
+                    <form th:action="@{/user/friends}" th:method="post" th:object="${friendshipBindingModel}">
 
                         <h2 class="mt-2" th:text="#{friend.page.description}">Add a friend and access his wishlist and
                             cooking recipes.</h2>
                         <div class="input-group mb-3 col-lg-4 col-md-8 col-sm-12">
-                            <input id="friend" th:name="friend" type="email" class="form-control col-10"
+                            <input id="friend" th:name="friend" th:field="*{friendUsername}" type="email" class="form-control col-10"
                                    th:placeholder="#{enter.friend.email}" aria-label="addFriend"
                                    aria-describedby="basic-addon2" required minlength="4" maxlength="64">
                             <button class="btn btn-success" type="submit" th:text="#{add}">Add</button>
@@ -98,19 +98,27 @@
                         <div class="col-md-4" th:each="friend : ${friends}">
                             <div class="card mb-4">
                                 <div class="card-header">
-                                    <h5 class="card-title" th:text="${friend.firstName + ' ' + friend.lastName}">
+                                    <h6 class="card-title" th:text="${friend.friendUsername}"></h6>
+                                    <h6 class="card-title" th:text="${friend.friendFirstName + ' ' + friend.friendLastName}">
                                         Full
-                                        Name</h5>
+                                        Name</h6>
                                 </div>
                                 <div class="card-footer">
 
                                     <div class="mt-1">
-                                        <a th:href="@{'/user/friends/wishlist/' + ${friend.friendName}}"
-                                           class="btn btn-primary" th:text="#{view.wishlist}">View Wishlist</a>
+<!--                                        <a th:href="@{'/user/friends/wishlist/' + ${friend.friendUsername}}"-->
+<!--                                           class="btn btn-primary" th:text="#{view.wishlist}">View Wishlist</a>-->
+                                        <form th:action="@{/user/friends/wishlist}" th:method="get">
+                                            <input type="hidden" name="id" th:value="${friend.id}" />
+                                            <input type="hidden" name="friendUsername" th:value="${friend.friendUsername}" />
+                                            <input type="hidden" name="friendFirstName" th:value="${friend.friendFirstName}" />
+                                            <input type="hidden" name="friendLastName" th:value="${friend.friendLastName}" />
+                                            <button class="btn btn-primary" type="submit" th:text="#{view.wishlist}">View Wishlist</button>
+                                        </form>
                                     </div>
 
                                     <div class="mt-1">
-                                        <a th:href="@{'/user/friends/recipes/' + ${friend.friendName}}"
+                                        <a th:href="@{'/user/friends/recipes/' + ${friend.friendUsername}}"
                                            class="btn btn-primary" th:text="#{view.recipes}">View Recipes</a>
                                     </div>
 
@@ -133,8 +141,6 @@
 </section>
 
 
-<!-- Footer -->
-<div th:replace="~{fragments/footer::footer}"></div>
 
 <!-- Bootstrap JS and dependencies -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

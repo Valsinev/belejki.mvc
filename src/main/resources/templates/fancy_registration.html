@@ -52,7 +52,7 @@
 
 
 <form class="container" id="registrationForm" action="/registration" method="post"
-	  th:object="${userRegisterBindingModel}" onsubmit="return validateForm()">
+	  th:object="${registerBindingModel}" onsubmit="return validateForm()">
 
 	<div class="header row mt-5">
 		<h2 class="col" th:text="#{registration}">Register</h2>

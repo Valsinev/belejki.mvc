@@ -36,7 +36,7 @@
 
 
                 <form th:action="@{/user/friends/wishlist/filter}" th:method="get">
-                    <input type="hidden" name="username" th:value="${username}" />
+                    <input type="hidden" name="friendUsername" th:value="${friendshipViewModel.friendUsername}" />
                     <h4 th:text="#{filter.by.price}">Filter by price:</h4>
                     <div class="input-group mb-3">
                         <input id="to" th:name="maxPrice" type="number" class="form-control col-6"
