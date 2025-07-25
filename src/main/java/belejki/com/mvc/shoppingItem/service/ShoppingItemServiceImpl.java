@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,13 +26,13 @@ public class ShoppingItemServiceImpl implements ShoppingItemService {
 	}
 
 	@Override
-	public Set<ShoppingItemViewModel> getShoppingList() {
+	public List<ShoppingItemViewModel> getShoppingList() {
 
-		Set<ShoppingItemDto> all = shoppingItemRepository.getAll();
+		List<ShoppingItemDto> all = shoppingItemRepository.getAll();
 
 		return all.stream()
 				.map(shoppingItemDto -> modelMapper.map(shoppingItemDto, ShoppingItemViewModel.class))
-				.collect(Collectors.toSet());
+				.collect(Collectors.toList());
 	}
 
 	@Override

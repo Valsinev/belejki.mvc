@@ -16,6 +16,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -36,12 +37,14 @@ public class ShoppingItemsController {
 
 		if (userinfo.getJwtToken() == null) return "redirect:/login";
 
-		Set<ShoppingItemViewModel> shoplist = shoppingItemService.getShoppingList();
+		List<ShoppingItemViewModel> shoplist = shoppingItemService.getShoppingList();
 
 		BigDecimal totalPrice = shoppingItemService.getTotalPrice();
 
+		if (!model.containsAttribute("item")) {
+			model.addAttribute("item", new ShoppingItemBindingModel());
+		}
 		model.addAttribute("totalPrice", totalPrice);
-		model.addAttribute("item", new ShoppingItemBindingModel());
 		model.addAttribute("shoplist", shoplist);
 
 
@@ -59,6 +62,7 @@ public class ShoppingItemsController {
 
 		if (userinfo.getJwtToken() == null) return "redirect:/login";
 
+		redirectAttributes.addFlashAttribute("item", item);
 		shoppingItemService.addShoppingItem(item);
 
 		return "redirect:/user/shoplist";

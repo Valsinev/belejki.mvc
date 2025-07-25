@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Repository
@@ -29,7 +30,7 @@ public class ShoppingItemRepositoryImpl implements ShoppingItemRepository {
 	}
 
 	@Override
-	public Set<ShoppingItemDto> getAll() {
+	public List<ShoppingItemDto> getAll() {
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setBearerAuth(userinfo.getJwtToken());
@@ -43,7 +44,7 @@ public class ShoppingItemRepositoryImpl implements ShoppingItemRepository {
 				new ParameterizedTypeReference<PagedResponse<ShoppingItemDto>>() {
 				}
 		);
-		return new HashSet<>(response.getBody().getContent());
+		return response.getBody().getContent();
 
 	}
 
